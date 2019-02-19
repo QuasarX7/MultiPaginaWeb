@@ -1,7 +1,8 @@
 
 <?php
-include_once 'LibreriaQx7-php/PaginaHTML.php';
+include_once 'Struttura/MultiPagina.php';
 
-$pagina = new PaginaHTML('ciao');
+$pagina = new MultiPagina('llu');
 $pagina->crea();
+
 ?>
