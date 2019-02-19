@@ -5,14 +5,58 @@ include_once 'Tag.php';
 include_once 'Stile.php';
 include_once 'CSS.php';
 
+/**
+ * 
+ * Stile bordo	Descrizione
+none	l’elemento non presenta alcun bordo e lo spessore equivale a 0
+hidden	equivalente a none
+dotted	bordo a puntini
+dashed	bordo a lineette
+solid	bordo solido e continuo
+double	bordo solido, continuo e doppio
+groove	tipo di bordo in rilievo
+ridge	altro tipo di bordo in rilievo
+inset	effetto ‘incastonato’
+outset	effetto ‘sbalzato’
+ * @author quasar
+ *
+ */
+class StileBordo{
+    const NESSUNO = 'none';
+    const PUNTINI = 'dotted';
+    const LINEETTE = 'dashed';
+    const CONTINUO = 'solid';
+    const DOPPIA = 'double';
+    const SOLCO = 'groove';
+    const RILIEVO = 'ridge';
+    const INCASTONATO = 'inset';
+    const SBALZATO = 'outset';
+    
+    static function appartiene($valore){
+        return  StileBordo::NESSUNO == $valore  || StileBordo::PUNTINI == $valore     || StileBordo::LINEETTE == $valore ||
+                StileBordo::CONTINUO == $valore || StileBordo::DOPPIA == $valore      || StileBordo::SOLCO == $valore    || 
+                StileBordo::RILIEVO == $valore  || StileBordo::INCASTONATO == $valore || StileBordo::SBALZATO == $valore;
+    }
+}
 
-class Posizione{
+class Lato{
+    const ALTO = 'top';
+    const DESTRA = 'right';
+    const BASSO = 'bottom';
+    const SINISTRA = 'left';
+    
+    static function appartiene($valore){
+        return Lato::ALTO == $valore || Lato::DESTRA == $valore || Lato::BASSO== $valore || Lato::SINISTRA == $valore;
+    }
+}
+
+class Posizione {
     const STATICA = 'static';
     const RELATIVA = 'relative';
     const ASSOLUTA = 'absolute';
     const FISSA = 'fixed';
     
-    static function è($valore){
+    static function appartiene($valore){
         return Posizione::ASSOLUTA == $valore || Posizione::STATICA == $valore 
                 || Posizione::RELATIVA == $valore || Posizione::FISSA == $valore;
     }
@@ -22,7 +66,7 @@ class Dimensione{
     const ALTEZZA = PropritàCSS::ALTEZZA;
     const LUNGHEZZA = PropritàCSS::LUNGHEZZA;
     
-    static function è($valore){
+    static function appartiene($valore){
         return Dimensione::ALTEZZA == $valore || Dimensione::LUNGHEZZA == $valore;
     }
 }
@@ -58,10 +102,62 @@ class Pannello extends Tag{
         parent::__construct('div',$css);
         
     }
-
-    public function bordo($colore,$spessore) {
-        
+    /**
+     * Imposta la distanza del pannello dagli altri componenti grafici adiacenti.
+     * 
+     * @param string $alto
+     * @param string $basso
+     * @param string $sinistra
+     * @param string $destra
+     */
+    public function margine($alto,$basso,$sinistra,$destra){
+        $css = new Stile('margin', $alto . ' ' . $destra . ' ' . $basso . ' ' . $sinistra);
+        $this->aggiungi($css);
     }
+    
+    /**
+     * Imposta la distanza dal bordo dei componenti grafici interni al pannello.
+     * 
+     * @param string $alto
+     * @param string $basso
+     * @param string $sinistra
+     * @param string $destra
+     */
+    public function padding($alto,$basso,$sinistra,$destra){
+        $css = new Stile('padding', $alto . ' ' . $destra . ' ' . $basso . ' ' . $sinistra);
+        $this->aggiungi($css);
+    }
+    
+    /**
+     * Imposta caratteristiche di un bordo.
+     * 
+     * @param $lato
+     * @param $colore
+     * @param $spessore
+     * @param $stile
+     */
+    public function bordo($lato,$colore,$spessore,$stile) {
+        if(Lato::appartiene($lato) && StileBordo::appartiene($stile) && is_string($colore)){
+            $this->aggiungi(
+                new Stile('border-'.$lato, $spessore . ' ' . $stile . ' ' . $colore)
+            );
+        }
+    }
+    
+    /**
+     * Pone i bordi del pannello in evidenza.
+     * @param $colore
+     * @param $spessore
+     * @param $stile
+     */
+    public function bordoInEvidenza($colore,$spessore,$stile) {
+        if(StileBordo::appartiene($stile) && is_string($colore)){
+            $this->aggiungi(
+                new Stile('outline', $spessore . ' ' . $stile . ' ' . $colore)
+                );
+        }
+    }
+    
     /**
      * Posizionamento del pannello.
      * 
@@ -71,7 +167,7 @@ class Pannello extends Tag{
      * @param $y
      */
     public function posiziona($tipo,$x=null,$y=null) {
-        if (Posizione::è($tipo)) {
+        if (Posizione::appartiene($tipo)) {
             $css = new Stile('position', $tipo);
             if (!is_null($x)) {
                 $css->aggiungi(PropritàCSS::SINISTRA, $x . '');
@@ -90,7 +186,7 @@ class Pannello extends Tag{
      * @param  $valore
      */
     public function limite($dimensione,$limite,$valore) {
-        if((is_int($valore) || is_string($valore)) && Dimensione::è($dimensione) && Limite::è($limite)){
+        if((is_int($valore) || is_string($valore)) && Dimensione::appartiene($dimensione) && Limite::è($limite)){
             $css = new Stile($limite.'-'.$dimensione , $valore . '');
             $this->aggiungi($css);
         }
