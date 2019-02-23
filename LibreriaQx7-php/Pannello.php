@@ -88,7 +88,7 @@ abstract class Limite{
  */
 class Pannello extends Tag{
     
-    public function __construct($lunghezza, $altezza, $coloreSfondo, $coloreBordo, $coloreTesto) {
+    public function __construct($lunghezza, $altezza, $coloreSfondo, $coloreTesto) {
         static $z = 0;
         $css = new Stile([
             new DichiarazioneCSS('overflow','hidden'),
@@ -96,7 +96,6 @@ class Pannello extends Tag{
             new DichiarazioneCSS(PropritàCSS::ALTEZZA, $altezza.''),
             new DichiarazioneCSS(PropritàCSS::LUNGHEZZA, $lunghezza.''),
             new DichiarazioneCSS(PropritàCSS::COLORE_SFONDO,$coloreSfondo),
-            new DichiarazioneCSS(PropritàCSS::COLORE_BORDO,$coloreBordo),
             new DichiarazioneCSS(PropritàCSS::COLORE,$coloreTesto)
         ]);
         parent::__construct('div',$css);
@@ -137,7 +136,7 @@ class Pannello extends Tag{
      * @param $stile
      */
     public function bordo($lato,$colore,$spessore,$stile) {
-        if(Lato::appartiene($lato) && StileBordo::appartiene($stile) && is_string($colore)){
+        if(Lato::appartiene($lato) && StileBordo::appartiene($stile) && is_string($colore) && is_string($spessore)){
             $this->aggiungi(
                 new Stile('border-'.$lato, $spessore . ' ' . $stile . ' ' . $colore)
             );
