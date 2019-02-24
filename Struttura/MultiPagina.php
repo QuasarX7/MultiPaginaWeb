@@ -5,7 +5,6 @@ include_once 'LibreriaQx7-php/BarraMenu.php';
 include_once 'LibreriaQx7-php/Menu.php';
 
 class MultiPagina extends PaginaHTML {
-    //const PAGINA_INIZIALE = 'home';
     
     protected $indice = 0;
     protected $argomento = 'home';
@@ -22,6 +21,7 @@ class MultiPagina extends PaginaHTML {
 
     public function __construct($titolo){
         parent::__construct($titolo);
+        $this->creaPannelloLaterale();
     }
     
   
@@ -38,6 +38,11 @@ class MultiPagina extends PaginaHTML {
         }else{
             parent::aggiungi($valore);
         }
+    }
+    
+    private function creaPannelloLaterale(){
+        $this->indiceLateraleSx = new Pannello('200px', '150%', '#999', '#000');
+        
     }
     
     /**
@@ -69,6 +74,7 @@ class MultiPagina extends PaginaHTML {
      * @see PaginaHTML::__toString()
      */
     public function __toString(){
+        parent::aggiungi($this->indiceLateraleSx);
         $this->cssBody();
         return parent::__toString();
     }

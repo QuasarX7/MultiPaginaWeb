@@ -7,6 +7,7 @@ $pagina = new MultiPagina('llu');
 $menu = new BarraMenu("#00f","#0f0","#f00");
 $menu->menuPrimoLivello('#f7f', '#f00');
 $menu->menuSecondoLivello('#222', '#fff');
+$menu->posizioneFissa();
 
 $menu->aggiungi(new Menu('ciaoooo stronzo',''));
 
@@ -22,6 +23,8 @@ $menu->aggiungi($menu2);
 $menu->aggiungi(new Menu('voce3',''));
 
 $pagina->aggiungi($menu);
+
+
 
 $pagina->crea();
 

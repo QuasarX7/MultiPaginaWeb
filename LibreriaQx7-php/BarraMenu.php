@@ -17,6 +17,8 @@ class BarraMenu extends Tag{
     
     protected $coloreSeleziona;
     
+    protected $posizione = Posizione::RELATIVA;
+    
 
     /**
      * Costruisce un tag 'nav'.
@@ -30,6 +32,10 @@ class BarraMenu extends Tag{
         
         $this->coloreSfondoVoce2liv = $this->coloreSfondoVoce = $coloreSfondo;
         $this->coloreTestoVoce2liv = $this->coloreTestoVoce = $coloreTesto;
+    }
+    
+    public function posizioneFissa(){
+        $this->posizione = Posizione::FISSA;
     }
     
     public function menuPrimoLivello($coloreSfondo,$coloreTesto){
@@ -51,8 +57,6 @@ class BarraMenu extends Tag{
      */
     public function regoleCSS(){
         $css = array();
-        
-        
         /*
           nav {
                 background-color: #333;
@@ -65,6 +69,8 @@ class BarraMenu extends Tag{
         $nav = new RegolaCSS(
             'nav',
             [
+                new DichiarazioneCSS('position',$this->posizione),
+                new DichiarazioneCSS('width','100%'),
                 new DichiarazioneCSS('background-color',$this->coloreSfondo),
                 new DichiarazioneCSS('border','1px solid '.$this->coloreSfondo),
                 new DichiarazioneCSS('display','block'),
@@ -189,7 +195,7 @@ class BarraMenu extends Tag{
         $nav_li_hover_ul= new RegolaCSS(
             'nav li:hover > ul',
             [
-                new DichiarazioneCSS('position','absolute'),
+                new DichiarazioneCSS('position',$this->posizione),
                 new DichiarazioneCSS('display','block')
                 
             ]
