@@ -13,6 +13,7 @@ class PaginaHTML extends Oggetto{
   
     protected $titolo;
     protected $css = array();
+    protected $file =''; ///< importa file esterni
 
     /**
      * 
@@ -29,6 +30,16 @@ class PaginaHTML extends Oggetto{
             parent::aggiungi($valore);
         }
     }
+    /**
+     * Carica file esterni.
+     * 
+     * @param string $file
+     */
+    public function importa($file){
+        if(is_string($file)){
+            $this->file .= "@import url(".$file.");";
+        }
+    }
 
     
     public function __toString() {
@@ -36,7 +47,7 @@ class PaginaHTML extends Oggetto{
         
         $body = new Tag("body", $this->attributi, $this->contenuto);
         $titolo = new Tag("title", $this->titolo . '');
-        $regoleCSS = ' ';
+        $regoleCSS = ' ' . $this->file;
         foreach ($this->css as $regola) {
             $regoleCSS .= $regola . '';
         }

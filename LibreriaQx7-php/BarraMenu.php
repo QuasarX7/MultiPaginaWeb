@@ -75,6 +75,7 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('border','1px solid '.$this->coloreSfondo),
                 new DichiarazioneCSS('display','block'),
                 new DichiarazioneCSS('margin','0'),
+                new DichiarazioneCSS('z-index','10000'),
                 new DichiarazioneCSS('overflow','hidden')
             ]
         );
