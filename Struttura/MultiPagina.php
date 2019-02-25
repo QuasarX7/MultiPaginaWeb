@@ -7,8 +7,9 @@ include_once 'LibreriaQx7-php/Menu.php';
 class MultiPagina extends PaginaHTML {
     
     const LUNGHEZZA_PAGINA  = '700px';
-    const FONT_TESTO_R      = 'Amita-Regular.ttf';
-    const FONT_TESTO_B      = 'Amita-Bold.ttf';
+    const LUNGHEZZA_PANNELLO_SX  = '270px';
+    const FONT_TESTO_R      = 'LibreriaQx7-php/Amita-Regular.ttf';
+    const FONT_INTESTAZIONE_R = 'LibreriaQx7-php/Akronim-Regular.ttf';
     //const FONT_TESTO_C      = 'AnonymousPro-Italic.ttf';
     //const FONT_TESTO_C_B    = 'AnonymousPro-BoldItalic.ttf';
     
@@ -17,6 +18,7 @@ class MultiPagina extends PaginaHTML {
 
     
     protected $intestazione;
+    
     
     protected $paginaTesto;
     protected $indiceLateraleSx;
@@ -49,21 +51,31 @@ class MultiPagina extends PaginaHTML {
     }
     
     private function creaPannelloLaterale(){
-        $this->indiceLateraleSx = new Pannello('270px', '400px', '#999', '#000');
-        $this->indiceLateraleSx->posiziona(Posizione::FISSA,'0','50px');
+        $this->indiceLateraleSx = new Pannello(self::LUNGHEZZA_PANNELLO_SX, '400px', '#999', '#000');
+        $this->indiceLateraleSx->posiziona(Posizione::ASSOLUTA,'0','50px');
     }
     
     private function creaTitoloPaggina(){
-        $this->intestazione = new Pannello(self::LUNGHEZZA_PAGINA, '80px', '#999', '#000');
+        $this->intestazione = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#999', '#000');
         $this->intestazione->posiziona(Posizione::ASSOLUTA,'280px','55px');
+        $this->intestazione->aggiungi('Qualsiasi cosa acadda: sei ......!');
+        $this->intestazione->aggiungi(
+            new Stile(
+                [
+                    new DichiarazioneCSS('font-family',"'Akronim', cursive"),
+                    new DichiarazioneCSS('font-size',"50px"),
+                    new DichiarazioneCSS('padding',"5px"),
+                ]
+            )
+        );
     }
     
     private function creaPaginaDiTesto(){
         $this->paginaTesto = new Pannello(self::LUNGHEZZA_PAGINA, '200%', '#ddd', 'black');
-        $this->paginaTesto->posiziona(Posizione::ASSOLUTA,'280px','150px');
+        $this->paginaTesto->posiziona(Posizione::ASSOLUTA,'280px','200px');
         $this->paginaTesto->aggiungi(
             "Silvia, rimembri ancora
-Quel tempo della tua vita mortale,
+Quel <b>tempo</b> della tua vita mortale,
 Quando beltà splendea
 Negli occhi tuoi ridenti e fuggitivi,
 E tu, lieta e pensosa, il limitare            
@@ -131,15 +143,24 @@ Tu, misera, cadesti: e con la mano
 La fredda morte ed una tomba ignuda
 Mostravi di lontano."
             );
-        $this->paginaTesto->aggiungi(new Stile('font-family',"'Amita', cursive"));
+        $this->paginaTesto->aggiungi(
+            new Stile(
+                [
+                    new DichiarazioneCSS('font-family',"'Amita', corsive"),
+                    new DichiarazioneCSS('font-size',"18px")
+                ]
+            )
+        );
     }
     
     /**
      * Inizializza lo stile predefinito della pagina.
      */
     private function cssBody(){
-        parent::importa(self::FONT_TESTO_R);
-        parent::importa(self::FONT_TESTO_B);
+        parent::importaFont('Amita', self::FONT_TESTO_R);
+        parent::importaFont('Akronim', self::FONT_INTESTAZIONE_R);
+        
+        //parent::importaCSS(self::FONT_TESTO_R);
         //parent::importa(self::FONT_TESTO_C);
         //parent::importa(self::FONT_TESTO_C_B);
         
@@ -157,11 +178,13 @@ Mostravi di lontano."
                 new DichiarazioneCSS('margin','0'),
                 new DichiarazioneCSS('padding','0'),
                 new DichiarazioneCSS('font-size','15px'),
-                //new DichiarazioneCSS('font-family', '"Lucida Grande", "Helvetica Nueue", Arial, sans-serif')
+                new DichiarazioneCSS('font-family', '"Lucida Grande", "Helvetica Nueue", Arial, sans-serif')
             ]
             );
         $this->aggiungi($body);
     }
+    
+    
     
     /**
      * {@inheritDoc}
@@ -171,7 +194,7 @@ Mostravi di lontano."
         parent::aggiungi($this->paginaTesto);
         parent::aggiungi($this->intestazione);
         parent::aggiungi($this->indiceLateraleSx);
-        
+       
         $this->cssBody();
         return parent::__toString();
     }
