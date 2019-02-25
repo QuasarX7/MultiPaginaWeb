@@ -35,9 +35,15 @@ class PaginaHTML extends Oggetto{
      * 
      * @param string $file
      */
-    public function importa($file){
+    public function importaCSS($file){
         if(is_string($file)){
             $this->file .= "@import url(".$file.");";
+        }
+    }
+    
+    public function importaFont($nome,$file){
+        if(is_string($file) && is_string($nome)){
+            $this->file .= "@font-face {font-family: '".$nome."';src: url('".$file."') format('truetype');}";
         }
     }
 
