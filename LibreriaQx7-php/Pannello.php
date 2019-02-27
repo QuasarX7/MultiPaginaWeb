@@ -88,16 +88,20 @@ abstract class Limite{
  */
 class Pannello extends Tag{
     
-    public function __construct($lunghezza, $altezza, $coloreSfondo, $coloreTesto) {
+    public function __construct($lunghezza, $altezza, $coloreSfondo=null, $coloreTesto=null) {
         static $z = 0;
         $css = new Stile([
-            new DichiarazioneCSS('overflow','hidden'),
+            new DichiarazioneCSS('overflow','auto'),
             new DichiarazioneCSS(PropritàCSS::SOVRAPPOSIZIONE, ($z++) .''),
             new DichiarazioneCSS(PropritàCSS::ALTEZZA, $altezza.''),
-            new DichiarazioneCSS(PropritàCSS::LUNGHEZZA, $lunghezza.''),
-            new DichiarazioneCSS(PropritàCSS::COLORE_SFONDO,$coloreSfondo),
-            new DichiarazioneCSS(PropritàCSS::COLORE,$coloreTesto)
+            new DichiarazioneCSS(PropritàCSS::LUNGHEZZA, $lunghezza.'')
         ]);
+        if(is_string($coloreSfondo)){
+            $css->aggiungi(PropritàCSS::COLORE_SFONDO,$coloreSfondo);
+        }
+        if(is_string($coloreTesto)){
+            $css->aggiungi(PropritàCSS::COLORE,$coloreTesto);
+        }
         parent::__construct('div',$css);
         
     }
@@ -175,6 +179,17 @@ class Pannello extends Tag{
                 $css->aggiungi(PropritàCSS::ALTO, $y . '');
             }
             $this->aggiungi($css);
+        }
+    }
+    
+    /**
+     * posiziona i pannelli come blocchi di elementi affiancati.
+     * 
+     * @param string $lato      'right' o  'left'
+     */
+    public function affianca($lato){
+        if($lato == Lato::SINISTRA || $lato == Lato::DESTRA){
+            $this->aggiungi(new Stile('float', $lato));
         }
     }
     

@@ -299,11 +299,36 @@ class BarraMenu extends Tag{
      */
     public function aggiungi($valore){
         if($valore instanceof Menu){
-            $this->menu[] = $valore;
+            $this->menu[$valore->nome()] = $valore;
         }else{
             parent::aggiungi($valore);
         }
-        
+    }
+    
+    /**
+     * 
+     * @param string $nome
+     * @return Menu
+     */
+    public function cercaVoce($nome){
+        return $this->menu[$nome];
+    }
+    /**
+     * nessun menu associato.
+     * 
+     * @return boolean
+     */
+    public function nessunaVoce(){
+        return count($this->menu) == 0;
+    }
+    
+    /**
+     * Lista delle voci menu.
+     * 
+     * @return array Menu
+     */
+    public function vociMenu(){
+        return $this->menu;
     }
 
     /**
