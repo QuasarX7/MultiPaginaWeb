@@ -3,8 +3,10 @@ include_once 'LibreriaQx7-php/PaginaHTML.php';
 include_once 'LibreriaQx7-php/Pannello.php';
 include_once 'LibreriaQx7-php/BarraMenu.php';
 include_once 'LibreriaQx7-php/Menu.php';
+include_once 'Argomento.php';
 
 class MultiPagina extends PaginaHTML {
+    const ELENCO = 'ElencoPagine'; // ID
     
     const LUNGHEZZA_PAGINA  = '700px';
     const LUNGHEZZA_PANNELLO_SX  = '270px';
@@ -17,11 +19,13 @@ class MultiPagina extends PaginaHTML {
     protected $vociMenu = array();
     
     protected $indice = 0;
-    protected $argomento = 'home';
+    protected $argomento = '';
 
+    protected $argomenti = array();
     
-    
-    protected $intestazione;
+    protected $indiceDiPagina;
+    protected $titoloArgomento;
+    protected $titoloPagina;
     
     
     protected $paginaTesto;
@@ -33,12 +37,13 @@ class MultiPagina extends PaginaHTML {
 
     public function __construct($titolo){
         parent::__construct($titolo);
-        if(!is_null($_GET['pagina']))
+        if(!is_null($_GET['pagina'])){
             $this->indice = $_GET['pagina'];
+        }
+        if(!is_null($_GET['argomento'])){
+            $this->argomento = $_GET['argomento'];
+        }
         
-        $this->creaPannelloLaterale();
-        $this->creaTitoloPaggina();
-        $this->creaPaginaDiTesto();
     }
     
     public function creaBarraMenu($coloreSfondo, $coloreTesto, $coloreSeleziona){
@@ -87,6 +92,17 @@ class MultiPagina extends PaginaHTML {
     }
     
     /**
+     * Collegamento ipertestuale ad un altra pagina di un argomento.
+     * 
+     * @param string $argomento
+     * @param int $pagina
+     * @return string
+     */
+    private function link($argomento,$pagina){
+        return $_SERVER['ADD_HOST'].'?pagina='.$pagina.'&argomento='.$argomento;
+    }
+    
+    /**
      * Metodo ricorsivo di ricerca del voce menu associata.
      * 
      * @param array $listaMenu
@@ -127,101 +143,101 @@ class MultiPagina extends PaginaHTML {
             
         }
     }
+    /**
+     * Aggiungi un argomento alla multi-pagina.
+     * 
+     * @param Argomento $argomento
+     */
+    public function aggiungiArgomento($argomento){
+        if($argomento instanceof Argomento){
+            $this->argomenti[$argomento->nome()] = $argomento;
+        }
+    }
     
     private function creaPannelloLaterale(){
         $this->indiceLateraleSx = new Pannello(self::LUNGHEZZA_PANNELLO_SX, '400px', '#999', '#000');
         $this->indiceLateraleSx->posiziona(Posizione::ASSOLUTA,'0','50px');
     }
     
-    private function creaTitoloPaggina(){
-        $this->intestazione = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#999', '#000');
-        $this->intestazione->posiziona(Posizione::ASSOLUTA,'280px','55px');
-        
-        $this->intestazione->aggiungi('->'.$this->indice.'<-');
-        $this->intestazione->aggiungi(
+    
+    private function creaTitoloPagina(){
+        $this->titoloArgomento = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
+        $this->titoloArgomento->posiziona(Posizione::STATICA);
+        $this->titoloArgomento->aggiungi($this->argomento.' ');
+        $this->titoloArgomento->aggiungi(
             new Stile(
                 [
                     new DichiarazioneCSS('font-family',"'Akronim', cursive"),
-                    new DichiarazioneCSS('font-size',"50px"),
-                    new DichiarazioneCSS('padding',"5px"),
+                    new DichiarazioneCSS('font-size',"50px")
+                ]
+            )
+        );
+        
+        $this->titoloPagina = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
+        $this->titoloPagina->posiziona(Posizione::STATICA);
+        $argomento = $this->argomenti[$this->argomento];
+        if($argomento instanceof Argomento){
+            $this->titoloPagina->aggiungi('<b>'.$argomento->nomePagina($this->indice).'</b>');
+            $this->titoloPagina->aggiungi(
+                new Stile(
+                    [
+                        new DichiarazioneCSS('font-family',"'Amita', cursive"),
+                        new DichiarazioneCSS('color','red'),
+                        new DichiarazioneCSS('font-size',"30px")
+                    ]
+                )
+            );
+        }
+        $this->titoloPagina->aggiungi(' ');
+    }
+    
+    private function creaIndiceDiPagina(){
+        $this->indiceDiPagina = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
+        $this->indiceDiPagina->posiziona(Posizione::STATICA);
+        $frecciaSx = new Tag(
+            'a',
+            [
+                new Attributo('href', self::link($this->argomento, $this->indice > 0 ? $this->indice - 1 : '0'))
+            ],
+            new Tag(
+                'img',
+                [
+                    new Attributo('src', 'LibreriaQx7-php/freccia_sinistra.png'),
+                    new Attributo('height', '40px'),new Attributo('width', '40px')
+                ]
+            )
+        );
+        $frecciaDx = new Tag(
+            'a',
+            [
+                new Attributo('href', self::link($this->argomento, $this->indice < $this->limiteIndicePagina() -1 ?  $this->indice + 1 : $this->indice ))
+            ],
+        
+            new Tag(
+                'img',
+                [
+                    new Attributo('src', 'LibreriaQx7-php/freccia_destra.png'),
+                    new Attributo('height', '40px'),new Attributo('width', '40px')
+                ]
+            )
+        );
+        
+        $this->indiceDiPagina->aggiungi($frecciaSx .'pag. '. $this->indice. $frecciaDx);
+        
+        $this->indiceDiPagina->aggiungi(
+            new Stile(
+                [
+                    new DichiarazioneCSS('font-family',"'Akronim', cursive"),
+                    new DichiarazioneCSS('font-size',"35px")
                 ]
             )
         );
     }
     
     private function creaPaginaDiTesto(){
-        $this->paginaTesto = new Pannello(self::LUNGHEZZA_PAGINA, '200%', '#ddd', 'black');
-        $this->paginaTesto->posiziona(Posizione::ASSOLUTA,'280px','200px');
-        $this->paginaTesto->aggiungi(
-            "Silvia, rimembri ancora
-            Quel <b>tempo</b> della tua vita mortale,
-            Quando beltà splendea
-            Negli occhi tuoi ridenti e fuggitivi,
-            E tu, lieta e pensosa, il limitare            
-            Di gioventù salivi?
-            
-            Sonavan le quiete
-            Stanze, e le vie dintorno,
-            Al tuo perpetuo canto,
-            Allor che all'opre femminili intenta        
-            Sedevi, assai contenta
-            Di quel vago avvenir che in mente avevi.
-            Era il maggio odoroso: e tu solevi
-            Così menare il giorno.
-            
-            Io gli studi leggiadri                
-            Talor lasciando e le sudate carte,
-            Ove il tempo mio primo
-            E di me si spendea la miglior parte,
-            D'in su i veroni del paterno ostello
-            Porgea gli orecchi al suon della tua voce,    
-            Ed alla man veloce
-            Che percorrea la faticosa tela.
-            Mirava il ciel sereno,
-            Le vie dorate e gli orti,
-            E quinci il mar da lungi, e quindi il monte.    
-            Lingua mortal non dice
-            Quel ch'io sentiva in seno.
-            
-            Che pensieri soavi,
-            Che speranze, che cori, o Silvia mia!
-            Quale allor ci apparia                
-            La vita umana e il fato!
-            Quando sovviemmi di cotanta speme,
-            Un affetto mi preme
-            Acerbo e sconsolato,
-            E tornami a doler di mia sventura.        
-            O natura, o natura,
-            Perchè non rendi poi
-            Quel che prometti allor? perchè di tanto
-            Inganni i figli tuoi?
-            
-            Tu pria che l'erbe inaridisse il verno,        
-            Da chiuso morbo combattuta e vinta,
-            Perivi, o tenerella. E non vedevi
-            Il fior degli anni tuoi;
-            Non ti molceva il core
-            La dolce lode or delle negre chiome,        
-            Or degli sguardi innamorati e schivi;
-            Nè teco le compagne ai dì festivi
-            Ragionavan d'amore.
-            
-            Anche peria fra poco
-            La speranza mia dolce: agli anni miei        
-            Anche negaro i fati
-            La giovanezza. Ahi come,
-            Come passata sei,
-            Cara compagna dell'età mia nova,
-            Mia lacrimata speme!                
-            Questo è quel mondo? questi
-            I diletti, l'amor, l'opre, gli eventi
-            Onde cotanto ragionammo insieme?
-            Questa la sorte dell'umane genti?
-            All'apparir del vero                    
-            Tu, misera, cadesti: e con la mano
-            La fredda morte ed una tomba ignuda
-            Mostravi di lontano."
-            );
+        $this->paginaTesto = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', 'black');
+        $this->paginaTesto->posiziona(Posizione::ASSOLUTA,'280px','60px');
+        $this->paginaTesto->aggiungi(' ');
         $this->paginaTesto->aggiungi(
             new Stile(
                 [
@@ -259,19 +275,132 @@ class MultiPagina extends PaginaHTML {
         $this->aggiungi($body);
     }
     
+    private function cssElencoPagine(){
+        /*
+          #ElencoPagine a:link, #ElencoPagine a:visited {
+              background-color: #f44336;
+              color: white;
+              padding: 14px 25px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+         }
+
+         */
+        $voceVisibile = new RegolaCSS(
+            '#'.self::ELENCO.' a:link, '.'#'.self::ELENCO.' a:visited',
+            [
+                new DichiarazioneCSS('background-color','#f44336'),
+                new DichiarazioneCSS('color','white'),
+                new DichiarazioneCSS('padding','5px 10px'),
+                //new DichiarazioneCSS('text-align', 'center'),
+                new DichiarazioneCSS('text-decoration', 'none'),
+                new DichiarazioneCSS('display', 'block')
+            ]
+            );
+        $this->aggiungi($voceVisibile);
+        /*
+         #ElencoPagine a:hover, #ElencoPagine a:active {
+              background-color: red;
+         }
+        */
+        $voceSeleziona = new RegolaCSS(
+            '#'.self::ELENCO.' a:hover, '.'#'.self::ELENCO.' a:active',
+            [new DichiarazioneCSS('background-color','red')]
+            );
+        $this->aggiungi($voceSeleziona);
+        
+        /*
+         #ElencoPagine li{
+            margin-left:-40px;
+            margin-top:-5px;
+         }
+         */
+        $voce = new RegolaCSS(
+            '#'.self::ELENCO.' li',
+            [
+                new DichiarazioneCSS('margin-left','-40px'),
+                //new DichiarazioneCSS('margin-top','-10px')
+            ]
+        );
+        $this->aggiungi($voce);
+    }
     
+    /**
+     * Numero messimo di pagine relative all'argomento corrente.
+     * 
+     * @return number
+     */
+    private function limiteIndicePagina(){
+        $argomento = $this->argomenti[$this->argomento];
+        if($argomento instanceof Argomento){
+            return $argomento->numeroPagine();
+        }
+        return -1;
+    }
+    
+    private function creaListaPagine(){
+        $listaPagine = new Tag('ul',[new Attributo('id', self::ELENCO)]);
+        $listaPagine->aggiungi(
+            new Stile(
+                [
+                    new DichiarazioneCSS('font-family',"'Amita', corsive"),
+                    new DichiarazioneCSS('font-size',"12px")
+                ]
+            )
+        );
+        $argomento = $this->argomenti[$this->argomento];
+        if($argomento instanceof Argomento){
+            for ($indice=0; $indice < $argomento->numeroPagine(); $indice++){
+                $listaPagine->aggiungi(
+                    new Tag(
+                        'li',
+                        [new Stile('list-style-type','none')],
+                        new Tag(
+                            'a',
+                            [new Attributo('href', self::link($argomento->nome(), $indice))],
+                            $argomento->nomePagina($indice)
+                        )
+                    )
+                );
+            }
+        }
+        
+        
+        $this->indiceLateraleSx->aggiungi($listaPagine);
+    }
     
     /**
      * {@inheritDoc}
      * @see PaginaHTML::__toString()
      */
     public function __toString(){
+        self::creaPannelloLaterale();
+        self::creaIndiceDiPagina();
+        self::creaPaginaDiTesto();
+        self::creaTitoloPagina();
         self::creaMenu();
+        $argomento = $this->argomenti[$this->argomento];
+        $this->paginaTesto->aggiungi($this->titoloArgomento);
+        $this->paginaTesto->aggiungi($this->indiceDiPagina);
+        $this->paginaTesto->aggiungi($this->titoloPagina);
+        
+        if($argomento instanceof Argomento){
+            $testo = $argomento->pagina($this->indice);
+            $this->paginaTesto->aggiungi($testo);
+        }
+        if(strlen($testo) > 100){
+            $this->paginaTesto->aggiungi($this->indiceDiPagina);
+        }
+        
         parent::aggiungi($this->paginaTesto);
-        parent::aggiungi($this->intestazione);
+        
+        //parent::aggiungi($this->intestazione);
+        self::creaListaPagine();
         parent::aggiungi($this->indiceLateraleSx);
         
-        $this->cssBody();
+        self::cssBody();
+        self::cssElencoPagine();
         return parent::__toString();
     }
     
