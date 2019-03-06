@@ -6,20 +6,26 @@ include_once 'LibreriaQx7-php/Menu.php';
 include_once 'Argomento.php';
 
 class MultiPagina extends PaginaHTML {
-    const ELENCO = 'ElencoPagine'; // ID
+    const ID_ELENCO = 'ElencoPagine'; // ID
+    const CHIAVE_PAGINA = 'pagina';
+    const CHIAVE_ARGOMENTO = 'argomento';
+    const HOME = 'home';
     
     const LUNGHEZZA_PAGINA  = '700px';
     const LUNGHEZZA_PANNELLO_SX  = '270px';
     const FONT_TESTO_R      = 'LibreriaQx7-php/Amita-Regular.ttf';
-    const FONT_INTESTAZIONE_R = 'LibreriaQx7-php/Akronim-Regular.ttf';
-    //const FONT_TESTO_C      = 'AnonymousPro-Italic.ttf';
-    //const FONT_TESTO_C_B    = 'AnonymousPro-BoldItalic.ttf';
     
+    const FONT_TITOLO_PAGINA_R = 'LibreriaQx7-php/ProstoOne-Regular.ttf';
+    const FONT_MENU_R = 'LibreriaQx7-php/Anton-Regular.ttf';
+    
+    const NOME_FONT_INTESATAZIONE = 'intestazione';
+   
+    protected $fontIntestazione;
     protected $barraMenu;
     protected $vociMenu = array();
     
-    protected $indice = 0;
-    protected $argomento = '';
+    protected $indice;
+    protected $argomento;
 
     protected $argomenti = array();
     
@@ -31,17 +37,27 @@ class MultiPagina extends PaginaHTML {
     protected $paginaTesto;
     protected $indiceLateraleSx;
     protected $suggerimentoLateraleDx;
+    
+    protected $coloreSelezionaIndicePagina;
    
     
     
-
     public function __construct($titolo){
         parent::__construct($titolo);
-        if(!is_null($_GET['pagina'])){
-            $this->indice = $_GET['pagina'];
+        
+        if(filter_has_var(INPUT_GET, self::CHIAVE_PAGINA)){
+            $this->indice = filter_input(INPUT_GET, self::CHIAVE_PAGINA, FILTER_SANITIZE_NUMBER_INT);
+            if ($this->indice === false) {
+                $this->indice = 0;
+            }
+        }else{
+            $this->indice = 0;
         }
-        if(!is_null($_GET['argomento'])){
-            $this->argomento = $_GET['argomento'];
+        if(filter_has_var(INPUT_GET, self::CHIAVE_ARGOMENTO)){
+            $this->argomento = filter_input(INPUT_GET, self::CHIAVE_ARGOMENTO, FILTER_SANITIZE_STRING);
+            if ($this->argomento === false) {
+                $this->argomento = self::HOME;
+            }
         }
         
     }
@@ -71,14 +87,16 @@ class MultiPagina extends PaginaHTML {
      * '$menu' contiene il nome di un'altra voce del un menu, sarà associato al sottomenu
      * di quest'ultimo.
      * 
-     * @param string $etichetta
-     * @param string $argomento
-     * @param int $pagina
-     * @param string $menu  etichetta della voce menu (padre) a cui è aggangiato
+     * @param string        $etichetta
+     * @param Argomento     $argomento
+     * @param string        $menu       etichetta della voce menu (padre) a cui è aggangiata
      */    
-     public function aggiungiMenu($etichetta,$argomento,$pagina,$menu=null){
-        if(!is_null($this->barraMenu) && is_integer($pagina) && is_string($argomento)){
-            $nuovoMenu = new Menu($etichetta,$_SERVER['ADD_HOST'].'?pagina='.$pagina.'&argomento='.$argomento);
+     public function aggiungiMenu($etichetta,$argomento=null,$menu=null){
+         if(!is_null($this->barraMenu)){
+            $nuovoMenu = new Menu(
+                $etichetta,
+                self::link($argomento != null ? $argomento->nome() : null, 0)
+            );
             if(is_null($menu)){//aggiungi alla barra menu
                 $this->vociMenu[$etichetta] = $nuovoMenu;
             }else{//aggiungi al menu
@@ -94,12 +112,15 @@ class MultiPagina extends PaginaHTML {
     /**
      * Collegamento ipertestuale ad un altra pagina di un argomento.
      * 
-     * @param string $argomento
-     * @param int $pagina
+     * @param   string  $argomento
+     * @param   int     $pagina
      * @return string
      */
     private function link($argomento,$pagina){
-        return $_SERVER['ADD_HOST'].'?pagina='.$pagina.'&argomento='.$argomento;
+        if(!is_null($argomento)){
+            return '?pagina='.$pagina.'&argomento='.$argomento;
+        }
+        return '';
     }
     
     /**
@@ -154,10 +175,15 @@ class MultiPagina extends PaginaHTML {
         }
     }
     
-    private function creaPannelloLaterale(){
-        $this->indiceLateraleSx = new Pannello(self::LUNGHEZZA_PANNELLO_SX, '400px', '#999', '#000');
+
+  
+    public function creaPannelloLaterale($coloreSfondo, $coloreTesto, $coloreSeleziona){
+        $this->indiceLateraleSx = new Pannello(self::LUNGHEZZA_PANNELLO_SX,'auto', $coloreSfondo, $coloreTesto);
+        $this->coloreSelezionaIndicePagina = $coloreSeleziona;
         $this->indiceLateraleSx->posiziona(Posizione::ASSOLUTA,'0','50px');
     }
+    
+ 
     
     
     private function creaTitoloPagina(){
@@ -167,7 +193,7 @@ class MultiPagina extends PaginaHTML {
         $this->titoloArgomento->aggiungi(
             new Stile(
                 [
-                    new DichiarazioneCSS('font-family',"'Akronim', cursive"),
+                    new DichiarazioneCSS('font-family',"'".self::NOME_FONT_INTESATAZIONE."', cursive"),
                     new DichiarazioneCSS('font-size',"50px")
                 ]
             )
@@ -177,11 +203,11 @@ class MultiPagina extends PaginaHTML {
         $this->titoloPagina->posiziona(Posizione::STATICA);
         $argomento = $this->argomenti[$this->argomento];
         if($argomento instanceof Argomento){
-            $this->titoloPagina->aggiungi('<b>'.$argomento->nomePagina($this->indice).'</b>');
+            $this->titoloPagina->aggiungi($argomento->nomePagina($this->indice));
             $this->titoloPagina->aggiungi(
                 new Stile(
                     [
-                        new DichiarazioneCSS('font-family',"'Amita', cursive"),
+                        new DichiarazioneCSS('font-family',"'Prosto One', cursive"),
                         new DichiarazioneCSS('color','red'),
                         new DichiarazioneCSS('font-size',"30px")
                     ]
@@ -192,46 +218,47 @@ class MultiPagina extends PaginaHTML {
     }
     
     private function creaIndiceDiPagina(){
-        $this->indiceDiPagina = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
-        $this->indiceDiPagina->posiziona(Posizione::STATICA);
-        $frecciaSx = new Tag(
-            'a',
-            [
-                new Attributo('href', self::link($this->argomento, $this->indice > 0 ? $this->indice - 1 : '0'))
-            ],
-            new Tag(
-                'img',
+        $maxPagina = $this->limiteIndicePagina();
+        if($maxPagina > 0){
+            $this->indiceDiPagina = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
+            $this->indiceDiPagina->posiziona(Posizione::STATICA);
+            $frecciaSx = new Tag(
+                'a',
+                [new Attributo('href', self::link($this->argomento, $this->indice > 0 ? $this->indice - 1 : '0'))],
+                new Tag(
+                    'img',
+                    [
+                        new Attributo('src', 'LibreriaQx7-php/freccia_sinistra.png'),
+                        new Attributo('height', '40px'),new Attributo('width', '40px')
+                    ]
+                )
+            );
+            $frecciaDx = new Tag(
+                'a',
                 [
-                    new Attributo('src', 'LibreriaQx7-php/freccia_sinistra.png'),
-                    new Attributo('height', '40px'),new Attributo('width', '40px')
-                ]
-            )
-        );
-        $frecciaDx = new Tag(
-            'a',
-            [
-                new Attributo('href', self::link($this->argomento, $this->indice < $this->limiteIndicePagina() -1 ?  $this->indice + 1 : $this->indice ))
-            ],
-        
-            new Tag(
-                'img',
-                [
-                    new Attributo('src', 'LibreriaQx7-php/freccia_destra.png'),
-                    new Attributo('height', '40px'),new Attributo('width', '40px')
-                ]
-            )
-        );
-        
-        $this->indiceDiPagina->aggiungi($frecciaSx .'pag. '. $this->indice. $frecciaDx);
-        
-        $this->indiceDiPagina->aggiungi(
-            new Stile(
-                [
-                    new DichiarazioneCSS('font-family',"'Akronim', cursive"),
-                    new DichiarazioneCSS('font-size',"35px")
-                ]
-            )
-        );
+                    new Attributo('href', self::link($this->argomento, $this->indice < $maxPagina -1 ?  $this->indice + 1 : $this->indice ))
+                ],
+            
+                new Tag(
+                    'img',
+                    [
+                        new Attributo('src', 'LibreriaQx7-php/freccia_destra.png'),
+                        new Attributo('height', '40px'),new Attributo('width', '40px')
+                    ]
+                )
+            );
+            
+            $this->indiceDiPagina->aggiungi($frecciaSx .'pag. '. ($this->indice+1). $frecciaDx);
+            http://locahttp://localhost/index.php?pagina=0&argomento=Argomento%20Testlhost/index.php?pagina=1&argomento=Argomento%20Test
+            $this->indiceDiPagina->aggiungi(
+                new Stile(
+                    [
+                        new DichiarazioneCSS('font-family',"'Prosto One', cursive"),
+                        new DichiarazioneCSS('font-size',"28px")
+                    ]
+                )
+            );
+        }
     }
     
     private function creaPaginaDiTesto(){
@@ -249,11 +276,25 @@ class MultiPagina extends PaginaHTML {
     }
     
     /**
+     * 
+     * @param string $font
+     */
+    public function formatoCarattereDiIntestazione($font) {
+        if(is_string($font)){
+            $this->fontIntestazione = $font;
+        }
+    } 
+    
+    /**
      * Inizializza lo stile predefinito della pagina.
      */
     private function cssBody(){
         parent::importaFont('Amita', self::FONT_TESTO_R);
-        parent::importaFont('Akronim', self::FONT_INTESTAZIONE_R);
+        if(!is_null($this->fontIntestazione)){
+            parent::importaFont('intestazione', $this->fontIntestazione);
+        }
+        parent::importaFont('Prosto One', self::FONT_TITOLO_PAGINA_R);
+        parent::importaFont('Anton', self::FONT_MENU_R);
         
         /*
          body{
@@ -268,62 +309,68 @@ class MultiPagina extends PaginaHTML {
             [
                 new DichiarazioneCSS('margin','0'),
                 new DichiarazioneCSS('padding','0'),
-                new DichiarazioneCSS('font-size','15px'),
-                new DichiarazioneCSS('font-family', '"Lucida Grande", "Helvetica Nueue", Arial, sans-serif')
+                new DichiarazioneCSS('font-size','16px'),
+                new DichiarazioneCSS('font-family', "'Anton', sans-serif")
             ]
             );
         $this->aggiungi($body);
+        
+        
     }
     
     private function cssElencoPagine(){
-        /*
-          #ElencoPagine a:link, #ElencoPagine a:visited {
-              background-color: #f44336;
-              color: white;
-              padding: 14px 25px;
-              text-align: center;
-              text-decoration: none;
-              display: inline-block;
-         }
-
-         */
-        $voceVisibile = new RegolaCSS(
-            '#'.self::ELENCO.' a:link, '.'#'.self::ELENCO.' a:visited',
-            [
-                new DichiarazioneCSS('background-color','#f44336'),
-                new DichiarazioneCSS('color','white'),
-                new DichiarazioneCSS('padding','5px 10px'),
-                //new DichiarazioneCSS('text-align', 'center'),
-                new DichiarazioneCSS('text-decoration', 'none'),
-                new DichiarazioneCSS('display', 'block')
-            ]
-            );
-        $this->aggiungi($voceVisibile);
-        /*
-         #ElencoPagine a:hover, #ElencoPagine a:active {
-              background-color: red;
-         }
-        */
-        $voceSeleziona = new RegolaCSS(
-            '#'.self::ELENCO.' a:hover, '.'#'.self::ELENCO.' a:active',
-            [new DichiarazioneCSS('background-color','red')]
-            );
-        $this->aggiungi($voceSeleziona);
+        if($this->indiceLateraleSx instanceof Pannello) {
         
-        /*
-         #ElencoPagine li{
-            margin-left:-40px;
-            margin-top:-5px;
-         }
-         */
-        $voce = new RegolaCSS(
-            '#'.self::ELENCO.' li',
-            [
-                new DichiarazioneCSS('margin-left','-40px'),
-                //new DichiarazioneCSS('margin-top','-10px')
-            ]
-        );
-        $this->aggiungi($voce);
+            /*
+              #ElencoPagine a:link, #ElencoPagine a:visited {
+                  background-color: #f44336;
+                  color: white;
+                  padding: 14px 25px;
+                  text-align: center;
+                  text-decoration: none;
+                  display: inline-block;
+             }
+    
+             */
+            $voceVisibile = new RegolaCSS(
+                '#'.self::ID_ELENCO.' a:link, '.'#'.self::ID_ELENCO.' a:visited',
+                [
+                    new DichiarazioneCSS('background-color',$this->indiceLateraleSx->coloreSfondo()),
+                    new DichiarazioneCSS('color',$this->indiceLateraleSx->coloreTesto()),
+                    new DichiarazioneCSS('padding','5px 10px'),
+                    //new DichiarazioneCSS('text-align', 'center'),
+                    new DichiarazioneCSS('text-decoration', 'none'),
+                    new DichiarazioneCSS('display', 'block')
+                ]
+                );
+            $this->aggiungi($voceVisibile);
+            /*
+             #ElencoPagine a:hover, #ElencoPagine a:active {
+                  background-color: red;
+             }
+            */
+            if(!is_null($this->coloreSelezionaIndicePagina)){
+                $voceSeleziona = new RegolaCSS(
+                    '#'.self::ID_ELENCO.' a:hover, '.'#'.self::ID_ELENCO.' a:active',
+                    [new DichiarazioneCSS('background-color',$this->coloreSelezionaIndicePagina)]
+                    );
+                $this->aggiungi($voceSeleziona);
+            }
+            
+            /*
+             #ElencoPagine li{
+                margin-left:-40px;
+                margin-top:-5px;
+             }
+             */
+            $voce = new RegolaCSS(
+                '#'.self::ID_ELENCO.' li',
+                [
+                    new DichiarazioneCSS('margin-left','-40px')
+                ]
+            );
+            $this->aggiungi($voce);
+        }
     }
     
     /**
@@ -340,11 +387,11 @@ class MultiPagina extends PaginaHTML {
     }
     
     private function creaListaPagine(){
-        $listaPagine = new Tag('ul',[new Attributo('id', self::ELENCO)]);
+        $listaPagine = new Tag('ul',[new Attributo('id', self::ID_ELENCO)]);
         $listaPagine->aggiungi(
             new Stile(
                 [
-                    new DichiarazioneCSS('font-family',"'Amita', corsive"),
+                    new DichiarazioneCSS('font-family',"'Prosto One', corsive"),
                     new DichiarazioneCSS('font-size',"12px")
                 ]
             )
@@ -365,8 +412,6 @@ class MultiPagina extends PaginaHTML {
                 );
             }
         }
-        
-        
         $this->indiceLateraleSx->aggiungi($listaPagine);
     }
     
@@ -375,7 +420,7 @@ class MultiPagina extends PaginaHTML {
      * @see PaginaHTML::__toString()
      */
     public function __toString(){
-        self::creaPannelloLaterale();
+        
         self::creaIndiceDiPagina();
         self::creaPaginaDiTesto();
         self::creaTitoloPagina();
@@ -385,6 +430,7 @@ class MultiPagina extends PaginaHTML {
         $this->paginaTesto->aggiungi($this->indiceDiPagina);
         $this->paginaTesto->aggiungi($this->titoloPagina);
         
+        $testo = '';
         if($argomento instanceof Argomento){
             $testo = $argomento->pagina($this->indice);
             $this->paginaTesto->aggiungi($testo);
@@ -395,9 +441,10 @@ class MultiPagina extends PaginaHTML {
         
         parent::aggiungi($this->paginaTesto);
         
-        //parent::aggiungi($this->intestazione);
-        self::creaListaPagine();
-        parent::aggiungi($this->indiceLateraleSx);
+        if(!is_null($this->indiceLateraleSx)){
+            self::creaListaPagine();
+            parent::aggiungi($this->indiceLateraleSx);
+        }
         
         self::cssBody();
         self::cssElencoPagine();

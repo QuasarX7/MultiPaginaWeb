@@ -87,7 +87,11 @@ abstract class Limite{
  * @author Dott. Domenico della PERUTA
  */
 class Pannello extends Tag{
+    protected $coloreSfondo;
+    protected $coloreTesto;
     
+    
+
     public function __construct($lunghezza, $altezza, $coloreSfondo=null, $coloreTesto=null) {
         static $z = 0;
         $css = new Stile([
@@ -98,13 +102,32 @@ class Pannello extends Tag{
         ]);
         if(is_string($coloreSfondo)){
             $css->aggiungi(PropritàCSS::COLORE_SFONDO,$coloreSfondo);
+            $this->coloreSfondo = $coloreSfondo;
         }
         if(is_string($coloreTesto)){
             $css->aggiungi(PropritàCSS::COLORE,$coloreTesto);
+            $this->coloreTesto = $coloreTesto;
         }
         parent::__construct('div',$css);
         
     }
+    
+    /**
+     * @return string
+     */
+    public function coloreSfondo(){
+        return $this->coloreSfondo;
+    }
+    
+    /**
+     * @return string
+     */
+    public function coloreTesto(){
+        return $this->coloreTesto;
+    }
+    
+    
+    
     /**
      * Imposta la distanza del pannello dagli altri componenti grafici adiacenti.
      * 
