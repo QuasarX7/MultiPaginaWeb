@@ -4,7 +4,7 @@ include_once 'Struttura/MultiPagina.php';
 
 $pagina = new MultiPagina('llu');
 
-$pagina->formatoCarattereDiIntestazione('LibreriaQx7-php/FrederickatheGreat-Regular.ttf');
+$pagina->formatoCarattereDiIntestazione('Struttura/Akronim-Regular.ttf');
 
 $pagina->creaBarraMenu("#00f","#0f0","#f00");
 //$pagina->inizializzaPrimoLivelloMenu('#f7f', '#f00');

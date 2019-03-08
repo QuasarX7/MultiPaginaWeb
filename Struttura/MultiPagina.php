@@ -13,14 +13,14 @@ class MultiPagina extends PaginaHTML {
     
     const LUNGHEZZA_PAGINA  = '700px';
     const LUNGHEZZA_PANNELLO_SX  = '270px';
-    const FONT_TESTO_R      = 'LibreriaQx7-php/Amita-Regular.ttf';
+    const FONT_TESTO_R      = 'Struttura/Amita-Regular.ttf';
     
-    const FONT_TITOLO_PAGINA_R = 'LibreriaQx7-php/ProstoOne-Regular.ttf';
-    const FONT_MENU_R = 'LibreriaQx7-php/Anton-Regular.ttf';
+    const FONT_TITOLO_PAGINA_R = 'Struttura/ProstoOne-Regular.ttf';
+    const FONT_MENU_R = 'Struttura/Anton-Regular.ttf';
     
     const NOME_FONT_INTESATAZIONE = 'intestazione';
    
-    protected $fontIntestazione;
+    protected $fontIntestazione = 'Struttura/FrederickatheGreat-Regular.ttf';
     protected $barraMenu;
     protected $vociMenu = array();
     
@@ -276,7 +276,7 @@ class MultiPagina extends PaginaHTML {
     }
     
     /**
-     * 
+     * Carica il file del font per l'intestazione degli argomenti.
      * @param string $font
      */
     public function formatoCarattereDiIntestazione($font) {
