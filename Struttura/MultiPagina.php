@@ -100,10 +100,12 @@ class MultiPagina extends PaginaHTML {
             if(is_null($menu)){//aggiungi alla barra menu
                 $this->vociMenu[$etichetta] = $nuovoMenu;
             }else{//aggiungi al menu
-                if($this->vociMenu[$menu] instanceof Menu){
-                    $this->vociMenu[$menu]->aggiungi($nuovoMenu);
-                }else{
-                   self::aggiungiSottomenu($this->vociMenu, $nuovoMenu, $menu); 
+                if(isset($this->vociMenu[$menu])){
+                    if($this->vociMenu[$menu] instanceof Menu){
+                        $this->vociMenu[$menu]->aggiungi($nuovoMenu);
+                    }else{
+                       self::aggiungiSottomenu($this->vociMenu, $nuovoMenu, $menu); 
+                    }
                 }
             }
         }
@@ -201,18 +203,20 @@ class MultiPagina extends PaginaHTML {
         
         $this->titoloPagina = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
         $this->titoloPagina->posiziona(Posizione::STATICA);
+        if(isset($this->argomenti[$this->argomento])){
         $argomento = $this->argomenti[$this->argomento];
-        if($argomento instanceof Argomento){
-            $this->titoloPagina->aggiungi($argomento->nomePagina($this->indice));
-            $this->titoloPagina->aggiungi(
-                new Stile(
-                    [
-                        new DichiarazioneCSS('font-family',"'Prosto One', cursive"),
-                        new DichiarazioneCSS('color','red'),
-                        new DichiarazioneCSS('font-size',"30px")
-                    ]
-                )
-            );
+            if($argomento instanceof Argomento){
+                $this->titoloPagina->aggiungi($argomento->nomePagina($this->indice));
+                $this->titoloPagina->aggiungi(
+                    new Stile(
+                        [
+                            new DichiarazioneCSS('font-family',"'Prosto One', cursive"),
+                            new DichiarazioneCSS('color','red'),
+                            new DichiarazioneCSS('font-size',"30px")
+                        ]
+                    )
+                );
+            }
         }
         $this->titoloPagina->aggiungi(' ');
     }
@@ -379,9 +383,11 @@ class MultiPagina extends PaginaHTML {
      * @return number
      */
     private function limiteIndicePagina(){
-        $argomento = $this->argomenti[$this->argomento];
-        if($argomento instanceof Argomento){
-            return $argomento->numeroPagine();
+        if(isset($this->argomenti[$this->argomento])){
+            $argomento = $this->argomenti[$this->argomento];
+            if($argomento instanceof Argomento){
+                return $argomento->numeroPagine();
+            }
         }
         return -1;
     }
@@ -425,25 +431,28 @@ class MultiPagina extends PaginaHTML {
         self::creaPaginaDiTesto();
         self::creaTitoloPagina();
         self::creaMenu();
-        $argomento = $this->argomenti[$this->argomento];
-        $this->paginaTesto->aggiungi($this->titoloArgomento);
-        $this->paginaTesto->aggiungi($this->indiceDiPagina);
-        $this->paginaTesto->aggiungi($this->titoloPagina);
+        if(isset($this->argomenti[$this->argomento])){
+            $argomento = $this->argomenti[$this->argomento];
         
-        $testo = '';
-        if($argomento instanceof Argomento){
-            $testo = $argomento->pagina($this->indice);
-            $this->paginaTesto->aggiungi($testo);
-        }
-        if(strlen($testo) > 100){
+            $this->paginaTesto->aggiungi($this->titoloArgomento);
             $this->paginaTesto->aggiungi($this->indiceDiPagina);
-        }
-        
-        parent::aggiungi($this->paginaTesto);
-        
-        if(!is_null($this->indiceLateraleSx)){
-            self::creaListaPagine();
-            parent::aggiungi($this->indiceLateraleSx);
+            $this->paginaTesto->aggiungi($this->titoloPagina);
+            
+            $testo = '';
+            if($argomento instanceof Argomento){
+                $testo = $argomento->pagina($this->indice);
+                $this->paginaTesto->aggiungi($testo);
+            }
+            if(strlen($testo) > 100){
+                $this->paginaTesto->aggiungi($this->indiceDiPagina);
+            }
+            
+            parent::aggiungi($this->paginaTesto);
+            
+            if(!is_null($this->indiceLateraleSx)){
+                self::creaListaPagine();
+                parent::aggiungi($this->indiceLateraleSx);
+            }
         }
         
         self::cssBody();

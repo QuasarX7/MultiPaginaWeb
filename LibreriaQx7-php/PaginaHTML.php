@@ -49,7 +49,7 @@ class PaginaHTML extends Oggetto{
 
     
     public function __toString() {
-        $intestazione = new Tag("!DOCTYPE html");
+        $intestazione = "<!DOCTYPE html>";
         
         $body = new Tag("body", $this->attributi, $this->contenuto);
         $titolo = new Tag("title", $this->titolo . '');
@@ -59,8 +59,8 @@ class PaginaHTML extends Oggetto{
         }
         $stile = new Tag('style',new Attributo('type','text/css'),$regoleCSS);
         $head = new Tag("head", $titolo . $stile);
-        $html = new Tag("html", $intestazione . $head . $body . '');
-        return $html->vedi();
+        $html = new Tag("html",  $head . $body . '');
+        return $intestazione . $html->vedi();
     }
 
 }
