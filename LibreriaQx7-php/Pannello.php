@@ -50,6 +50,19 @@ class Lato{
     }
 }
 
+class Comportamento{
+    const BLOCCO = 'block';
+    const IN_LINEA = 'inline';
+    const BLOCCO_LINEA = 'inline-block';
+    const INVISIBILE = 'none';
+    
+    static function appartiene($valore){
+        return Comportamento::BLOCCO == $valore || Comportamento::IN_LINEA == $valore
+        || Comportamento::BLOCCO_LINEA == $valore || Comportamento::INVISIBILE == $valore;
+    }
+    
+}
+
 class Posizione {
     const STATICA = 'static';
     const RELATIVA = 'relative';
@@ -108,7 +121,7 @@ class Pannello extends Tag{
             $css->aggiungi(PropritàCSS::COLORE,$coloreTesto);
             $this->coloreTesto = $coloreTesto;
         }
-        parent::__construct('div',$css);
+        parent::__construct('div',$css,' ');
         
     }
     
@@ -202,6 +215,16 @@ class Pannello extends Tag{
                 $css->aggiungi(PropritàCSS::ALTO, $y . '');
             }
             $this->aggiungi($css);
+        }
+    }
+    
+    /**
+     * Permette di definire il comportamento del pannello nella visualizzazione, che di default è 'blocco'.
+     * @param string $display Es.: Comportamento::IN_LINEA
+     */
+    public function comportamento($display){
+        if (Comportamento::appartiene($display)) {
+            $this->aggiungi(new Stile('display', $display));
         }
     }
     

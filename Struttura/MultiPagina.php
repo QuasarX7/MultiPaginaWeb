@@ -189,6 +189,7 @@ class MultiPagina extends PaginaHTML {
     
     
     private function creaTitoloPagina(){
+        
         $this->titoloArgomento = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
         $this->titoloArgomento->posiziona(Posizione::STATICA);
         $this->titoloArgomento->aggiungi($this->argomento.' ');
@@ -204,9 +205,11 @@ class MultiPagina extends PaginaHTML {
         $this->titoloPagina = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
         $this->titoloPagina->posiziona(Posizione::STATICA);
         if(isset($this->argomenti[$this->argomento])){
-        $argomento = $this->argomenti[$this->argomento];
+            $argomento = $this->argomenti[$this->argomento];
             if($argomento instanceof Argomento){
-                $this->titoloPagina->aggiungi($argomento->nomePagina($this->indice));
+                $pagina = $argomento->nomePagina($this->indice);
+                self::titolo($pagina);
+                $this->titoloPagina->aggiungi($pagina);
                 $this->titoloPagina->aggiungi(
                     new Stile(
                         [
@@ -427,36 +430,60 @@ class MultiPagina extends PaginaHTML {
      */
     public function __toString(){
         
-        self::creaIndiceDiPagina();
-        self::creaPaginaDiTesto();
-        self::creaTitoloPagina();
-        self::creaMenu();
-        if(isset($this->argomenti[$this->argomento])){
-            $argomento = $this->argomenti[$this->argomento];
-        
-            $this->paginaTesto->aggiungi($this->titoloArgomento);
-            $this->paginaTesto->aggiungi($this->indiceDiPagina);
-            $this->paginaTesto->aggiungi($this->titoloPagina);
+        $controllo = new Browser();
+        if($controllo->html5()){
+            $testata = new Pannello('auto', '40px','red');
+            //self::aggiungi($testata);
+            $listaIndici = new Pannello('100px', '500px','blue');
+            $listaIndici->affianca(Lato::SINISTRA);
+            //$listaIndici->comportamento(Comportamento::IN_LINEA);
+            $pagina = new Pannello('500px', '600px','#0FF');
+            $pagina->affianca(Lato::SINISTRA);
+            $corpo = new Pannello('800px', '800px','#0F0');
+            $corpo->aggiungi($testata);
+            $corpo->aggiungi($listaIndici);
+            $corpo->aggiungi($pagina);
+            //$corpo->comportamento(Comportamento::BLOCCO_LINEA);
+            //$corpo->posiziona(Posizione::ASSOLUTA,'400px','200px');
+            self::aggiungi($corpo);
             
-            $testo = '';
-            if($argomento instanceof Argomento){
-                $testo = $argomento->pagina($this->indice);
-                $this->paginaTesto->aggiungi($testo);
-            }
-            if(strlen($testo) > 100){
+            /*
+            self::creaIndiceDiPagina();
+            self::creaPaginaDiTesto();
+            self::creaTitoloPagina();
+            self::creaMenu();
+            if(isset($this->argomenti[$this->argomento])){
+                $argomento = $this->argomenti[$this->argomento];
+            
+                $this->paginaTesto->aggiungi($this->titoloArgomento);
                 $this->paginaTesto->aggiungi($this->indiceDiPagina);
+                $this->paginaTesto->aggiungi($this->titoloPagina);
+                
+                $testo = '';
+                if($argomento instanceof Argomento){
+                    $testo = $argomento->pagina($this->indice);
+                    $this->paginaTesto->aggiungi($testo);
+                }
+                if(strlen($testo) > 100){
+                    $this->paginaTesto->aggiungi($this->indiceDiPagina);
+                }
+                
+                self::aggiungi($this->paginaTesto);
+                
+                if(!is_null($this->indiceLateraleSx)){
+                    self::creaListaPagine();
+                    self::aggiungi($this->indiceLateraleSx);
+                }
             }
-            
-            parent::aggiungi($this->paginaTesto);
-            
-            if(!is_null($this->indiceLateraleSx)){
-                self::creaListaPagine();
-                parent::aggiungi($this->indiceLateraleSx);
-            }
+            self::cssBody();
+            self::cssElencoPagine();
+            */
+        }else{
+            self::aggiungi(
+                '<h1>Il browser non è compatibile con il codice HTML5 della pagina</h1><br><br><h2>'.$controllo.'</h2>'
+            );
         }
         
-        self::cssBody();
-        self::cssElencoPagine();
         return parent::__toString();
     }
     
