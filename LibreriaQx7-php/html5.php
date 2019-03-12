@@ -14,7 +14,6 @@ class IntestazionePagina extends Pannello {
     public function __construct($altezza, $coloreSfondo=null, $coloreTesto=null) {
         parent::__construct('100%', $altezza,$coloreSfondo, $coloreTesto);
         $this->nome = 'header';
-        $this->posiziona(Posizione::ASSOLUTA,0,0);
     }
 }
 
@@ -29,15 +28,15 @@ class FinePagina extends Pannello {
     public function __construct($altezza, $coloreSfondo=null, $coloreTesto=null) {
         parent::__construct('100%', $altezza,$coloreSfondo, $coloreTesto);
         $this->nome = 'footer';
-        
-        $posizione = new Stile('position', Posizione::ASSOLUTA);
-        $posizione->aggiungi(PropritàCSS::SINISTRA, '0');
-        $posizione->aggiungi(PropritàCSS::BASSO , '0');
-        $this->aggiungi($posizione);
-        
     }
 }
 
+/**
+ * Parte contenente il testo principale o un articolo.
+ * 
+ * @author Dott. Domenico della PERUTA
+ *
+ */
 class TestoPagina extends Pannello {
     public function __construct($lunghezza, $altezza, $coloreSfondo=null, $coloreTesto=null) {
         parent::__construct($lunghezza, $altezza,$coloreSfondo, $coloreTesto);
@@ -45,6 +44,30 @@ class TestoPagina extends Pannello {
     }
 }
 
+/**
+ * Annotazioni o parti marginali della pagina.
+ *
+ * @author Dott. Domenico della PERUTA
+ *
+ */
+class NotePagina extends Pannello {
+    public function __construct($lunghezza, $altezza, $coloreSfondo=null, $coloreTesto=null) {
+        parent::__construct($lunghezza, $altezza,$coloreSfondo, $coloreTesto);
+        $this->nome = 'aside';
+    }
+}
+/**
+ * Paragrafo o sezione del testo principale.
+ * 
+ * @author Dott. Domenico della PERUTA
+ *
+ */
+class ParagrafoPagina extends Pannello {
+    public function __construct($lunghezza, $altezza, $coloreSfondo=null, $coloreTesto=null) {
+        parent::__construct($lunghezza, $altezza,$coloreSfondo, $coloreTesto);
+        $this->nome = 'section';
+    }
+}
 
 
 
