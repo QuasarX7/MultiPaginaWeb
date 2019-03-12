@@ -1,6 +1,6 @@
 <?php
 include_once 'LibreriaQx7-php/PaginaHTML.php';
-include_once 'LibreriaQx7-php/Pannello.php';
+include_once 'LibreriaQx7-php/html5.php';
 include_once 'LibreriaQx7-php/BarraMenu.php';
 include_once 'LibreriaQx7-php/Menu.php';
 include_once 'Argomento.php';
@@ -432,17 +432,20 @@ class MultiPagina extends PaginaHTML {
         
         $controllo = new Browser();
         if($controllo->html5()){
-            $testata = new Pannello('auto', '40px','red');
+            $testata = new IntestazionePagina('40px',Pannello::colora(255, 0, 0, 0.5));
+            $fine = new FinePagina('20px','#F0F');
             //self::aggiungi($testata);
-            $listaIndici = new Pannello('100px', '500px','blue');
+            $listaIndici = new Pannello('100px', '500px',Pannello::colora(0, 0, 255, 0.5));
             $listaIndici->affianca(Lato::SINISTRA);
             //$listaIndici->comportamento(Comportamento::IN_LINEA);
-            $pagina = new Pannello('500px', '600px','#0FF');
+            $pagina = new Pannello('500px', '600px',Pannello::colora(0, 255, 255, 0.5));
             $pagina->affianca(Lato::SINISTRA);
-            $corpo = new Pannello('800px', '800px','#0F0');
-            $corpo->aggiungi($testata);
+            $corpo = new Pannello('800px', '800px',Pannello::colora(0, 255,0, 0.5));
             $corpo->aggiungi($listaIndici);
             $corpo->aggiungi($pagina);
+            $corpo->aggiungi($fine);
+            $corpo->aggiungi($testata);
+            
             //$corpo->comportamento(Comportamento::BLOCCO_LINEA);
             //$corpo->posiziona(Posizione::ASSOLUTA,'400px','200px');
             self::aggiungi($corpo);

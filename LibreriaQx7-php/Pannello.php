@@ -251,6 +251,19 @@ class Pannello extends Tag{
             $this->aggiungi($css);
         }
     }
+    
+    /**
+     * Crea un colore di tipo RGBA.
+     * 
+     * @param int $rosso
+     * @param int $verde
+     * @param int $blu
+     * @param float $trasparenza
+     * @return string
+     */
+    public static function colora(int $rosso,int $verde, int $blu, float $trasparenza) {
+        return 'rgba('.$rosso.','.$verde.','.$blu.','.$trasparenza.')';
+    }
 }
 
 
