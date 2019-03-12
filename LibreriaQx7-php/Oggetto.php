@@ -37,7 +37,10 @@ abstract class Oggetto {
         }
     }
     
-    
+    /**
+     * 
+     * @return string
+     */
     public function __toString() {
         return "metodo '__toString' non definito!!!!";
     }

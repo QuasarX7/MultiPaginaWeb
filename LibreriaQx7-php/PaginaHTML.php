@@ -3,7 +3,7 @@
 include_once 'Oggetto.php';
 include_once 'Tag.php';
 include_once 'Stile.php';
-
+include_once 'javascript.php';
 include_once 'Browser.php';
 
 /**
@@ -17,6 +17,7 @@ class PaginaHTML extends Oggetto{
     protected $ricerca = '';
     protected $css = array();
     protected $file =''; ///< importa file esterni
+    protected $javascript = '';
 
     /**
      * 
@@ -49,8 +50,19 @@ class PaginaHTML extends Oggetto{
         }
     }
 
+    /**
+     * Permette di aggiungere al 'head' codice JavaScript e CSS, oppure quasiasi elemento o attributo HTML al 'body'.
+     * 
+     * @param  $valore
+     *
+     * {@inheritDoc}
+     * @see Oggetto::aggiungi()
+     */
     public function aggiungi($valore) {
-        if ($valore instanceof RegolaCSS) {
+        if ($valore instanceof JavaScript) {
+            $this->javascript .= $valore->vedi();
+            
+        }elseif ($valore instanceof RegolaCSS) {
             $this->css[$valore->selettore()] = $valore;
         }else{
             parent::aggiungi($valore);
@@ -100,8 +112,9 @@ class PaginaHTML extends Oggetto{
         foreach ($this->css as $regola) {
             $regoleCSS .= $regola . '';
         }
+        
         $stile = new Tag('style',new Attributo('type','text/css'),$regoleCSS);
-        $head = new Tag("head", $correzioneIE . $codifica . $ricercaWeb . $titolo . $stile);
+        $head = new Tag("head", $correzioneIE . $codifica . $ricercaWeb . $this->javascript . $titolo . $stile  );
         $html = new Tag("html",  $head . $body . '');
         return $intestazione . $html->vedi();
     }

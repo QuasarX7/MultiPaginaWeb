@@ -441,14 +441,17 @@ class MultiPagina extends PaginaHTML {
             $pagina = new Pannello('500px', '600px',Pannello::colora(0, 255, 255, 0.5));
             $pagina->affianca(Lato::SINISTRA);
             $corpo = new Pannello('800px', '800px',Pannello::colora(0, 255,0, 0.5));
+            $corpo->aggiungi(new JavaScript('alert("ciaoooo");'));
             $corpo->aggiungi($listaIndici);
             $corpo->aggiungi($pagina);
             $corpo->aggiungi($fine);
             $corpo->aggiungi($testata);
             
+            
             //$corpo->comportamento(Comportamento::BLOCCO_LINEA);
             //$corpo->posiziona(Posizione::ASSOLUTA,'400px','200px');
             self::aggiungi($corpo);
+            self::aggiungi(new JavaScript('alert("ciaoooo22222");'));
             
             /*
             self::creaIndiceDiPagina();
