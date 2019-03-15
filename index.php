@@ -2,9 +2,9 @@
 <?php
 include_once 'Struttura/MultiPagina.php';
 
-$pagina = new MultiPagina('llu');
+$pagina = new MultiPagina('Quasar X7');
 
-$pagina->formatoCarattereDiIntestazione('Struttura/Akronim-Regular.ttf');
+//$pagina->formatoCarattereDiIntestazione('Struttura/Akronim-Regular.ttf');
 
 $pagina->creaBarraMenu("#00f","#0f0","#f00");
 //$pagina->inizializzaPrimoLivelloMenu('#f7f', '#f00');
@@ -19,7 +19,7 @@ $tr = 'ventesimo';
 $pagina->aggiungiMenu("primo", $argomento1);
 $pagina->aggiungiMenu("secondo");
 $pagina->aggiungiMenu("terzo");
-$pagina->aggiungiMenu('ventesimo', null,'secondo');
+//$pagina->aggiungiMenu('ventesimo', null,'secondo');
 $pagina->aggiungiMenu($tr, null,'secondo');
 $pagina->aggiungiMenu('duecentesimo', null,$tr);
 

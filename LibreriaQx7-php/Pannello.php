@@ -229,6 +229,15 @@ class Pannello extends Tag{
     }
     
     /**
+     * Permette di specificare il tipo di allineamento verticale dei blocchi adiacenti.
+     * 
+     * @param string $orientamento
+     */
+    public function allineamentoVerticale($orientamento){
+        $this->aggiungi(new Stile('vertical-align', $orientamento));
+    }
+    
+    /**
      * posiziona i pannelli come blocchi di elementi affiancati.
      * 
      * @param string $lato      'right' o  'left'

@@ -17,7 +17,7 @@ class BarraMenu extends Tag{
     
     protected $coloreSeleziona;
     
-    protected $posizione = Posizione::RELATIVA;
+    protected $posizione = Posizione::ASSOLUTA;
     
 
     /**
@@ -69,7 +69,6 @@ class BarraMenu extends Tag{
         $nav = new RegolaCSS(
             'nav',
             [
-                new DichiarazioneCSS('position',$this->posizione),
                 new DichiarazioneCSS('width','100%'),
                 new DichiarazioneCSS('background-color',$this->coloreSfondo),
                 new DichiarazioneCSS('border','1px solid '.$this->coloreSfondo),
@@ -79,6 +78,9 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('overflow','hidden')
             ]
         );
+        if($this->posizione == Posizione::FISSA){
+            $nav->aggiungi(new DichiarazioneCSS('position',Posizione::FISSA));
+        }
         $css[] = $nav;
         
         /*nav ul{
@@ -121,12 +123,7 @@ class BarraMenu extends Tag{
         /*
         nav > ul > li > a {
             color: #aaa;
-            display: block;
-            line-height: 2em;
-            padding: 0.5em 0.5em;
-            text-decoration: none;
         }
-        
         */
         $css[] = $this->stileCellaMenu('nav > ul > li > a', $this->coloreTesto);
         

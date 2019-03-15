@@ -26,15 +26,6 @@ class Menu extends BarraMenu{
         return $this->etichetta;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see Tag::__toString()
-     *
-    public function __toString(){
-        
-        return Tag::__toString();
-    }
-    */
     
     
     

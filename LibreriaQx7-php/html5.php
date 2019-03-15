@@ -69,7 +69,18 @@ class ParagrafoPagina extends Pannello {
     }
 }
 
-
+/**
+ * Area principale della pagina non contenuta dalle altri elementi html ma solo dal 'body'.
+ * 
+ * @author Dott. Domenico della PERUTA
+ *
+ */
+class AreaPagina extends Pannello {
+    public function __construct($coloreSfondo=null, $coloreTesto=null) {
+        parent::__construct('100%', 'auto',$coloreSfondo, $coloreTesto);
+        $this->nome = 'main';
+    }
+}
 
 
 
