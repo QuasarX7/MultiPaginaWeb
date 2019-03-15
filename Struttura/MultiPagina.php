@@ -71,10 +71,10 @@ class MultiPagina extends PaginaHTML {
      * @param string $coloreSfondo
      * @param string $coloreTesto
      * @param string $coloreSeleziona
+     * @param string $posizone          se Posizione::FISSA non varia con lo scorrimento della pagina.
      */
     public function creaBarraMenu(string $coloreSfondo, string $coloreTesto, string $coloreSeleziona){
-        $this->barraMenu = new BarraMenu($coloreSfondo, $coloreTesto, $coloreSeleziona);
-        //$this->barraMenu->posizioneFissa();
+        $this->barraMenu = new BarraMenu($coloreSfondo, $coloreTesto, $coloreSeleziona,Posizione::RELATIVA);
     }
     
     /**
@@ -198,7 +198,21 @@ class MultiPagina extends PaginaHTML {
                 parent::aggiungi($regolaCSS);//aggiungi regola al tag style del head della pagina HTML
             }
             
-            
+            $this->barraMenu->aggiungi(
+                new JavaScript(
+                    "window.onscroll = function() {funzione()};".
+                    "var navbar = document.getElementById(\"mobile\");".
+                    "var sticky = navbar.offsetTop;".
+                    "function funzione(){".
+                        "if(window.pageYOffset < sticky){".
+                            "navbar.id = 'mobile';".
+                        "} else {".
+                            "navbar.id = 'fisso';".
+                            "navbar.style.top = '0';".
+                        "}".
+                    "}"
+                )
+            );
         }
     }
     /**
@@ -247,7 +261,7 @@ class MultiPagina extends PaginaHTML {
     private function inizializzaTitoloPagina(){
         
         $this->titoloPagina = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
-        $this->titoloPagina->posiziona(Posizione::STATICA);
+        
         if(isset($this->argomenti[$this->argomento])){
             $argomento = $this->argomenti[$this->argomento];
             if($argomento instanceof Argomento){
@@ -272,7 +286,7 @@ class MultiPagina extends PaginaHTML {
         $maxPagina = $this->limiteIndicePagina();
         if($maxPagina > 0){
             $this->indiceDiPagina = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
-            $this->indiceDiPagina->posiziona(Posizione::STATICA);
+            
             $frecciaSx = new Tag(
                 'a',
                 [new Attributo('href', self::link($this->argomento, $this->indice > 0 ? $this->indice - 1 : '0'))],
@@ -374,7 +388,9 @@ class MultiPagina extends PaginaHTML {
                 new DichiarazioneCSS('padding-top', '100px')
             ]
             );
-        $this->aggiungi($main);
+        
+        
+        //$this->aggiungi($main);
         
     }
     
@@ -516,7 +532,22 @@ class MultiPagina extends PaginaHTML {
                 }
                 $pagina->aggiungi($this->paginaTesto);
                 
-                
+                $pagina->aggiungi(
+                    new JavaScript(
+                        "window.onscroll=function(){stickyMenu()};".
+                        "var menu=document.getElementById(\"mobile\");".
+                        "var sticky=menu.offsetTop;".
+                        "function stickyMenu(){".
+                            "if(window.pageYOffset < sticky){".
+                                "menu.id='mobile';".
+                                //"menu.style.top=sticky;".
+                            "} else {".
+                                "menu.id='fisso';".
+                                "menu.style.top='0';".
+                            "}".
+                        "}"
+                        )
+                    );
                 self::aggiungi($pagina);
             }
             self::cssBody();

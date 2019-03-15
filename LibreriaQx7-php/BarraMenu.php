@@ -16,14 +16,13 @@ class BarraMenu extends Tag{
     protected $coloreTestoVoce2liv;
     
     protected $coloreSeleziona;
-    
-    protected $posizione = Posizione::ASSOLUTA;
+
     
 
     /**
      * Costruisce un tag 'nav'.
      */
-    public function __construct($coloreSfondo,$coloreTesto,$coloreSeleziona){
+    public function __construct($coloreSfondo,$coloreTesto,$coloreSeleziona,$posizione){
         $this->nome = 'nav';
         $this->contenuto = ' ';
         $this->coloreSfondo = $coloreSfondo;
@@ -32,11 +31,14 @@ class BarraMenu extends Tag{
         
         $this->coloreSfondoVoce2liv = $this->coloreSfondoVoce = $coloreSfondo;
         $this->coloreTestoVoce2liv = $this->coloreTestoVoce = $coloreTesto;
+        
+        if($posizione == Posizione::FISSA){
+            parent::aggiungi(new Attributo('id', 'fisso'));
+        }else{
+            parent::aggiungi(new Attributo('id', 'mobile'));
+        }
     }
-    
-    public function posizioneFissa(){
-        $this->posizione = Posizione::FISSA;
-    }
+
     
     public function menuPrimoLivello($coloreSfondo,$coloreTesto){
         $this->coloreSfondoVoce = $coloreSfondo;
@@ -78,10 +80,19 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('overflow','hidden')
             ]
         );
+        /*
         if($this->posizione == Posizione::FISSA){
             $nav->aggiungi(new DichiarazioneCSS('position',Posizione::FISSA));
-        }
+        }*/
         $css[] = $nav;
+        
+        $nav_fisso = new RegolaCSS(
+            'nav#fisso',
+            [
+                new DichiarazioneCSS('position',Posizione::FISSA)
+            ]
+            );
+        $css[] = $nav_fisso;
         
         /*nav ul{
             margin: 0;
@@ -186,19 +197,35 @@ class BarraMenu extends Tag{
         $css[] = $nav_li_hover;
         /*
         nav li:hover > ul{
-            position:absolute;
+            position:absolute; //* N.B.: variate
             display : block;
         }
         */
         $nav_li_hover_ul= new RegolaCSS(
             'nav li:hover > ul',
             [
-                new DichiarazioneCSS('position',$this->posizione),
                 new DichiarazioneCSS('display','block')
-                
             ]
         );
-        $css[] = $nav_li_hover_ul;
+        //$css[] = $nav_li_hover_ul;
+        
+        $nav_fissa_li_hover_ul= new RegolaCSS(
+            'nav#fisso li:hover > ul',
+            [
+                new DichiarazioneCSS('position',Posizione::FISSA),new DichiarazioneCSS('display','block')
+            ]
+            );
+        $css[] = $nav_fissa_li_hover_ul;
+        
+        $nav_mobile_li_hover_ul= new RegolaCSS(
+            'nav#mobile li:hover > ul',
+            [
+                new DichiarazioneCSS('position',Posizione::ASSOLUTA),new DichiarazioneCSS('display','block')
+            ]
+            );
+        $css[] = $nav_mobile_li_hover_ul;
+        
+        
         /*
         nav li > ul > li ul  {
             display: none;
@@ -239,7 +266,7 @@ class BarraMenu extends Tag{
         $nav_li_ul_li_hover_ul= new RegolaCSS(
             'nav li > ul > li:hover > ul',
             [
-                new DichiarazioneCSS('position','absolute'),
+                
                 new DichiarazioneCSS('display','block'),
                 new DichiarazioneCSS('margin-left','100%'),
                 new DichiarazioneCSS('margin-top','-3em')
@@ -247,6 +274,17 @@ class BarraMenu extends Tag{
             ]
             );
         $css[] = $nav_li_ul_li_hover_ul;
+        
+        $nav_fisso_li_ul_li_hover_ul= new RegolaCSS(
+            'nav#fisso li > ul > li:hover > ul',
+            [
+                new DichiarazioneCSS('position',Posizione::ASSOLUTA)
+            ]
+            );
+        $css[] = $nav_fisso_li_ul_li_hover_ul;
+        
+        
+        
         /*
         nav ul > li.sub{
             background: url(LibreriaQx7-php/freccia_verticale.png) right center no-repeat;
@@ -334,6 +372,9 @@ class BarraMenu extends Tag{
      */
     public function __toString(){
         if(count($this->menu) > 0){
+            
+            
+                
             
             parent::aggiungi(new Attributo('class','sub')); 
             
