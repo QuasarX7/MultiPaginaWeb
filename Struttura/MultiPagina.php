@@ -382,16 +382,6 @@ class MultiPagina extends PaginaHTML {
             );
         $this->aggiungi($body);
         
-        $main = new RegolaCSS(
-            'main',
-            [
-                new DichiarazioneCSS('padding-top', '100px')
-            ]
-            );
-        
-        
-        //$this->aggiungi($main);
-        
     }
     
     private function cssElencoPagine(){
