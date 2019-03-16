@@ -6,15 +6,15 @@ include_once 'LibreriaQx7-php/Menu.php';
 include_once 'Argomento.php';
 
 class MultiPagina extends PaginaHTML {
-    const ID_ELENCO = 'ElencoPagine'; // ID
+    const ID_ELENCO = 'ElencoPagine'; // ID indici
     const CHIAVE_PAGINA = 'pagina';
     const CHIAVE_ARGOMENTO = 'argomento';
     const HOME = 'home';
     
     const ALTEZZA_INTESTAZIONE_SITO  = '70px';
     
-    const LUNGHEZZA_PAGINA  = '700px';
-    const LUNGHEZZA_PANNELLO_SX  = '270px';
+    const LUNGHEZZA_PAGINA  = '70%';
+    const LUNGHEZZA_PANNELLO_SX  = '23%';
     const FONT_TESTO_R      = 'Struttura/Amita-Regular.ttf';
     
     const FONT_TITOLO_PAGINA_R = 'Struttura/ProstoOne-Regular.ttf';
@@ -39,7 +39,7 @@ class MultiPagina extends PaginaHTML {
     
     protected $paginaTesto;
     protected $indiceLateraleSx = null;
-    protected $suggerimentoLateraleDx;
+    protected $noteLateraleDx = null;
     
     protected $coloreSelezionaIndicePagina;
    
@@ -198,21 +198,7 @@ class MultiPagina extends PaginaHTML {
                 parent::aggiungi($regolaCSS);//aggiungi regola al tag style del head della pagina HTML
             }
             
-            $this->barraMenu->aggiungi(
-                new JavaScript(
-                    "window.onscroll = function() {funzione()};".
-                    "var navbar = document.getElementById(\"mobile\");".
-                    "var sticky = navbar.offsetTop;".
-                    "function funzione(){".
-                        "if(window.pageYOffset < sticky){".
-                            "navbar.id = 'mobile';".
-                        "} else {".
-                            "navbar.id = 'fisso';".
-                            "navbar.style.top = '0';".
-                        "}".
-                    "}"
-                )
-            );
+          
         }
     }
     /**
@@ -245,14 +231,15 @@ class MultiPagina extends PaginaHTML {
  
     private function inizializzaTitoloArgomentoMultipagina(){
         // Crea titolo dell'argomento della multipagina
-        $this->titoloArgomento = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
+        $this->titoloArgomento = new Pannello('100%', 'auto', '#fff', '#000');
         
         $this->titoloArgomento->aggiungi($this->argomento.' ');
         $this->titoloArgomento->aggiungi(
             new Stile(
                 [
                     new DichiarazioneCSS('font-family',"'".self::NOME_FONT_INTESATAZIONE."', cursive"),
-                    new DichiarazioneCSS('font-size',"50px")
+                    new DichiarazioneCSS('font-size',"50px"),
+                    new DichiarazioneCSS('text-align', 'center')
                 ]
                 )
             );
@@ -260,7 +247,7 @@ class MultiPagina extends PaginaHTML {
     
     private function inizializzaTitoloPagina(){
         
-        $this->titoloPagina = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
+        $this->titoloPagina = new Pannello('100%', 'auto', '#fff', '#000');
         
         if(isset($this->argomenti[$this->argomento])){
             $argomento = $this->argomenti[$this->argomento];
@@ -273,7 +260,8 @@ class MultiPagina extends PaginaHTML {
                         [
                             new DichiarazioneCSS('font-family',"'Prosto One', cursive"),
                             new DichiarazioneCSS('color','red'),
-                            new DichiarazioneCSS('font-size',"30px")
+                            new DichiarazioneCSS('font-size',"30px"),
+                            new DichiarazioneCSS('text-align', 'center')
                         ]
                     )
                 );
@@ -285,7 +273,7 @@ class MultiPagina extends PaginaHTML {
     private function inizializzaIndiceDiPagina(){
         $maxPagina = $this->limiteIndicePagina();
         if($maxPagina > 0){
-            $this->indiceDiPagina = new Pannello(self::LUNGHEZZA_PAGINA, 'auto', '#fff', '#000');
+            $this->indiceDiPagina = new Pannello('100%', 'auto', '#fff', '#000');
             
             $frecciaSx = new Tag(
                 'a',
@@ -294,7 +282,8 @@ class MultiPagina extends PaginaHTML {
                     'img',
                     [
                         new Attributo('src', 'LibreriaQx7-php/freccia_sinistra.png'),
-                        new Attributo('height', '40px'),new Attributo('width', '40px')
+                        new Attributo('height', '40px'),
+                        new Attributo('width', '40px')
                     ]
                 )
             );
@@ -319,7 +308,8 @@ class MultiPagina extends PaginaHTML {
                 new Stile(
                     [
                         new DichiarazioneCSS('font-family',"'Prosto One', cursive"),
-                        new DichiarazioneCSS('font-size',"28px")
+                        new DichiarazioneCSS('font-size',"28px"),
+                        new DichiarazioneCSS('text-align', 'center')
                     ]
                 )
             );
@@ -327,7 +317,7 @@ class MultiPagina extends PaginaHTML {
     }
     
     private function inizializzaPaginaDiTesto(){
-        $this->paginaTesto = new TestoPagina(self::LUNGHEZZA_PAGINA, 'auto', '#fff', 'black');
+        $this->paginaTesto = new TestoPagina(self::LUNGHEZZA_PAGINA, 'auto', '#ddd', 'black');
         
         $this->paginaTesto->comportamento(Comportamento::BLOCCO_LINEA);
         $this->paginaTesto->allineamentoVerticale(Lato::ALTO);
@@ -340,6 +330,14 @@ class MultiPagina extends PaginaHTML {
                 ]
             )
         );
+    }
+    
+    private function inizializzaNoteMargineDx(){
+        $this->noteLateraleDx = new NotePagina('calc(99% - '.self::LUNGHEZZA_PAGINA.')', 'auto', '#aaa', 'black');
+        $this->noteLateraleDx->comportamento(Comportamento::BLOCCO_LINEA);
+        $this->noteLateraleDx->allineamentoVerticale(Lato::ALTO);
+        $this->noteLateraleDx->aggiungi('prova ');
+        
     }
     
     /**
@@ -382,17 +380,38 @@ class MultiPagina extends PaginaHTML {
             );
         $this->aggiungi($body);
         
+        $aside = new RegolaCSS(
+            'aside',
+            [
+                new DichiarazioneCSS('margin','4px'),
+                new DichiarazioneCSS('padding','0')
+            ]
+            );
+        $this->aggiungi($aside);
+        
     }
     
     private function cssElencoPagine(){
         if($this->indiceLateraleSx instanceof Pannello) {
         
             /*
+             #ElencoPagine{
+             'width' : ...;
+             }*/
+             $elenco = new RegolaCSS(
+                '#'.self::ID_ELENCO,
+                [
+                    new DichiarazioneCSS('width', 'calc('.self::LUNGHEZZA_PANNELLO_SX.'*0.85);'),
+                    new DichiarazioneCSS('height', '600px')
+                ]
+                );
+            $this->aggiungi($elenco);
+            
+            /*
               #ElencoPagine a:link, #ElencoPagine a:visited {
-                  background-color: #f44336;
+                  background-color: #....;
                   color: white;
-                  padding: 14px 25px;
-                  text-align: center;
+                  padding: 5px 10px;
                   text-decoration: none;
                   display: inline-block;
              }
@@ -404,7 +423,6 @@ class MultiPagina extends PaginaHTML {
                     new DichiarazioneCSS('background-color',$this->indiceLateraleSx->coloreSfondo()),
                     new DichiarazioneCSS('color',$this->indiceLateraleSx->coloreTesto()),
                     new DichiarazioneCSS('padding','5px 10px'),
-                    //new DichiarazioneCSS('text-align', 'center'),
                     new DichiarazioneCSS('text-decoration', 'none'),
                     new DichiarazioneCSS('display', 'block')
                 ]
@@ -432,7 +450,8 @@ class MultiPagina extends PaginaHTML {
             $voce = new RegolaCSS(
                 '#'.self::ID_ELENCO.' li',
                 [
-                    new DichiarazioneCSS('margin-left','-40px')
+                    new DichiarazioneCSS('margin-left','-40px'),
+                    new DichiarazioneCSS('margin-top','-5px')
                 ]
             );
             $this->aggiungi($voce);
@@ -483,6 +502,34 @@ class MultiPagina extends PaginaHTML {
         $this->indiceLateraleSx->aggiungi($listaPagine);
     }
     
+    private function animaMenu(){
+        $this->paginaTesto->aggiungi(
+            new JavaScript(
+                "window.onscroll=function(){stickyMenu()};".
+                "var menu=document.getElementById(\"mobile\");".
+                "var indice=document.getElementById(\"".self::ID_ELENCO."\");".
+                "var sticky=menu.offsetTop;".
+                "var yPagina=menu.window.pageYOffset;".
+                "function stickyMenu(){".
+                    "if(window.pageYOffset < sticky){".
+                        "menu.id='mobile';".//scorri menu sulla pagina
+                        "indice.style.position='static';".//scorri indice pagine
+                    "} else {".
+                        "menu.id='fisso';". //incolla menu quando il titolo sito scompare
+                        "indice.style.position='fixed';".//incolla indice pagine
+                        "var y = window.pageYOffset;".
+                        "if (yPagina > y) {".
+                            "menu.style.top='0';". //comparsa menu quando scorre verso l'alto
+                        "}else{".
+                            "menu.style.top='-100px';".//scomparsa menu quando scorre verso il basso
+                        "}".
+                        "yPagina=y;".
+                    "}".
+                "}"
+                )
+            );
+    }
+    
     /**
      * {@inheritDoc}
      * @see PaginaHTML::__toString()
@@ -497,7 +544,7 @@ class MultiPagina extends PaginaHTML {
             if(isset($this->argomenti[$this->argomento])){
                 $pagina = new AreaPagina();
                 
-                //viene creata la vista indice a sinistra solo definita nella classe/metodo chiamante
+                // Creazione (opzionale) della vista indice di pagine nella colonna di sinistra
                 if(!is_null($this->indiceLateraleSx)){ 
                     self::creaListaPagine();
                     $pagina->aggiungi($this->indiceLateraleSx);
@@ -506,6 +553,8 @@ class MultiPagina extends PaginaHTML {
                 self::inizializzaIndiceDiPagina();
                 self::inizializzaTitoloPagina();
                 self::inizializzaPaginaDiTesto();
+                self::inizializzaNoteMargineDx();
+                
                 $argomento = $this->argomenti[$this->argomento];
             
                 $this->paginaTesto->aggiungi($this->titoloArgomento);
@@ -517,28 +566,20 @@ class MultiPagina extends PaginaHTML {
                     $testo = $argomento->pagina($this->indice);
                     $this->paginaTesto->aggiungi($testo);
                 }
+                //visualizza i pulsanti di navigazione pagina alla fine del testo
+                //se il testo è di notevole dimensione.
                 if(strlen($testo) > 100){
                     $this->paginaTesto->aggiungi($this->indiceDiPagina);
                 }
-                $pagina->aggiungi($this->paginaTesto);
-                
-                $pagina->aggiungi(
-                    new JavaScript(
-                        "window.onscroll=function(){stickyMenu()};".
-                        "var menu=document.getElementById(\"mobile\");".
-                        "var sticky=menu.offsetTop;".
-                        "function stickyMenu(){".
-                            "if(window.pageYOffset < sticky){".
-                                "menu.id='mobile';".
-                                //"menu.style.top=sticky;".
-                            "} else {".
-                                "menu.id='fisso';".
-                                "menu.style.top='0';".
-                            "}".
-                        "}"
-                        )
-                    );
+                //script inserito in '$this->paginaTesto'
+                self::animaMenu();
+                $sezionePrincipale = new ParagrafoPagina('calc(73%)', 'auto');
+                $sezionePrincipale->comportamento(Comportamento::BLOCCO_LINEA);
+                $sezionePrincipale->aggiungi($this->paginaTesto);
+                $sezionePrincipale->aggiungi($this->noteLateraleDx);
+                $pagina->aggiungi($sezionePrincipale);
                 self::aggiungi($pagina);
+                
             }
             self::cssBody();
             self::cssElencoPagine();

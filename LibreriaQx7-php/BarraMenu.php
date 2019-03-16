@@ -77,7 +77,8 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('display','block'),
                 new DichiarazioneCSS('margin','0'),
                 new DichiarazioneCSS('z-index','10000'),
-                new DichiarazioneCSS('overflow','hidden')
+                new DichiarazioneCSS('overflow','hidden'),
+                new DichiarazioneCSS('transition', "top 0.5s")//eventuale effetto...
             ]
         );
         /*
