@@ -27,13 +27,15 @@ class MultiPagina extends PaginaHTML {
     const NOME_FONT_INTESATAZIONE = 'intestazione';
    
     protected $fontIntestazione = 'Struttura/FrederickatheGreat-Regular.ttf';
+    
     protected $barraMenu = null;
     protected $vociMenu = array();
     
     protected $indice;
     protected $argomento;
 
-    protected $argomenti = array();
+    protected $argomenti = array(); 
+    protected $note = array();
     
     protected $indiceDiPagina;
     protected $titoloArgomento;
@@ -210,12 +212,18 @@ class MultiPagina extends PaginaHTML {
      * 
      * @param Argomento $argomento
      */
-    public function aggiungiArgomento($argomento){
-        if($argomento instanceof Argomento){
-            $this->argomenti[$argomento->nome()] = $argomento;
-        }
+    public function aggiungiArgomento(Argomento $argomento){
+        $this->argomenti[$argomento->nome()] = $argomento;
     }
     
+    /**
+     * Aggiungi annotazioni permanenti alla pagina sul margine destro.
+     * 
+     * @param Pannello $note
+     */    
+    public function aggiungiNoteMarginePagina(Pannello $note){
+        $this->note[] = $note;
+    }
 
     /**
      * Imposta un eventuale pannello laterale
@@ -249,28 +257,25 @@ class MultiPagina extends PaginaHTML {
             );
     }
     
-    private function inizializzaTitoloPagina(){
+    private function inizializzaTitoloPagina(Argomento $argomento){
         
         $this->titoloPagina = new Pannello('100%', 'auto', '#fff', '#000');
         
-        if(isset($this->argomenti[$this->argomento])){
-            $argomento = $this->argomenti[$this->argomento];
-            if($argomento instanceof Argomento){
-                $pagina = $argomento->nomePagina($this->indice);
-                self::titolo($pagina);
-                $this->titoloPagina->aggiungi($pagina);
-                $this->titoloPagina->aggiungi(
-                    new Stile(
-                        [
-                            new DichiarazioneCSS('font-family',"'Prosto One', cursive"),
-                            new DichiarazioneCSS('color','red'),
-                            new DichiarazioneCSS('font-size',"30px"),
-                            new DichiarazioneCSS('text-align', 'center')
-                        ]
-                    )
-                );
-            }
-        }
+        $pagina = $argomento->nomePagina($this->indice);
+        self::titolo($pagina);
+        $this->titoloPagina->aggiungi($pagina);
+        $this->titoloPagina->aggiungi(
+            new Stile(
+                [
+                    new DichiarazioneCSS('font-family',"'Prosto One', cursive"),
+                    new DichiarazioneCSS('color','red'),
+                    new DichiarazioneCSS('font-size',"30px"),
+                    new DichiarazioneCSS('text-align', 'center')
+                ]
+            )
+        );
+        
+        
         $this->titoloPagina->aggiungi(' ');
     }
     
@@ -336,13 +341,20 @@ class MultiPagina extends PaginaHTML {
         );
     }
     
-    private function inizializzaNoteMargineDx(){
+    /**
+     * Inizializza e crea il pannello laterale destro con i sugerimenti e le note aggiunte.
+     */
+    private function creaNoteMargineDx(){
         $this->noteLateraleDx = new NotePagina(self::LUNGHEZZA_PANNELLO_DX, 'auto', '#aaa', 'black');
         $this->noteLateraleDx->comportamento(Comportamento::BLOCCO_LINEA);
         $this->noteLateraleDx->allineamentoVerticale(Lato::ALTO);
-        $this->noteLateraleDx->aggiungi('prova ');
-        
+        foreach ($this->note as $pannello) {
+            $this->noteLateraleDx->aggiungi($pannello);
+        }
+        $this->noteLateraleDx->aggiungi(' ');
     }
+    
+    
     
     /**
      * Carica il file del font per l'intestazione degli argomenti.
@@ -546,14 +558,15 @@ class MultiPagina extends PaginaHTML {
                     self::creaListaPagine();
                     $pagina->aggiungi($this->indiceLateraleSx);
                 }
+                $argomento = $this->argomenti[$this->argomento];
+                
                 self::inizializzaTitoloArgomentoMultipagina();
                 self::inizializzaIndiceDiPagina();
-                self::inizializzaTitoloPagina();
+                self::inizializzaTitoloPagina($argomento);
                 self::inizializzaPaginaDiTesto();
-                self::inizializzaNoteMargineDx();
+                self::creaNoteMargineDx();
                 
-                $argomento = $this->argomenti[$this->argomento];
-            
+                
                 $this->paginaTesto->aggiungi($this->titoloArgomento);
                 $this->paginaTesto->aggiungi($this->indiceDiPagina);
                 $this->paginaTesto->aggiungi($this->titoloPagina);
