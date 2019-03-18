@@ -7,6 +7,7 @@ include_once 'Argomento.php';
 
 class MultiPagina extends PaginaHTML {
     const ID_ELENCO = 'ElencoPagine'; // ID indici
+    
     const CHIAVE_PAGINA = 'pagina';
     const CHIAVE_ARGOMENTO = 'argomento';
     const HOME = 'home';
@@ -235,9 +236,9 @@ class MultiPagina extends PaginaHTML {
     public function creaPannelloLaterale($coloreSfondo, $coloreTesto, $coloreSeleziona){
         $this->indiceLateraleSx = new NotePagina(self::LUNGHEZZA_PANNELLO_SX,'auto', $coloreSfondo, $coloreTesto);
         $this->coloreSelezionaIndicePagina = $coloreSeleziona;
-        $this->indiceLateraleSx->comportamento(Comportamento::BLOCCO_LINEA);
+        //$this->indiceLateraleSx->comportamento(Comportamento::BLOCCO_LINEA);
         $this->indiceLateraleSx->allineamentoVerticale(Lato::ALTO);
-        //$this->indiceLateraleSx->limite(Dimensione::ALTEZZA, Limite::MINIMO, '500px');
+        
     }
     
  
@@ -326,9 +327,8 @@ class MultiPagina extends PaginaHTML {
     }
     
     private function inizializzaPaginaDiTesto(){
-        $this->paginaTesto = new TestoPagina(self::LUNGHEZZA_AREA_ARGOMENTO, 'auto', '#ddd', 'black');
+        $this->paginaTesto = new TestoPagina(null, 'auto', '#ddd', 'black');
         
-        $this->paginaTesto->comportamento(Comportamento::BLOCCO_LINEA);
         $this->paginaTesto->allineamentoVerticale(Lato::ALTO);
         $this->paginaTesto->aggiungi(' ');
         $this->paginaTesto->aggiungi(
@@ -345,7 +345,7 @@ class MultiPagina extends PaginaHTML {
      * Inizializza e crea il pannello laterale destro con i sugerimenti e le note aggiunte.
      */
     private function creaNoteMargineDx(){
-        $this->noteLateraleDx = new NotePagina(self::LUNGHEZZA_PANNELLO_DX, 'auto', '#aaa', 'black');
+        $this->noteLateraleDx = new NotePagina(self::LUNGHEZZA_PANNELLO_DX, 'auto');
         $this->noteLateraleDx->comportamento(Comportamento::BLOCCO_LINEA);
         $this->noteLateraleDx->allineamentoVerticale(Lato::ALTO);
         foreach ($this->note as $pannello) {
@@ -399,9 +399,78 @@ class MultiPagina extends PaginaHTML {
         
     }
     
+    private function cssFormattazionePagina(){
+        $primaColonna = new RegolaCSS(//elimina la prima colonna
+            'aside:first-child',
+            [
+                new DichiarazioneCSS('display', 'inline-block')
+            ]
+            );
+        $this->aggiungi($primaColonna);
+        
+        $colonnaTesto = new RegolaCSS(//elimina la prima colonna
+            'article:first-child',
+            [
+                new DichiarazioneCSS('display', 'inline-block'),
+                new DichiarazioneCSS('width', self::LUNGHEZZA_AREA_ARGOMENTO)
+            ]
+            );
+        $this->aggiungi($colonnaTesto);
+        
+        $areaPrincipale =  new RegolaCSS(//elimina la prima colonna
+            'section',
+            [
+                new DichiarazioneCSS('display', 'inline-block'),
+                new DichiarazioneCSS('width', self::LUNGHEZZA_AREA_PRINCIPALE)
+            ]
+            );
+        $this->aggiungi($areaPrincipale);
+        
+        $scomparsaPrimaColonna = new RegolaCSS(//elimina la prima colonna
+            'aside:first-child',
+            [
+                new DichiarazioneCSS('display', 'none')
+            ]
+            );
+        $espandiColonnaTesto = new RegolaCSS(//elimina la prima colonna
+            'article:first-child',
+            [
+                new DichiarazioneCSS('display', 'block'),
+                new DichiarazioneCSS('width', '100%')
+            ]
+            );
+        $espandiAreaPrincipale = new RegolaCSS(
+            'section',
+            [
+                new DichiarazioneCSS('display', 'block'),
+                new DichiarazioneCSS('width', '100%')
+            ]
+            );
+        
+        $this->aggiungi(
+            new SchermoCSS(
+                [
+                    $scomparsaPrimaColonna, 
+                    $espandiAreaPrincipale
+                ],
+                1000,700
+                )
+            );
+        
+        $this->aggiungi(
+            new SchermoCSS(
+                [
+                    $scomparsaPrimaColonna,
+                    $espandiColonnaTesto,
+                    $espandiAreaPrincipale
+                ],
+                700
+                )
+            );
+    }
+    
     private function cssElencoPagine(){
         if($this->indiceLateraleSx instanceof Pannello) {
-        
             /*
              #ElencoPagine{
              'width' : ...;
@@ -409,11 +478,13 @@ class MultiPagina extends PaginaHTML {
              $elenco = new RegolaCSS(
                 '#'.self::ID_ELENCO,
                 [
-                    new DichiarazioneCSS('width', 'calc('.self::LUNGHEZZA_PANNELLO_SX.'*0.85)'),
-                    new DichiarazioneCSS('height', '600px')
+                    new DichiarazioneCSS('width', 'auto'),
+                    new DichiarazioneCSS('height', 'auto'),
+                    new DichiarazioneCSS('box-shadow', '2px 2px 2px 3px rgba(0,0,0,0.25)'),
                 ]
                 );
             $this->aggiungi($elenco);
+            
             
             /*
               #ElencoPagine a:link, #ElencoPagine a:visited {
@@ -552,7 +623,7 @@ class MultiPagina extends PaginaHTML {
             self::creaMenu();
             if(isset($this->argomenti[$this->argomento])){
                 $pagina = new AreaPagina();
-                
+                $pagina->margine('10px', '0', '0', '0');
                 // Creazione (opzionale) della vista indice di pagine nella colonna di sinistra
                 if(!is_null($this->indiceLateraleSx)){ 
                     self::creaListaPagine();
@@ -583,8 +654,7 @@ class MultiPagina extends PaginaHTML {
                 }
                 //script inserito in '$this->paginaTesto'
                 self::animaMenu();
-                $sezionePrincipale = new ParagrafoPagina(self::LUNGHEZZA_AREA_PRINCIPALE, 'auto');
-                $sezionePrincipale->comportamento(Comportamento::BLOCCO_LINEA);
+                $sezionePrincipale = new ParagrafoPagina(null, 'auto');
                 $sezionePrincipale->aggiungi($this->paginaTesto);
                 $sezionePrincipale->aggiungi($this->noteLateraleDx);
                 $pagina->aggiungi($sezionePrincipale);
@@ -593,7 +663,7 @@ class MultiPagina extends PaginaHTML {
             }
             self::cssBody();
             self::cssElencoPagine();
-      
+            self::cssFormattazionePagina();
         }else{
             self::aggiungi(
                 '<h1>Il browser non è compatibile con il codice HTML5 della pagina</h1><br><br><h2>'.$controllo.'</h2>'

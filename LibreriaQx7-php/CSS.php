@@ -128,3 +128,46 @@ abstract class PropritàCSS{
     
     
 }
+
+
+
+
+/**
+ * Classe che implementa delle regole di un foglio di stile (CSS)
+ * associato a una particolare risoluzione dello schermo.
+ *
+ * @author Dott. Domenico della PERUTA
+ */
+class SchermoCSS extends RegolaCSS{
+
+    /**
+     * Costruttore.
+     * 
+     * @param array $regole
+     * @param int $max  massima risoluzione dello schermo
+     * @param int $min  minima risoluzione dello schermo
+     */
+    public function __construct(array $regole, int $max, int $min=0) {
+        
+        $this->dichiarazioni = $regole;
+        
+        if($min <=0 && $max >0){
+            $this->selettore = '@media only screen and (max-width:'.$max.'px)';
+        }elseif ($min > 0 && $max >0){
+            $this->selettore = '@media only screen  and (min-width:'.$min.'px) and (max-width:'.$max.'px)';
+        }elseif ($min > 0 && $max <=0){
+            $this->selettore = '@media only screen  and (min-width:'.$min.'px)';
+        }else{
+            $this->selettore = '';
+        }
+        
+    }
+    
+    public function aggiungi($regolaCSS) {
+        if($regolaCSS instanceof RegolaCSS){
+            $this->dichiarazioni[] = $regolaCSS;
+        }
+    }
+    
+    
+}

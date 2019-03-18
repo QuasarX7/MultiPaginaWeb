@@ -78,7 +78,8 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('margin','0'),
                 new DichiarazioneCSS('z-index','10000'),
                 new DichiarazioneCSS('overflow','hidden'),
-                new DichiarazioneCSS('transition', "top 0.5s")//eventuale effetto...
+                new DichiarazioneCSS('transition', "top 0.5s"),//eventuale effetto...
+                new DichiarazioneCSS('box-shadow', '0px 5px 5px 5px rgba(0,0,0,0.3)')
             ]
         );
         /*
@@ -127,7 +128,8 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('margin','0'),
                 new DichiarazioneCSS('display','inline-block'),
                 new DichiarazioneCSS('list-style-type','none'),
-                new DichiarazioneCSS('transition','all 0.2s')
+                new DichiarazioneCSS('transition','all 0.2s'),
+                new DichiarazioneCSS('box-shadow', '3px 5px 2px rgba(0,0,0,0.3)')
             ]
         );
         $css[] = $nav_ul_li;
@@ -202,14 +204,6 @@ class BarraMenu extends Tag{
             display : block;
         }
         */
-        $nav_li_hover_ul= new RegolaCSS(
-            'nav li:hover > ul',
-            [
-                new DichiarazioneCSS('display','block')
-            ]
-        );
-        //$css[] = $nav_li_hover_ul;
-        
         $nav_fissa_li_hover_ul= new RegolaCSS(
             'nav#fisso li:hover > ul',
             [

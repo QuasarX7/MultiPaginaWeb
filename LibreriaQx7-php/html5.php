@@ -51,8 +51,9 @@ class TestoPagina extends Pannello {
  *
  */
 class NotePagina extends Pannello {
-    public function __construct($lunghezza, $altezza, $coloreSfondo=null, $coloreTesto=null) {
-        parent::__construct($lunghezza, $altezza,$coloreSfondo, $coloreTesto);
+    
+    public function __construct($lunghezza, $altezza, $coloreSfondo=null, $coloreTesto=null,$id=null) {
+        parent::__construct($lunghezza, $altezza,$coloreSfondo, $coloreTesto,$id);
         $this->nome = 'aside';
     }
 }

@@ -105,14 +105,18 @@ class Pannello extends Tag{
     
     
 
-    public function __construct($lunghezza, $altezza, $coloreSfondo=null, $coloreTesto=null) {
+    public function __construct($lunghezza, $altezza, $coloreSfondo=null, $coloreTesto=null,$id=null) {
         static $z = 0;
         $css = new Stile([
             new DichiarazioneCSS('overflow','auto'),
-            new DichiarazioneCSS(PropritàCSS::SOVRAPPOSIZIONE, ($z++) .''),
-            new DichiarazioneCSS(PropritàCSS::ALTEZZA, $altezza.''),
-            new DichiarazioneCSS(PropritàCSS::LUNGHEZZA, $lunghezza.'')
+            new DichiarazioneCSS(PropritàCSS::SOVRAPPOSIZIONE, ($z++) .'')
         ]);
+        if(is_string($altezza)){
+            $css->aggiungi(PropritàCSS::ALTEZZA, $altezza.'');
+        }
+        if(is_string($lunghezza)){
+            $css->aggiungi(PropritàCSS::LUNGHEZZA, $lunghezza.'');
+        }
         if(is_string($coloreSfondo)){
             $css->aggiungi(PropritàCSS::COLORE_SFONDO,$coloreSfondo);
             $this->coloreSfondo = $coloreSfondo;
@@ -121,7 +125,11 @@ class Pannello extends Tag{
             $css->aggiungi(PropritàCSS::COLORE,$coloreTesto);
             $this->coloreTesto = $coloreTesto;
         }
-        parent::__construct('div',$css,' ');
+        $nome = null;
+        if(is_string($id)){
+            $nome = new Attributo('id', $id);
+        }
+        parent::__construct('div',is_null($nome) ? $css : [$nome,$css],' ');
         
     }
     
