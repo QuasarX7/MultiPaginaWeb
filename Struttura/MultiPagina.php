@@ -282,7 +282,7 @@ class MultiPagina extends PaginaHTML {
     
     private function inizializzaIndiceDiPagina(){
         $maxPagina = $this->limiteIndicePagina();
-        if($maxPagina > 0){
+        if($maxPagina > 1){
             $this->indiceDiPagina = new Pannello('100%', 'auto', '#fff', '#000');
             
             $frecciaSx = new Tag(
@@ -565,7 +565,7 @@ class MultiPagina extends PaginaHTML {
         );
         $argomento = $this->argomenti[$this->argomento];
         if($argomento instanceof Argomento){
-            for ($indice=0; $indice < $argomento->numeroPagine(); $indice++){
+            for ($indice=0;$this->limiteIndicePagina() > 1 && $indice < $argomento->numeroPagine(); $indice++){
                 $listaPagine->aggiungi(
                     new Tag(
                         'li',
