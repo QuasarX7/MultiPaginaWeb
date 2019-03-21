@@ -17,7 +17,6 @@ class BarraMenu extends Tag{
     
     protected $coloreSeleziona;
 
-    
 
     /**
      * Costruisce un tag 'nav'.
@@ -60,13 +59,13 @@ class BarraMenu extends Tag{
     public function regoleCSS(){
         $css = array();
         /*
-          nav {
-                background-color: #333;
-                border: 1px solid #333;
-                display: block;
-                margin: 0;
-                overflow: hidden;
-            }
+         nav {
+         background-color: #333;
+         border: 1px solid #333;
+         display: block;
+         margin: 0;
+         overflow: hidden;
+         }
          */
         $nav = new RegolaCSS(
             'nav',
@@ -81,11 +80,11 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('transition', "top 0.5s"),//eventuale effetto...
                 new DichiarazioneCSS('box-shadow', '0px 5px 5px 5px rgba(0,0,0,0.3)')
             ]
-        );
+            );
         /*
-        if($this->posizione == Posizione::FISSA){
-            $nav->aggiungi(new DichiarazioneCSS('position',Posizione::FISSA));
-        }*/
+         if($this->posizione == Posizione::FISSA){
+         $nav->aggiungi(new DichiarazioneCSS('position',Posizione::FISSA));
+         }*/
         $css[] = $nav;
         
         $nav_fisso = new RegolaCSS(
@@ -96,12 +95,23 @@ class BarraMenu extends Tag{
             );
         $css[] = $nav_fisso;
         
+      
+        $css[] = self::maxSchermo();
+        $css[] = self::miniSchermo();
+        return $css;
+        
+    }
+    
+    private function maxSchermo(){
+        $regole = array();
+        
+        
         /*nav ul{
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-        */
+         margin: 0;
+         padding: 0;
+         list-style: none;
+         }
+         */
         $nav_ul = new RegolaCSS(
             'nav ul',
             [
@@ -109,19 +119,19 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('padding','0'),
                 new DichiarazioneCSS('list-style','none')
             ]
-        );
-        $css[] = $nav_ul;
+            );
+        $regole[] = $nav_ul;
         
         
         /*
-         
-         nav ul li {
-            margin: 0;
-            display: inline-block;
-            list-style-type: none;
-            transition: all 0.2s;
+        
+        nav ul li {
+        margin: 0;
+        display: inline-block;
+        list-style-type: none;
+        transition: all 0.2s;
         }
-         */
+        */
         $nav_ul_li = new RegolaCSS(
             'nav ul li',
             [
@@ -131,24 +141,24 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('transition','all 0.2s'),
                 new DichiarazioneCSS('box-shadow', '3px 5px 2px rgba(0,0,0,0.3)')
             ]
-        );
-        $css[] = $nav_ul_li;
+            );
+        $regole[] = $nav_ul_li;
         
         /*
-        nav > ul > li > a {
-            color: #aaa;
-        }
-        */
-        $css[] = $this->stileCellaMenu('nav > ul > li > a', $this->coloreTesto);
+         nav > ul > li > a {
+         color: #aaa;
+         }
+         */
+        $regole[] = $this->stileCellaMenu('nav > ul > li > a', $this->coloreTesto);
         
         
         /*
-        nav li > ul{
-            display : none;
-            margin-top:1px;
-            background-color: #bbb;
-        
-        }
+         nav li > ul{
+         display : none;
+         margin-top:1px;
+         background-color: #bbb;
+         
+         }
          */
         $nav_li_ul = new RegolaCSS(
             'nav li > ul',
@@ -157,14 +167,14 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('background-color',$this->coloreSfondoVoce),
                 new DichiarazioneCSS('margin-top','1px')
             ]
-        );
-        $css[] = $nav_li_ul;
+            );
+        $regole[] = $nav_li_ul;
         
         
         /*
          nav li > ul li{
-            display: block;
-        }
+         display: block;
+         }
          */
         $nav_li_ul_li = new RegolaCSS(
             'nav li > ul li',
@@ -172,22 +182,22 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('display','block')
             ]
             );
-        $css[] = $nav_li_ul_li;
+        $regole[] = $nav_li_ul_li;
         
         /*
-        nav  li > ul li a {
-            color: #111;
-            display: block;
-            line-height: 2em;
-            padding: 0.5em 2em;
-            text-decoration: none;
-        }
+         nav  li > ul li a {
+         color: #111;
+         display: block;
+         line-height: 2em;
+         padding: 0.5em 2em;
+         text-decoration: none;
+         }
          */
-        $css[] = $this->stileCellaMenu('nav li > ul li a', $this->coloreTestoVoce);
+        $regole[] = $this->stileCellaMenu('nav li > ul li a', $this->coloreTestoVoce);
         /*
-         
-         nav li:hover {
-            background-color: #666;
+        
+        nav li:hover {
+        background-color: #666;
         }
         
         */
@@ -196,21 +206,21 @@ class BarraMenu extends Tag{
             [
                 new DichiarazioneCSS('background-color',$this->coloreSeleziona)
             ]
-        );
-        $css[] = $nav_li_hover;
+            );
+        $regole[] = $nav_li_hover;
         /*
-        nav li:hover > ul{
-            position:absolute; //* N.B.: variate
-            display : block;
-        }
-        */
+         nav li:hover > ul{
+         position:absolute; //* N.B.: variate
+         display : block;
+         }
+         */
         $nav_fissa_li_hover_ul= new RegolaCSS(
             'nav#fisso li:hover > ul',
             [
                 new DichiarazioneCSS('position',Posizione::FISSA),new DichiarazioneCSS('display','block')
             ]
             );
-        $css[] = $nav_fissa_li_hover_ul;
+        $regole[] = $nav_fissa_li_hover_ul;
         
         $nav_mobile_li_hover_ul= new RegolaCSS(
             'nav#mobile li:hover > ul',
@@ -218,15 +228,15 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('position',Posizione::ASSOLUTA),new DichiarazioneCSS('display','block')
             ]
             );
-        $css[] = $nav_mobile_li_hover_ul;
+        $regole[] = $nav_mobile_li_hover_ul;
         
         
         /*
-        nav li > ul > li ul  {
-            display: none;
-            background-color: #888;
-        }
-        */
+         nav li > ul > li ul  {
+         display: none;
+         background-color: #888;
+         }
+         */
         $nav_li_ul_li_ul= new RegolaCSS(
             'nav li > ul > li ul',
             [
@@ -234,30 +244,30 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('display','none')
                 
             ]
-        );
-        $css[] = $nav_li_ul_li_ul;
+            );
+        $regole[] = $nav_li_ul_li_ul;
         
         /*
          nav li > ul > li ul a{
-            color: #888;
-        }
+         color: #888;
+         }
          */
         $nav_li_ul_li_ul_a= new RegolaCSS(
             'nav li > ul > li ul a',
             [
                 new DichiarazioneCSS('color',$this->coloreTestoVoce2liv)
             ]
-        );
-        $css[] = $nav_li_ul_li_ul_a;
+            );
+        $regole[] = $nav_li_ul_li_ul_a;
         
         /*
-        nav li > ul > li:hover > ul  {
-            position:absolute;
-            display : block;
-            margin-left:100%;
-            margin-top:-3em;
-        }
-        */
+         nav li > ul > li:hover > ul  {
+         position:absolute;
+         display : block;
+         margin-left:100%;
+         margin-top:-3em;
+         }
+         */
         $nav_li_ul_li_hover_ul= new RegolaCSS(
             'nav li > ul > li:hover > ul',
             [
@@ -265,10 +275,9 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('display','block'),
                 new DichiarazioneCSS('margin-left','100%'),
                 new DichiarazioneCSS('margin-top','-3em')
-                
             ]
             );
-        $css[] = $nav_li_ul_li_hover_ul;
+        $regole[] = $nav_li_ul_li_hover_ul;
         
         $nav_fisso_li_ul_li_hover_ul= new RegolaCSS(
             'nav#fisso li > ul > li:hover > ul',
@@ -276,37 +285,123 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('position',Posizione::ASSOLUTA)
             ]
             );
-        $css[] = $nav_fisso_li_ul_li_hover_ul;
+        $regole[] = $nav_fisso_li_ul_li_hover_ul;
         
         
         
         /*
-        nav ul > li.sub{
-            background: url(LibreriaQx7-php/freccia_verticale.png) right center no-repeat;
-        }
-        */
+         nav ul > li.sub{
+         background: url(LibreriaQx7-php/freccia_verticale.png) right center no-repeat;
+         }
+         */
         $nav_ul_li_sub= new RegolaCSS(
             'nav ul > li.sub',
             [
                 new DichiarazioneCSS('background','url(LibreriaQx7-php/freccia_verticale.png) right center no-repeat')
             ]
-        );
-        $css[] = $nav_ul_li_sub;
+            );
+        $regole[] = $nav_ul_li_sub;
         /*
-        nav ul > li.sub li.sub{
-            background: url(LibreriaQx7-php/freccia_orizzontale.png) right center no-repeat;
-        }
+         nav ul > li.sub li.sub{
+         background: url(LibreriaQx7-php/freccia_orizzontale.png) right center no-repeat;
+         }
          */
         $nav_ul_li_sub_li_sub= new RegolaCSS(
             'nav ul > li.sub li.sub',
             [
                 new DichiarazioneCSS('background','url(LibreriaQx7-php/freccia_orizzontale.png) right center no-repeat')
             ]
-        );
-        $css[] = $nav_ul_li_sub_li_sub;
+            );
+        $regole[] = $nav_ul_li_sub_li_sub;
         
-        return $css;
         
+        return new SchermoCSS($regole, 0, 800);
+    }
+    
+    private function miniSchermo(){
+        $regole = array();
+        $logo = new RegolaCSS(
+            '.logo',
+            [
+                new DichiarazioneCSS(' display', 'inline-block'),
+                new DichiarazioneCSS('background-color',$this->coloreTesto),
+                new DichiarazioneCSS('cursor', 'pointer')
+            ]
+            );
+        $regole[] = $logo;
+        /*
+           .bar1, .bar2, .bar3 {
+              width: 35px;
+              height: 5px;
+              background-color: #333;
+              margin: 6px 0;
+              transition: 0.4s;
+            }
+         */
+        $barre_logo = new RegolaCSS(
+            '.barra1, .barra2, .barra3',
+            [
+                new DichiarazioneCSS('width', '40px'),
+                new DichiarazioneCSS('height', '7px'),
+                new DichiarazioneCSS('background-color', $this->coloreSfondo),
+                new DichiarazioneCSS('margin', '7px 6px 0 6px'),
+                new DichiarazioneCSS('transition', '0.4s')
+            ]
+            );
+        $regole[] = $barre_logo;
+        /*
+            .attiva .barra1 {
+              -webkit-transform: rotate(-45deg) translate(-10px, 10px);
+              transform: rotate(-45deg) translate(-10px, 10px);
+            }
+         */
+        $barre_1 = new RegolaCSS(
+            '.attiva .barra1',
+            [
+                new DichiarazioneCSS('-webkit-transform', 'rotate(-45deg) translate(-10px, 10px)'),
+                new DichiarazioneCSS('transform', 'rotate(-45deg) translate(-10px, 10px)')
+            ]
+            );
+        $regole[] = $barre_1;
+        /*
+         .attiva .barra2 {opacity: 0;}
+        */
+        $barre_2 = new RegolaCSS(
+            '.attiva .barra2',
+            [
+                new DichiarazioneCSS('opacity', '0')
+            ]
+            );
+        $regole[] = $barre_2;
+        /*
+         .attiva .barra3 {
+         -webkit-transform: rotate(45deg) translate(-10px, -10px);
+         transform: rotate(45deg) translate(-10px, -10px);
+         }
+         */
+        $barre_3 = new RegolaCSS(
+            '.attiva .barra3',
+            [
+                new DichiarazioneCSS('-webkit-transform', 'rotate(45deg) translate(-10px, -10px)'),
+                new DichiarazioneCSS('transform', 'rotate(45deg) translate(-10px, -10px)')
+            ]
+            );
+        $regole[] = $barre_3;
+        
+        
+        
+        $nav_ul= new RegolaCSS(
+            'nav > ul',
+            [
+                //new DichiarazioneCSS('background-color',$this->coloreSfondo),
+                new DichiarazioneCSS('display','none')
+                
+            ]
+            );
+        $regole[] = $nav_ul;
+        
+        
+        return new SchermoCSS($regole, 800);
     }
     
     
@@ -360,6 +455,75 @@ class BarraMenu extends Tag{
     public function vociMenu(){
         return $this->menu;
     }
+    
+    private function disegnaLogoMiniMenu(){
+        if(!($this instanceof Menu)){
+            $logoMiniMenu = new Pannello('50px', '50px');
+            $logoMiniMenu->aggiungi(new Attributo('class', 'logo'));
+            $logoMiniMenu->aggiungi(new Attributo('onclick', 'attivaMenu(this)'));
+            
+            $barra1 = new Pannello(null, null);
+            $barra1->aggiungi(new Attributo('class', 'barra1'));
+            $logoMiniMenu->aggiungi($barra1);
+            $barra2 = new Pannello(null, null);
+            $barra2->aggiungi(new Attributo('class', 'barra2'));
+            $logoMiniMenu->aggiungi($barra2);
+            $barra3 = new Pannello(null, null);
+            $barra3->aggiungi(new Attributo('class', 'barra3'));
+            $logoMiniMenu->aggiungi($barra3);
+            
+            $logoMiniMenu->affianca(Lato::DESTRA);
+            $this->contenuto .= $logoMiniMenu->vedi();
+        }
+    }
+    /**
+     * Aggiungi comportamento mini-menu
+     */
+    protected  function azioneMiniMenu(){
+        $this->aggiungi(new JavaScript(
+                'function attivaMenu(x){'.
+                    'x.classList.toggle("attiva");'. 
+                    'var lista=document.getElementsByTagName("ul")[0];'.
+                    'if(lista.style.display!=="block"){'.
+                        'lista.style.display="block";'.
+                    '}else{'.
+                        'lista.style.display="none";'.
+                    '}'.
+                '}'
+            ));
+    }
+    
+    
+    /**
+     * Permette un azione di tipo 'sticky' sul menu scorrevole.
+     * 
+     * @param string $idNoteLaterali    eventuale ID di un altro elemento 'stick'
+     */
+    public function azioneStickyMenu($idNoteLaterali='-non-presente-'){
+        return new JavaScript(
+            "window.onscroll=function(){stickyMenu()};".
+            "var menu=document.getElementById(\"mobile\");".
+            "var indice=document.getElementById(\"".$idNoteLaterali."\");".
+            "var sticky=menu.offsetTop;".
+            "var yPagina=menu.window.pageYOffset;".
+            "function stickyMenu(){".
+            "if(window.pageYOffset < sticky){".
+                "menu.id='mobile';".//scorri menu sulla pagina
+                "indice.style.position='static';".//scorri indice pagine
+            "} else {".
+                "menu.id='fisso';". //incolla menu quando il titolo sito scompare
+                "indice.style.position='fixed';".//incolla indice pagine
+                "var y = window.pageYOffset;".
+                "if (yPagina > y) {".
+                    "menu.style.top='0';". //comparsa menu quando scorre verso l'alto
+                "}else{".
+                    "menu.style.top='-100px';".//scomparsa menu quando scorre verso il basso
+                "}".
+                    "yPagina=y;".
+                "}".
+            "}"
+            );
+    }
 
     /**
      * {@inheritDoc}
@@ -368,16 +532,17 @@ class BarraMenu extends Tag{
     public function __toString(){
         if(count($this->menu) > 0){
             
-            
-                
-            
             parent::aggiungi(new Attributo('class','sub')); 
+            
+            self::disegnaLogoMiniMenu();
             
             $lista = new Tag('ul');
             foreach ($this->menu as  $voce) {
                 $lista->aggiungi($voce);
             }
             $this->contenuto .= $lista->vedi();
+            self::azioneMiniMenu();
+           
         }
         return parent::__toString();
     }
