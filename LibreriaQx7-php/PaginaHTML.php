@@ -13,6 +13,7 @@ include_once 'Browser.php';
  */
 class PaginaHTML extends Oggetto{
   
+    const JQUERY = 'jquery-3.3.1.slim.min.js';//NON FUNZIONALITA AJAX
     protected $titolo;
     protected $ricerca = '';
     protected $css = array();
@@ -85,6 +86,10 @@ class PaginaHTML extends Oggetto{
             $this->file .= "@font-face {font-family: '".$nome."';src: url('".$file."') format('truetype');}";
         }
     }
+    
+    private function importaLibreriaJQuery(){
+        return new Tag('script',[new Attributo('src',self::JQUERY)],' ').'';
+    }
 
     
     public function __toString() {
@@ -114,7 +119,7 @@ class PaginaHTML extends Oggetto{
         }
         
         $stile = new Tag('style',new Attributo('type','text/css'),$regoleCSS);
-        $head = new Tag("head", $correzioneIE . $codifica . $ricercaWeb . $this->javascript . $titolo . $stile  );
+        $head = new Tag("head", $correzioneIE . $codifica . $ricercaWeb . self::importaLibreriaJQuery() . $this->javascript . $titolo . $stile  );
         $html = new Tag("html",  $head . $body . '');
         return $intestazione . $html->vedi();
     }
