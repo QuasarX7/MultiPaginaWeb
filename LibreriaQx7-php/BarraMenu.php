@@ -558,28 +558,28 @@ class BarraMenu extends Tag{
      * @param string $idNoteLaterali    eventuale ID di un altro elemento 'stick'
      */
     public function azioneStickyMenu($idNoteLaterali='-non-presente-'){
-        return new JavaScript(
-            "window.onscroll=function(){stickyMenu()};".
-            "var menu=document.getElementById(\"mobile\");".
-            "var indice=document.getElementById(\"".$idNoteLaterali."\");".
-            "var sticky=menu.offsetTop;".
-            "var yPagina=menu.window.pageYOffset;".
-            "function stickyMenu(){".
-            "if(window.pageYOffset < sticky){".
-                "menu.id='mobile';".//scorri menu sulla pagina
-                "indice.style.position='static';".//scorri indice pagine
-            "} else {".
-                "menu.id='fisso';". //incolla menu quando il titolo sito scompare
-                "indice.style.position='fixed';".//incolla indice pagine
-                "var y = window.pageYOffset;".
-                "if (yPagina > y) {".
-                    "menu.style.top='0';". //comparsa menu quando scorre verso l'alto
-                "}else{".
-                    "menu.style.top='-100px';".//scomparsa menu quando scorre verso il basso
-                "}".
-                    "yPagina=y;".
-                "}".
-            "}"
+        return new JQuery(
+                "window.onscroll=function(){stickyMenu()};".
+                "var menu=document.getElementById(\"mobile\");".
+                "var indice=document.getElementById(\"".$idNoteLaterali."\");".
+                "var sticky=menu.offsetTop;".
+                "var yPagina=menu.window.pageYOffset;".
+                "function stickyMenu(){".
+                "if(window.pageYOffset < sticky){".
+                    "menu.id='mobile';".//scorri menu sulla pagina
+                    "indice.style.position='static';".//scorri indice pagine
+                "} else {".
+                    "menu.id='fisso';". //incolla menu quando il titolo sito scompare
+                    "indice.style.position='fixed';".//incolla indice pagine
+                    "var y = window.pageYOffset;".
+                    "if (yPagina > y) {".
+                        "menu.style.top='0';". //comparsa menu quando scorre verso l'alto
+                    "}else{".
+                        "menu.style.top='-100px';".//scomparsa menu quando scorre verso il basso
+                    "}".
+                        "yPagina=y;".
+                    "}".
+                "}"
             );
     }
 

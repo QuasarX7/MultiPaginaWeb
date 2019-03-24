@@ -13,13 +13,13 @@ include_once 'Browser.php';
  */
 class PaginaHTML extends Oggetto{
   
-    const JQUERY = 'jquery-3.3.1.slim.min.js';//NON FUNZIONALITA AJAX
+    const JQUERY = 'LibreriaQx7-php/jquery-3.3.1.slim.min.js';//NON FUNZIONALITA AJAX
     protected $titolo;
     protected $ricerca = '';
     protected $css = array();
     protected $file =''; ///< importa file esterni
     protected $javascript = '';
-
+    protected $jquery = '';
     /**
      * 
      * @param string   $titolo
@@ -60,7 +60,11 @@ class PaginaHTML extends Oggetto{
      * @see Oggetto::aggiungi()
      */
     public function aggiungi($valore) {
-        if ($valore instanceof JavaScript) {
+        
+        if ($valore instanceof JQuery) {
+            $this->jquery .= $valore->vedi();
+            
+        }elseif ($valore instanceof JavaScript) {
             $this->javascript .= $valore->vedi();
             
         }elseif ($valore instanceof RegolaCSS) {
@@ -120,7 +124,7 @@ class PaginaHTML extends Oggetto{
         
         $stile = new Tag('style',new Attributo('type','text/css'),$regoleCSS);
         $head = new Tag("head", $correzioneIE . $codifica . $ricercaWeb . self::importaLibreriaJQuery() . $this->javascript . $titolo . $stile  );
-        $html = new Tag("html",  $head . $body . '');
+        $html = new Tag("html",  $head  . $this->jquery . $body . '');
         return $intestazione . $html->vedi();
     }
 
