@@ -7,8 +7,8 @@ $pagina = new MultiPagina('Quasar X7');
 //$pagina->formatoCarattereDiIntestazione('Struttura/Akronim-Regular.ttf');
 
 $pagina->creaBarraMenu("#00f","#0f0","#f00");
-//$pagina->inizializzaPrimoLivelloMenu('#f7f', '#f00');
-//$pagina->inizializzaSecondoLivelloMenu('#222', '#fff');
+$pagina->inizializzaPrimoLivelloMenu('#f7f', '#f00');
+$pagina->inizializzaSecondoLivelloMenu('#222', '#fff');
 $pagina->creaPannelloLaterale('red', 'blue', 'black');
 $argomento1 = new Argomento('Argomento Test');
 $argomento1->aggiungiPagina('Pagina 1','PagineWeb/pagina1.txt');

@@ -95,17 +95,6 @@ class BarraMenu extends Tag{
             );
         $css[] = $nav_fisso;
         
-      
-        $css[] = self::maxSchermo();
-        $css[] = self::miniSchermo();
-        return $css;
-        
-    }
-    
-    private function maxSchermo(){
-        $regole = array();
-        
-        
         /*nav ul{
          margin: 0;
          padding: 0;
@@ -120,9 +109,33 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('list-style','none')
             ]
             );
-        $regole[] = $nav_ul;
+        $css[] = $nav_ul;
         
+        // colora celle menu (primo livello)
+        $css[] = $this->stileCellaMenu('nav > ul > li > a', $this->coloreTesto);
         
+        //colora celle menu (secondo livello)
+        $css[] = $this->stileCellaMenu('nav li > ul li a', $this->coloreTestoVoce);
+        
+       
+        
+        $css[] = self::maxSchermo();
+        $css[] = self::miniSchermo();
+        return $css;
+        
+    }
+    
+    private function maxSchermo(){
+        $regole = array();
+        
+        // colore voce selezionata
+        $nav_li_hover = new RegolaCSS(
+            'nav li:hover',
+            [
+                new DichiarazioneCSS('background-color',$this->coloreSeleziona)
+            ]
+            );
+        $regole[] = $nav_li_hover;
         /*
         
         nav ul li {
@@ -143,13 +156,6 @@ class BarraMenu extends Tag{
             ]
             );
         $regole[] = $nav_ul_li;
-        
-        /*
-         nav > ul > li > a {
-         color: #aaa;
-         }
-         */
-        $regole[] = $this->stileCellaMenu('nav > ul > li > a', $this->coloreTesto);
         
         
         /*
@@ -184,30 +190,9 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_li_ul_li;
         
-        /*
-         nav  li > ul li a {
-         color: #111;
-         display: block;
-         line-height: 2em;
-         padding: 0.5em 2em;
-         text-decoration: none;
-         }
-         */
-        $regole[] = $this->stileCellaMenu('nav li > ul li a', $this->coloreTestoVoce);
-        /*
         
-        nav li:hover {
-        background-color: #666;
-        }
         
-        */
-        $nav_li_hover = new RegolaCSS(
-            'nav li:hover',
-            [
-                new DichiarazioneCSS('background-color',$this->coloreSeleziona)
-            ]
-            );
-        $regole[] = $nav_li_hover;
+        
         /*
          nav li:hover > ul{
          position:absolute; //* N.B.: variate
@@ -236,7 +221,7 @@ class BarraMenu extends Tag{
          display: none;
          background-color: #888;
          }
-         */
+         */ // colora voci menu 3 livello
         $nav_li_ul_li_ul= new RegolaCSS(
             'nav li > ul > li ul',
             [
@@ -251,7 +236,7 @@ class BarraMenu extends Tag{
          nav li > ul > li ul a{
          color: #888;
          }
-         */
+         */ // colora voci menu 3 livello
         $nav_li_ul_li_ul_a= new RegolaCSS(
             'nav li > ul > li ul a',
             [
@@ -400,6 +385,79 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_ul;
         
+        
+        // colore voce selezionata
+        $nav_li_hover = new RegolaCSS(
+            'nav li:hover:not(.sub)',
+            [
+                new DichiarazioneCSS('background-color',$this->coloreSeleziona)
+            ]
+            );
+        $regole[] = $nav_li_hover;
+        
+        $nav_ul_li = new RegolaCSS(
+            'nav ul li',
+            [
+                new DichiarazioneCSS('margin','0'),
+                new DichiarazioneCSS('display','block'),
+                new DichiarazioneCSS('list-style-type','none'),
+                new DichiarazioneCSS('box-shadow', '3px 5px 2px rgba(0,0,0,0.3)')
+            ]
+            );
+        $regole[] = $nav_ul_li;
+        
+        
+        $nav_li_ul = new RegolaCSS(
+            'nav li > ul',
+            [
+                new DichiarazioneCSS('display','block'),
+                new DichiarazioneCSS('background-color',$this->coloreSfondoVoce),
+                new DichiarazioneCSS('margin-top','1px')
+            ]
+            );
+        $regole[] = $nav_li_ul;
+        
+        
+        /*
+         nav li > ul > li ul  {
+         display: none;
+         background-color: #888;
+         }
+         */ // colora voci menu 3 livello
+        $nav_li_ul_li_ul= new RegolaCSS(
+            'nav li > ul > li ul',
+            [
+                new DichiarazioneCSS('background-color',$this->coloreSfondoVoce2liv)
+                
+            ]
+            );
+        $regole[] = $nav_li_ul_li_ul;
+        
+        /*
+         nav li > ul > li ul a{
+         color: #888;
+         }
+         */ // colora voci menu 3 livello
+        $nav_li_ul_li_ul_a= new RegolaCSS(
+            'nav li > ul > li ul a',
+            [
+                new DichiarazioneCSS('color',$this->coloreTestoVoce2liv)
+            ]
+            );
+        $regole[] = $nav_li_ul_li_ul_a;
+        
+        /*
+         Visualizza feccia verticale*/
+        $nav_ul_li_sub= new RegolaCSS(
+            'nav ul li.sub',
+            [
+                new DichiarazioneCSS('background-image','url(LibreriaQx7-php/freccia_verticale.png)'),
+                new DichiarazioneCSS('background-repeat','no-repeat'),
+                new DichiarazioneCSS('background-position','95% 10%'),
+                new DichiarazioneCSS('background-size','30px 30px')
+            ]
+            );
+        $regole[] = $nav_ul_li_sub;
         
         return new SchermoCSS($regole, 800);
     }
