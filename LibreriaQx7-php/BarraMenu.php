@@ -518,7 +518,8 @@ class BarraMenu extends Tag{
         if(!($this instanceof Menu)){
             $logoMiniMenu = new Pannello('50px', '50px');
             $logoMiniMenu->aggiungi(new Attributo('class', 'logo'));
-            $logoMiniMenu->aggiungi(new Attributo('onclick', 'attivaMenu(this)'));
+            
+            //$logoMiniMenu->aggiungi(new Attributo('onclick', 'attivaMenu(this)'));
             
             $barra1 = new Pannello(null, null);
             $barra1->aggiungi(new Attributo('class', 'barra1'));
@@ -538,7 +539,8 @@ class BarraMenu extends Tag{
      * Aggiungi comportamento mini-menu
      */
     protected  function azioneMiniMenu(){
-        $this->aggiungi(new JavaScript(
+        $this->aggiungi(new JQuery(
+            /*
                 'function attivaMenu(x){'.
                     'x.classList.toggle("attiva");'. 
                     'var lista=document.getElementsByTagName("ul")[0];'.
@@ -547,9 +549,21 @@ class BarraMenu extends Tag{
                     '}else{'.
                         'lista.style.display="none";'.
                     '}'.
-                '}'
+                '}'.
+            */
+            '$(".logo").on("click", '.
+                'function(){'.
+                    '$(this).toggleClass("attiva");'.
+                    'if($(".sub ul").css("display") !== "block"){'.
+                        '$(".sub ul").css("display","block")'.
+                    '}else{'.
+                        '$(".sub ul").css("display","none")'.
+                    '}'.
+                '});'
             ));
     }
+
+              
     
     
     /**
