@@ -540,17 +540,33 @@ class BarraMenu extends Tag{
      */
     protected  function azioneMiniMenu(){
         $this->aggiungi(new JQuery(
-            /*
-                'function attivaMenu(x){'.
-                    'x.classList.toggle("attiva");'. 
-                    'var lista=document.getElementsByTagName("ul")[0];'.
-                    'if(lista.style.display!=="block"){'.
-                        'lista.style.display="block";'.
-                    '}else{'.
-                        'lista.style.display="none";'.
+            
+             /* Chiudi il menu quando si scorre la pagina verso il basso*/
+            'var su = false;'.
+            'var yUltimo = 0;'.
+            '$(window).scroll(function() {'.
+                'var y = $(window).scrollTop();'.
+                'if(y > yUltimo){'.
+                    'if(su){'.
+                        'su=false;'.
+                        'if($(".attiva").height() > 0){'.
+                            '$(".logo").toggleClass("attiva");'.
+                            'if($(".sub ul").css("display") !== "block"){'.
+                                '$(".sub ul").css("display","block")'.
+                            '}else{'.
+                                '$(".sub ul").css("display","none")'.
+                            '}'.
+                        '}'.
+                    '}'.
+                '}else{'.
+                    'if(!su){'.
+                        'su=true;'.
                     '}'.
                 '}'.
-            */
+                'yUltimo=y;'.
+            '});'.
+            
+            /*Apri e chiudi il menu con il clic sul logo del menu (a destra della barra)*/
             '$(".logo").on("click", '.
                 'function(){'.
                     '$(this).toggleClass("attiva");'.
@@ -573,24 +589,26 @@ class BarraMenu extends Tag{
      */
     public function azioneStickyMenu($idNoteLaterali='-non-presente-'){
         return new JQuery(
+                
                 "window.onscroll=function(){stickyMenu()};".
                 "var menu=document.getElementById(\"mobile\");".
                 "var indice=document.getElementById(\"".$idNoteLaterali."\");".
                 "var sticky=menu.offsetTop;".
                 "var yPagina=menu.window.pageYOffset;".
                 "function stickyMenu(){".
-                "if(window.pageYOffset < sticky){".
-                    "menu.id='mobile';".//scorri menu sulla pagina
-                    "indice.style.position='static';".//scorri indice pagine
-                "} else {".
-                    "menu.id='fisso';". //incolla menu quando il titolo sito scompare
-                    "indice.style.position='fixed';".//incolla indice pagine
-                    "var y = window.pageYOffset;".
-                    "if (yPagina > y) {".
-                        "menu.style.top='0';". //comparsa menu quando scorre verso l'alto
-                    "}else{".
-                        "menu.style.top='-100px';".//scomparsa menu quando scorre verso il basso
-                    "}".
+                    "if(window.pageYOffset < sticky){".
+                        "menu.id='mobile';".//scorri menu sulla pagina
+                        "indice.style.position='static';".//scorri indice pagine
+                    "} else {".
+                        "menu.id='fisso';". //incolla menu quando il titolo sito scompare
+                        "indice.style.position='fixed';".//incolla indice pagine
+                        "var y = window.pageYOffset;".
+                        "if (yPagina > y) {".
+                            "menu.style.top='0';". //comparsa menu quando scorre verso l'alto
+                        "}else{".
+                            "menu.style.top='-100px';".//scomparsa menu quando scorre verso il basso
+                            
+                        "}".
                         "yPagina=y;".
                     "}".
                 "}"
