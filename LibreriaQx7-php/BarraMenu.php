@@ -372,21 +372,13 @@ class BarraMenu extends Tag{
             ]
             );
         $regole[] = $barre_3;
-        
-        /*
-        $vedi_sottomenu = new RegolaCSS(
-            'ul.attiva',
-            [
-                new DichiarazioneCSS("display","block")
-            ]
-            );
-        $regole[] = $vedi_sottomenu;
+       
         
         
         $nav_ul= new RegolaCSS(
             'nav > ul',
             [
-                //new DichiarazioneCSS('background-color',$this->coloreSfondo),
+                new DichiarazioneCSS('background-color',$this->coloreSfondo),
                 new DichiarazioneCSS('display','none')
                 
             ]
@@ -430,7 +422,7 @@ class BarraMenu extends Tag{
          nav li > ul > li ul  {
          display: none;
          background-color: #888;
-         }
+         }*/
           // colora voci menu 3 livello
         $nav_li_ul_li_ul= new RegolaCSS(
             'nav li > ul > li ul',
@@ -444,7 +436,7 @@ class BarraMenu extends Tag{
         /*
          nav li > ul > li ul a{
          color: #888;
-         }
+         }*/
           // colora voci menu 3 livello
         $nav_li_ul_li_ul_a= new RegolaCSS(
             'nav li > ul > li ul a',
@@ -456,6 +448,7 @@ class BarraMenu extends Tag{
         
         /*
          Visualizza feccia verticale
+         */
         $nav_ul_li_sub= new RegolaCSS(
             'nav ul li.sub',
             [
@@ -466,7 +459,7 @@ class BarraMenu extends Tag{
             ]
             );
         $regole[] = $nav_ul_li_sub;
-        
+        /*
         $blocca_evento_click= new RegolaCSS(
             'li.sub > a',
             [
@@ -587,45 +580,29 @@ class BarraMenu extends Tag{
             /*Apri e chiudi il menu con il clic sul logo del menu (a destra della barra)*/
             '$(".logo").on("click", '.
             'function(){'.
-            'console.log("click1"); '.
                     '$(this).toggleClass("attiva");'.
-                    //>'$("nav > ul").toggleClass("attiva");'. // menu principale
-            
+                    
                     'if($(".sub ul").css("display") !== "block"){'.
                         '$(".sub ul").css("display","block");'.
                     '}else{'.
                         '$(".sub ul").css("display","none")'.
+                        
                     '}'.
                     
             
-            '});'/* .
-            'if($(".attiva")){'.
-            
-                '$("li.sub").on("click", '.
-                    'function(){'.
-                        '$(this).toggleClass("attiva");'.
-                        'console.log("click2"); '.
-                    '}'.
-                ');'
-                /*
-            .
-          
-                '$(".sub li.sub").on("dblclick", '.
-                    'function(){'.
-                        'if($(this).children("a").css("pointer-events") == "none"){'.
-                            '$(this).children("a").css("pointer-events","auto");'.
-                            '$(this).children("a").css("cursor","auto");'.
-                        '}'.
-           
-                    '}'.
-                ');'.
-           */ .
-            '}'
+            '});' 
          
             ));
     }
 
-              
+    /**
+     * Aggiorna la paginia al cambiamento delle dimensioni
+     */
+    protected  function cambiaDimensioneMenu(){
+        $this->aggiungi(new JQuery(
+            "$(window).resize(function(){location.reload();});"
+            ));
+    }
     
     
     /**
@@ -678,6 +655,7 @@ class BarraMenu extends Tag{
             }
             $this->contenuto .= $lista->vedi();
             self::azioneMiniMenu();
+            self::cambiaDimensioneMenu();
            
         }
         return parent::__toString();
