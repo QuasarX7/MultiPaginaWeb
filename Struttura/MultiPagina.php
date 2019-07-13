@@ -600,7 +600,7 @@ class MultiPagina extends PaginaHTML {
 
             self::creaIntestazioneSito();
             self::creaMenu();
-            if(isset($this->argomenti[$this->argomento])){
+  //          if(isset($this->argomenti[$this->argomento])){
                 $pagina = new AreaPagina();
                 $pagina->margine('10px', '0', '0', '0');
                 // Creazione (opzionale) della vista indice di pagine nella colonna di sinistra
@@ -639,7 +639,7 @@ class MultiPagina extends PaginaHTML {
                 $pagina->aggiungi($sezionePrincipale);
                 self::aggiungi($pagina);
                 
-            }
+  //          }
             self::cssBody();
             self::cssElencoPagine();
             self::cssFormattazionePagina();

@@ -554,11 +554,11 @@ class BarraMenu extends Tag{
              /* Chiudi il menu quando si scorre la pagina verso il basso*/
             'var su = false;'.
             'var yUltimo = 0;'.
-            '$(window).scroll(function() {'.
+            '$(window).scroll(function(){'.
                 'var y = $(window).scrollTop();'.
                 'if(y > yUltimo){'.
                     'if(su){'.
-            'su=false;'.
+                        'su=false;'.
                         'if($(".attiva").height() > 0){'.
                             
                             '$(".logo").toggleClass("attiva");'.
@@ -580,17 +580,20 @@ class BarraMenu extends Tag{
             /*Apri e chiudi il menu con il clic sul logo del menu (a destra della barra)*/
             '$(".logo").on("click", '.
             'function(){'.
-                    '$(this).toggleClass("attiva");'.
-                    
+            '$(this).toggleClass("attiva");'.
+           // '$(this).toggleClass("attiva",true);'.
+           // 'if($(this).is(".attiva"))'.
+            //    '$(this).addClass("attiva");'.
+                 // /*  
                     'if($(".sub ul").css("display") !== "block"){'.
                         '$(".sub ul").css("display","block");'.
                     '}else{'.
                         '$(".sub ul").css("display","none")'.
                         
                     '}'.
-                    
+                 //  */ 
             
-            '});' 
+            '});'
          
             ));
     }
@@ -654,9 +657,13 @@ class BarraMenu extends Tag{
                 $lista->aggiungi($voce);
             }
             $this->contenuto .= $lista->vedi();
-            self::azioneMiniMenu();
-            self::cambiaDimensioneMenu();
-           
+            
+            if($this->nome == 'nav'){// impedisce di riscrivere lo script negli elementi derivati (Menu)
+                
+                self::azioneMiniMenu();
+                self::cambiaDimensioneMenu();
+            }
+            
         }
         return parent::__toString();
     }
