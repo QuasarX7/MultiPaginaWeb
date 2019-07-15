@@ -58,6 +58,7 @@ class BarraMenu extends Tag{
      */
     public function regoleCSS(){
         $css = array();
+        
         /*
          nav {
          background-color: #333;
@@ -581,18 +582,12 @@ class BarraMenu extends Tag{
             '$(".logo").on("click", '.
             'function(){'.
             '$(this).toggleClass("attiva");'.
-           // '$(this).toggleClass("attiva",true);'.
-           // 'if($(this).is(".attiva"))'.
-            //    '$(this).addClass("attiva");'.
-                 // /*  
-                    'if($(".sub ul").css("display") !== "block"){'.
+                   'if($(".sub ul").css("display") !== "block"){'.
                         '$(".sub ul").css("display","block");'.
                     '}else{'.
                         '$(".sub ul").css("display","none")'.
                         
                     '}'.
-                 //  */ 
-            
             '});'
          
             ));

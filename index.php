@@ -15,16 +15,17 @@ $pagina->inizializzaSecondoLivelloMenu('#777', COLORE_TESTO_MENU);
 
 $pagina->creaPannelloLaterale("#333", COLORE_TESTO_MENU, COLORE_SELEZIONE_MENU);
 
-$paginaHome = new Argomento('HOME');
+$paginaHome = new Argomento(MultiPagina::HOME);
 $pagina->aggiungiArgomento($paginaHome);
 
 $argomento1 = new Argomento('IA');
 $argomento1->aggiungiPagina('Intelligenza Artificiale','PagineWeb/IA/IA.html');
+$argomento1->aggiungiPagina('Leopardi','PagineWeb/pagina2.txt');
 $pagina->aggiungiArgomento($argomento1);
 
-$pagina->aggiungiNoteMarginePagina(new Pannello('100%', '40px','#FF0'));
-$pagina->aggiungiNoteMarginePagina(new Pannello('50px', '400px','#0F0'));
-$pagina->aggiungiNoteMarginePagina(new Pannello('590px', '400px','#0F0'));
+//Eventuali note
+//$pagina->aggiungiNoteMarginePagina(new Pannello('100%', '40px','#FF0'));
+
 
 
 $argomento2 = new Argomento('Lamù - la ragazza dello Spazio');

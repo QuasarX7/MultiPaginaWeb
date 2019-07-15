@@ -12,7 +12,7 @@ class MultiPagina extends PaginaHTML {
     const CHIAVE_ARGOMENTO = 'argomento';
     const HOME = 'home';
     
-    const ALTEZZA_INTESTAZIONE_SITO  = '70px';
+    const ALTEZZA_INTESTAZIONE_SITO  = 'auto';
     
     const LUNGHEZZA_PANNELLO_SX  = '22%';
     const LUNGHEZZA_AREA_PRINCIPALE  = '78%';
@@ -20,10 +20,12 @@ class MultiPagina extends PaginaHTML {
     const LUNGHEZZA_AREA_ARGOMENTO = '70%';
     const LUNGHEZZA_PANNELLO_DX  = '29%';
     
-    const FONT_TESTO_R      = 'Struttura/Amita-Regular.ttf';
+    const FONT_TESTO_STANDARD      = 'Struttura/Inter-Regular.ttf';
+    const FONT_TESTO_SPECIALE      = 'Struttura/Niconne-Regular.ttf';
+    const FONT_TITOLO_PAGINA_SPECIALE = 'FrederickatheGreat-Regular.ttf';
     
-    const FONT_TITOLO_PAGINA_R = 'Struttura/ProstoOne-Regular.ttf';
-    const FONT_MENU_R = 'Struttura/Anton-Regular.ttf';
+    const FONT_TITOLO_PAGINA_STANDARD = 'Struttura/ProstoOne-Regular.ttf';
+    const FONT_MENU_STANDARD = 'Struttura/Anton-Regular.ttf';
     
     const NOME_FONT_INTESATAZIONE = 'intestazione';
    
@@ -184,7 +186,8 @@ class MultiPagina extends PaginaHTML {
             new Stile(
                 [
                     new DichiarazioneCSS('font-family',"'".self::NOME_FONT_INTESATAZIONE."', cursive"),
-                    new DichiarazioneCSS('font-size',"50px")
+                    new DichiarazioneCSS('font-size',"50px"),
+                    new DichiarazioneCSS('font-size',"4.5vw")//adatta alle dimensioni
                 ]
                 )
             );
@@ -244,18 +247,21 @@ class MultiPagina extends PaginaHTML {
  
     private function inizializzaTitoloArgomentoMultipagina(){
         // Crea titolo dell'argomento della multipagina
-        $this->titoloArgomento = new Pannello('100%', 'auto', '#fff', '#000');
-        
-        $this->titoloArgomento->aggiungi($this->argomento.' ');
-        $this->titoloArgomento->aggiungi(
-            new Stile(
-                [
-                    new DichiarazioneCSS('font-family',"'".self::NOME_FONT_INTESATAZIONE."', cursive"),
-                    new DichiarazioneCSS('font-size',"50px"),
-                    new DichiarazioneCSS('text-align', 'center')
-                ]
-                )
-            );
+        if(isset($this->argomento))
+            if($this->argomento != self::HOME){
+            $this->titoloArgomento = new Pannello('100%', 'auto', '#fff', '#000');
+            
+            $this->titoloArgomento->aggiungi($this->argomento.' ');
+            $this->titoloArgomento->aggiungi(
+                new Stile(
+                    [
+                        new DichiarazioneCSS('font-family',"'".self::NOME_FONT_INTESATAZIONE."', cursive"),
+                        new DichiarazioneCSS('font-size',"50px"),
+                        new DichiarazioneCSS('text-align', 'center')
+                    ]
+                    )
+                );
+        }
     }
     
     private function inizializzaTitoloPagina(Argomento $argomento){
@@ -264,8 +270,8 @@ class MultiPagina extends PaginaHTML {
         
         $pagina = $argomento->nomePagina($this->indice);
         self::titolo($pagina);
-        $this->titoloPagina->aggiungi($pagina);
-        $this->titoloPagina->aggiungi(
+       $this->titoloPagina->aggiungi($pagina);
+       $this->titoloPagina->aggiungi(
             new Stile(
                 [
                     new DichiarazioneCSS('font-family',"'Prosto One', cursive"),
@@ -275,8 +281,6 @@ class MultiPagina extends PaginaHTML {
                 ]
             )
         );
-        
-        
         $this->titoloPagina->aggiungi(' ');
     }
     
@@ -327,15 +331,15 @@ class MultiPagina extends PaginaHTML {
     }
     
     private function inizializzaPaginaDiTesto(){
-        $this->paginaTesto = new TestoPagina(null, 'auto', '#ddd', 'black');
+        $this->paginaTesto = new TestoPagina(null, 'auto', '#fff', 'black');
         
         $this->paginaTesto->allineamentoVerticale(Lato::ALTO);
         $this->paginaTesto->aggiungi(' ');
         $this->paginaTesto->aggiungi(
             new Stile(
                 [
-                    new DichiarazioneCSS('font-family',"'Amita', corsive"),
-                    new DichiarazioneCSS('font-size',"18px")
+                    new DichiarazioneCSS('font-family',"'Inter', sans-serif"),
+                    new DichiarazioneCSS('font-size',"16px")
                 ]
             )
         );
@@ -370,12 +374,14 @@ class MultiPagina extends PaginaHTML {
      * Inizializza lo stile predefinito della pagina.
      */
     private function cssBody(){
-        parent::importaFont('Amita', self::FONT_TESTO_R);
+        parent::importaFont('Inter', self::FONT_TESTO_STANDARD);
         if(!is_null($this->fontIntestazione)){
             parent::importaFont('intestazione', $this->fontIntestazione);
         }
-        parent::importaFont('Prosto One', self::FONT_TITOLO_PAGINA_R);
-        parent::importaFont('Anton', self::FONT_MENU_R);
+        parent::importaFont('Prosto One', self::FONT_TITOLO_PAGINA_STANDARD);
+        parent::importaFont('Anton', self::FONT_MENU_STANDARD);
+        parent::importaFont('Niconne', self::FONT_TESTO_SPECIALE);
+        //parent::importaFont('FrederickatheGreat', self::FONT_TITOLO_PAGINA_SPECIALE);
         
         /*
          body{
@@ -386,17 +392,76 @@ class MultiPagina extends PaginaHTML {
          }
          */
         $body = new RegolaCSS(
-            'body',
+            'body', 
             [
                 new DichiarazioneCSS('margin','0'),
                 new DichiarazioneCSS('padding','0'),
+                // N.B.:si applica soprattuto alla 'barra menu'
                 new DichiarazioneCSS('font-size','16px'),
                 new DichiarazioneCSS('font-family', "'Anton', sans-serif")
             ]
             );
         $this->aggiungi($body);
-     
         
+        self::classeTesto();//casse speciale dei tag di tipo div
+    }
+    
+    private function classeTesto(){
+        $classe = new RegolaCSS(
+            '.testo',
+            [
+                new DichiarazioneCSS('margin','2'),
+                new DichiarazioneCSS('padding','2'),
+                new DichiarazioneCSS('text-align','justify'),
+                new DichiarazioneCSS('font-size','26px'),
+                new DichiarazioneCSS('font-family', "'Niconne', sans-serif")
+            ]
+            );
+        $this->aggiungi($classe);
+        $link_interno = new RegolaCSS(
+            '.testo a.linkInterno:link,.testo a.linkInterno:visited',
+            [
+                new DichiarazioneCSS('color', '#5499C7'),
+                new DichiarazioneCSS('text-decoration', 'none')
+            ]
+            );
+        $this->aggiungi($link_interno);
+        $link_prima = new RegolaCSS(
+            '.testo a:link,.testo a:visited',
+            [
+                new DichiarazioneCSS('color', 'green'),
+                new DichiarazioneCSS('text-decoration', 'none')
+            ]
+            );
+        $this->aggiungi($link_prima);
+        
+        $link_focus = new RegolaCSS(
+            '.testo a:hover,.testo a:active,.testo a.linkInterno:hover,.testo a.linkInterno:active',
+            [
+                new DichiarazioneCSS('color', 'orange'),
+                new DichiarazioneCSS('text-decoration', 'underline')
+            ]
+            );
+        $this->aggiungi($link_focus);
+        
+        $titolo = new RegolaCSS(
+            '.testo h1,.testo h2,.testo h3',
+            [
+                new DichiarazioneCSS('color', '#FFF'),
+                new DichiarazioneCSS('background','#111'),
+                new DichiarazioneCSS('font-family', "'intestazione', script")
+            ]
+            );
+        $this->aggiungi($titolo);
+        
+        $immagine = new RegolaCSS(
+            '.testo img',
+            [
+                new DichiarazioneCSS('float','left'),
+                new DichiarazioneCSS('margin','15px 15px 15px 15px'),
+            ]
+            );
+        $this->aggiungi($immagine);
     }
     
     private function cssFormattazionePagina(){
@@ -600,22 +665,23 @@ class MultiPagina extends PaginaHTML {
 
             self::creaIntestazioneSito();
             self::creaMenu();
-  //          if(isset($this->argomenti[$this->argomento])){
-                $pagina = new AreaPagina();
-                $pagina->margine('10px', '0', '0', '0');
+            $pagina = new AreaPagina();
+            $pagina->margine('10px', '0', '0', '0');
+            
+            if(isset($this->argomenti[$this->argomento])){
                 // Creazione (opzionale) della vista indice di pagine nella colonna di sinistra
-                if(!is_null($this->indiceLateraleSx)){ 
+              if(!is_null($this->indiceLateraleSx)){ 
                     self::creaListaPagine();
                     $pagina->aggiungi($this->indiceLateraleSx);
                 }
-                $argomento = $this->argomenti[$this->argomento];
+               $argomento = $this->argomenti[$this->argomento];
                 
                 self::inizializzaTitoloArgomentoMultipagina();
                 self::inizializzaIndiceDiPagina();
                 self::inizializzaTitoloPagina($argomento);
                 self::inizializzaPaginaDiTesto();
                 self::creaNoteMargineDx();
-                
+
                 
                 $this->paginaTesto->aggiungi($this->titoloArgomento);
                 $this->paginaTesto->aggiungi($this->indiceDiPagina);
@@ -637,9 +703,8 @@ class MultiPagina extends PaginaHTML {
                 $sezionePrincipale->aggiungi($this->paginaTesto);
                 $sezionePrincipale->aggiungi($this->noteLateraleDx);
                 $pagina->aggiungi($sezionePrincipale);
-                self::aggiungi($pagina);
-                
-  //          }
+               self::aggiungi($pagina);
+            }
             self::cssBody();
             self::cssElencoPagine();
             self::cssFormattazionePagina();

@@ -38,6 +38,7 @@ class PaginaHTML extends Oggetto{
             $this->titolo = $titolo;
             self::parareChiaviDiRicerca($titolo);
         }
+        
     }
     
     /**
@@ -116,7 +117,7 @@ class PaginaHTML extends Oggetto{
                 new Attributo('content','IE=edge')
             ]
         );
-        $titolo = new Tag("title", $this->titolo . '');
+        $titolo = new Tag("title", $this->titolo . ' ');
         $regoleCSS = ' ' . $this->file;
         foreach ($this->css as $regola) {
             $regoleCSS .= $regola . '';
