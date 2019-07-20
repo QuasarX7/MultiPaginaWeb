@@ -421,12 +421,22 @@ class MultiPagina extends PaginaHTML {
             ]
             );
         $this->aggiungi($classe);
+        $codice = new RegolaCSS(
+            'code',
+            [
+                new DichiarazioneCSS('background','#eee'),
+                new DichiarazioneCSS('color', '#000'),
+                new DichiarazioneCSS('font-size','14px'),
+                new DichiarazioneCSS('font-family', "'Space Mono', sans-serif")
+            ]
+            );
+        $this->aggiungi($codice);
         $pre = new RegolaCSS(
             'pre',
             [
                 new DichiarazioneCSS('background','#000'),
                 new DichiarazioneCSS('color', '#fff'),
-                new DichiarazioneCSS('font-size','14px'),
+                new DichiarazioneCSS('font-size','12px'),
                 new DichiarazioneCSS('font-family', "'Space Mono', sans-serif")
             ]
             );
@@ -438,14 +448,14 @@ class MultiPagina extends PaginaHTML {
             ]
             );
         $this->aggiungi($pre_b);
-        $grossetto = new RegolaCSS(
+        /*$grossetto = new RegolaCSS(
             '.testo b',
             [
                 new DichiarazioneCSS('font-size','18px'),
                 new DichiarazioneCSS('font-family', intestazione.", script")
             ]
             );
-        $this->aggiungi($grossetto);
+        $this->aggiungi($grossetto);*/
         $link_interno = new RegolaCSS(
             '.testo a.linkInterno:link,.testo a.linkInterno:visited',
             [
