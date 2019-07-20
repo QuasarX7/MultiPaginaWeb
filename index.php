@@ -2,12 +2,18 @@
 <?php
 include_once 'Struttura/MultiPagina.php';
 
-$pagina = new MultiPagina('Domenico della PERUTA');
-
-//$pagina->formatoCarattereDiIntestazione('Struttura/Akronim-Regular.ttf');
-
-const COLORE_TESTO_MENU = "#0f0";
+const COLORE_TESTO_MENU     = "#0f0";
 const COLORE_SELEZIONE_MENU = "#fff";
+
+const MENU_HOME                  = "Home";
+const MENU_SORRISO               = "Sorriso";
+const MENU_APPUNTI               = "Appunti";
+const MENU_INFORMATICA           = "Informatica";
+const MENU_IA                    = "Intelligenza Artificiale";
+const MENU_SICUREZZA_INFORMATICA = "Sicurezza Informatica";
+const MENU_ART_ASCII = "ASCII Art";
+
+$pagina = new MultiPagina('Domenico dellaPERUTA');
 
 $pagina->creaBarraMenu("#333",COLORE_TESTO_MENU,COLORE_SELEZIONE_MENU);
 $pagina->inizializzaPrimoLivelloMenu('#555', COLORE_TESTO_MENU);
@@ -15,35 +21,61 @@ $pagina->inizializzaSecondoLivelloMenu('#777', COLORE_TESTO_MENU);
 
 $pagina->creaPannelloLaterale("#333", COLORE_TESTO_MENU, COLORE_SELEZIONE_MENU);
 
+//Eventuali note
+$nota = new Pannello('100%', 'auto','#fafad2');
+$nota->aggiungi("Chiunque si accinga ad eleggere se stesso a giudice del vero e della conoscenza, naufraga sotto le risate degli dei.<br><br><i>Albert Einstein</i>");
+$pagina->aggiungiNoteMarginePagina($nota);
+
 $paginaHome = new Argomento(MultiPagina::HOME);
 $pagina->aggiungiArgomento($paginaHome);
 
-$argomento1 = new Argomento('IA');
-$argomento1->aggiungiPagina('Intelligenza Artificiale','PagineWeb/IA/IA.html');
-$argomento1->aggiungiPagina('Leopardi','PagineWeb/pagina2.txt');
-$pagina->aggiungiArgomento($argomento1);
+$argomentoIA = new Argomento('Intelligenza Artificiale');
+$argomentoIA->aggiungiPagina('Introduzione','PagineWeb/IA/IA.html');
+$argomentoIA->aggiungiPagina('Algoritmi Genetici','PagineWeb/IA/algoritmi_genetici/algoritmi_genetici.html');
+$argomentoIA->aggiungiPagina('Reti Neurali','PagineWeb/IA/reti_neurali/reti_neurali.html');
+$argomentoIA->aggiungiPagina('Percettrone','PagineWeb/IA/reti_neurali/percettrone/Percettrone.html');
+$argomentoIA->aggiungiPagina('MLP','PagineWeb/IA/reti_neurali/MLP/MLP.html');
+$argomentoIA->aggiungiPagina('SOM','PagineWeb/IA/reti_neurali/SOM/SOM.html');
+$argomentoIA->aggiungiPagina('RBF','PagineWeb/IA/reti_neurali/RBF/RBF.html');
+$argomentoIA->aggiungiPagina('Hopfield','PagineWeb/IA/reti_neurali/hopfield/Hopfield.html');
+$pagina->aggiungiArgomento($argomentoIA);
 
-//Eventuali note
-//$pagina->aggiungiNoteMarginePagina(new Pannello('100%', '40px','#FF0'));
+$argomentoArtASCII = new Argomento('Immagine Art ASCII');
+$argomentoArtASCII->aggiungiPagina('Lamù - la ragazza dello Spazio','PagineWeb/pagina3.txt');
+$pagina->aggiungiArgomento($argomentoArtASCII);
+
+$argomentoPenTest = new Argomento('Sicurezza Informatica');
+$argomentoPenTest->aggiungiPagina('Penetration Test','PagineWeb/penetration_test/penetration_test.html');
+$argomentoPenTest->aggiungiPagina('Footprinting','PagineWeb/penetration_test/footprinting.html');
+$argomentoPenTest->aggiungiPagina('Scansione delle porte','PagineWeb/penetration_test/scansione_delle_porte.html');
+$argomentoPenTest->aggiungiPagina('Enumerazione','PagineWeb/penetration_test/enumerazione.html');
+$argomentoPenTest->aggiungiPagina('Exploit','PagineWeb/penetration_test/exploit.html');
+$argomentoPenTest->aggiungiPagina('Forza bruta','PagineWeb/penetration_test/forza_bruta.html');
+$argomentoPenTest->aggiungiPagina('Spoofing','PagineWeb/penetration_test/spoofing.html');
+$pagina->aggiungiArgomento($argomentoPenTest);
 
 
 
-$argomento2 = new Argomento('Lamù - la ragazza dello Spazio');
-$argomento2->aggiungiPagina('Immagine Art ASCII','PagineWeb/pagina3.txt');
-$pagina->aggiungiArgomento($argomento2);
+
+
 $tr = 'ventesimo';
 
 
 /* MENU PRINCIPALE */
 
 // Primo livello
-$pagina->aggiungiMenu("HOME", $paginaHome);
-$pagina->aggiungiMenu("Appunti");
-$pagina->aggiungiMenu("Sorriso");
+$pagina->aggiungiMenu(MENU_HOME, $paginaHome);
+$pagina->aggiungiMenu(MENU_APPUNTI);
+$pagina->aggiungiMenu(MENU_SORRISO);
 
-// Secondo livello
-$pagina->aggiungiMenu('Intelligenza Artificiale', $argomento1,'Appunti');
-$pagina->aggiungiMenu('Lamu', $argomento2,'Sorriso');
+// sottovoci
+$pagina->aggiungiMenu(MENU_INFORMATICA,null,MENU_APPUNTI);
+$pagina->aggiungiMenu(MENU_IA, $argomentoIA,MENU_INFORMATICA);
+$pagina->aggiungiMenu(MENU_SICUREZZA_INFORMATICA, $argomentoPenTest,MENU_INFORMATICA);
+
+$pagina->aggiungiMenu(MENU_ART_ASCII, $argomentoArtASCII,MENU_SORRISO);
+
+
 
 $pagina->crea();
 

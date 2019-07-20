@@ -5,6 +5,8 @@ class Browser {
     protected $nome = '?';
     protected $versione = '?';
     
+    protected $dispositivoMobile = false;
+    
     /**
      * Costruttore che inizializza le variabili.
      * 
@@ -19,6 +21,14 @@ class Browser {
                     $this->nome = $match[1] ===  'Trident' ? 'Explorer' : ($match[1] ===  'OPR' ? 'Opera' :  $match[1] );
                     $this->versione = $match[1] ===  'Trident'?  $match[2] + 4.0 : $match[2];
                     break ;
+                }
+            }
+            
+            $device = array("iPhone", "Android", "Windows Phone", "BlackBerry", "iPod");
+            foreach ($device as $value) {
+                if (strpos($this->dati, $value) !== false) {
+                    $this->dispositivoMobile = true;
+                    break;
                 }
             }
         }
@@ -39,7 +49,9 @@ class Browser {
         return $this->versione;
     }
 
-    
+    public function telefono(){
+        return $this->dispositivoMobile;
+    }
     
     /**
      * Verifica la compatibilità (o quasi) con lo standard HTML5

@@ -13,6 +13,7 @@ class MultiPagina extends PaginaHTML {
     const HOME = 'home';
     
     const ALTEZZA_INTESTAZIONE_SITO  = 'auto';
+    const ALTEZZA_MENU  = '50px';
     
     const LUNGHEZZA_PANNELLO_SX  = '22%';
     const LUNGHEZZA_AREA_PRINCIPALE  = '78%';
@@ -22,12 +23,15 @@ class MultiPagina extends PaginaHTML {
     
     const FONT_TESTO_STANDARD      = 'Struttura/Inter-Regular.ttf';
     const FONT_TESTO_SPECIALE      = 'Struttura/Niconne-Regular.ttf';
+    const FONT_TESTO_SPACEMONO     = 'Struttura/SpaceMono-Regular.ttf';
     const FONT_TITOLO_PAGINA_SPECIALE = 'FrederickatheGreat-Regular.ttf';
     
     const FONT_TITOLO_PAGINA_STANDARD = 'Struttura/ProstoOne-Regular.ttf';
     const FONT_MENU_STANDARD = 'Struttura/Anton-Regular.ttf';
     
     const NOME_FONT_INTESATAZIONE = 'intestazione';
+    
+
    
     protected $fontIntestazione = 'Struttura/FrederickatheGreat-Regular.ttf';
     
@@ -381,16 +385,8 @@ class MultiPagina extends PaginaHTML {
         parent::importaFont('Prosto One', self::FONT_TITOLO_PAGINA_STANDARD);
         parent::importaFont('Anton', self::FONT_MENU_STANDARD);
         parent::importaFont('Niconne', self::FONT_TESTO_SPECIALE);
-        //parent::importaFont('FrederickatheGreat', self::FONT_TITOLO_PAGINA_SPECIALE);
+        parent::importaFont('Space Mono', self::FONT_TESTO_SPACEMONO);
         
-        /*
-         body{
-             margin: 0;
-             padding: 0;
-             font-size: 15px;
-             font-family: "Lucida Grande", "Helvetica Nueue", Arial, sans-serif;
-         }
-         */
         $body = new RegolaCSS(
             'body', 
             [
@@ -403,6 +399,13 @@ class MultiPagina extends PaginaHTML {
             );
         $this->aggiungi($body);
         
+        $aside = new RegolaCSS(
+            'aside',
+            [
+                new DichiarazioneCSS('font-family', "'Prosto One', sans-serif")
+            ]
+            );
+        $this->aggiungi($aside);
         self::classeTesto();//casse speciale dei tag di tipo div
     }
     
@@ -410,14 +413,39 @@ class MultiPagina extends PaginaHTML {
         $classe = new RegolaCSS(
             '.testo',
             [
-                new DichiarazioneCSS('margin','2'),
-                new DichiarazioneCSS('padding','2'),
+                new DichiarazioneCSS('margin','2px'),
+                new DichiarazioneCSS('padding','2px'),
                 new DichiarazioneCSS('text-align','justify'),
                 new DichiarazioneCSS('font-size','26px'),
                 new DichiarazioneCSS('font-family', "'Niconne', sans-serif")
             ]
             );
         $this->aggiungi($classe);
+        $pre = new RegolaCSS(
+            'pre',
+            [
+                new DichiarazioneCSS('background','#000'),
+                new DichiarazioneCSS('color', '#fff'),
+                new DichiarazioneCSS('font-size','14px'),
+                new DichiarazioneCSS('font-family', "'Space Mono', sans-serif")
+            ]
+            );
+        $this->aggiungi($pre);
+        $pre_b = new RegolaCSS(
+            'pre b',
+            [
+                new DichiarazioneCSS('color', 'yellow')
+            ]
+            );
+        $this->aggiungi($pre_b);
+        $grossetto = new RegolaCSS(
+            '.testo b',
+            [
+                new DichiarazioneCSS('font-size','18px'),
+                new DichiarazioneCSS('font-family', intestazione.", script")
+            ]
+            );
+        $this->aggiungi($grossetto);
         $link_interno = new RegolaCSS(
             '.testo a.linkInterno:link,.testo a.linkInterno:visited',
             [
@@ -462,34 +490,41 @@ class MultiPagina extends PaginaHTML {
             ]
             );
         $this->aggiungi($immagine);
+        $immagine_estesa = new RegolaCSS(
+            '.testo img.estesa',
+            [
+                new DichiarazioneCSS('float','none')
+            ]
+            );
+        $this->aggiungi($immagine_estesa);
     }
     
     private function cssFormattazionePagina(){
-        $primaColonna = new RegolaCSS(//elimina la prima colonna
+        $primaColonna = new RegolaCSS(
             'aside:first-child',
             [
                 new DichiarazioneCSS('display', 'inline-block')
             ]
             );
-        $this->aggiungi($primaColonna);
+        //$this->aggiungi($primaColonna);
         
-        $colonnaTesto = new RegolaCSS(//elimina la prima colonna
+        $colonnaTesto = new RegolaCSS(
             'article:first-child',
             [
                 new DichiarazioneCSS('display', 'inline-block'),
                 new DichiarazioneCSS('width', self::LUNGHEZZA_AREA_ARGOMENTO)
             ]
             );
-        $this->aggiungi($colonnaTesto);
+        //$this->aggiungi($colonnaTesto);
         
-        $areaPrincipale =  new RegolaCSS(//elimina la prima colonna
+        $areaPrincipale =  new RegolaCSS(
             'section',
             [
                 new DichiarazioneCSS('display', 'inline-block'),
                 new DichiarazioneCSS('width', self::LUNGHEZZA_AREA_PRINCIPALE)
             ]
             );
-        $this->aggiungi($areaPrincipale);
+        //$this->aggiungi($areaPrincipale);
         
         $scomparsaPrimaColonna = new RegolaCSS(//elimina la prima colonna
             'aside:first-child',
@@ -512,26 +547,13 @@ class MultiPagina extends PaginaHTML {
             ]
             );
         
-        $this->aggiungi(
-            new SchermoCSS(
-                [
-                    $scomparsaPrimaColonna, 
-                    $espandiAreaPrincipale
-                ],
-                1000,700
-                )
-            );
-        
-        $this->aggiungi(
-            new SchermoCSS(
-                [
-                    $scomparsaPrimaColonna,
-                    $espandiColonnaTesto,
-                    $espandiAreaPrincipale
-                ],
-                700
-                )
-            );
+        $this->cssMiniDesktop([$primaColonna,$colonnaTesto,$areaPrincipale]);
+        $this->cssTablet([$colonnaTesto,$areaPrincipale,$scomparsaPrimaColonna]);
+        $this->cssTabletOrizzontale([$colonnaTesto,$areaPrincipale,$scomparsaPrimaColonna]);
+        $this->cssTabletVerticale([$areaPrincipale,$scomparsaPrimaColonna,$espandiAreaPrincipale]);
+        $this->cssCellulareOrizzontale([$areaPrincipale,$scomparsaPrimaColonna,$espandiAreaPrincipale]);
+        $this->cssCellulareVerticale([$scomparsaPrimaColonna,$espandiColonnaTesto,$espandiAreaPrincipale]);
+
     }
     
     private function cssElencoPagine(){
@@ -661,6 +683,7 @@ class MultiPagina extends PaginaHTML {
     public function __toString(){
         
         $controllo = new Browser();
+        SchermoCSS::$mobile = $controllo->telefono();
         if($controllo->html5()){
 
             self::creaIntestazioneSito();

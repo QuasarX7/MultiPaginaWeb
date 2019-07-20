@@ -6,6 +6,7 @@ include_once 'Stile.php';
 include_once 'javascript.php';
 include_once 'Browser.php';
 
+
 /**
  * Classe che implementa la costruzione di una pagina html.
  *
@@ -13,6 +14,11 @@ include_once 'Browser.php';
  */
 class PaginaHTML extends Oggetto{
   
+    const LIMITE_DESKTOP = 1280;
+    const LIMITE_PORTATILE = 1024;
+    const LIMITE_TABLET  = 737;
+    const LIMITE_SMARTPHONE = 320;//480;
+    
     const JQUERY = 'LibreriaQx7-php/jquery-3.3.1.slim.min.js';//NON FUNZIONALITA AJAX
     protected $titolo;
     protected $ricerca = '';
@@ -96,6 +102,80 @@ class PaginaHTML extends Oggetto{
         return new Tag('script',[new Attributo('src',self::JQUERY)],' ').'';
     }
 
+    public function cssCellulareVerticale(array $regoleCss){
+        $this->aggiungi(
+            new SchermoCSS(
+                $regoleCss,
+                self::LIMITE_SMARTPHONE // limite massimo
+            )
+        );
+    }
+    
+    public function cssCellulareOrizzontale(array $regoleCss){
+        $this->aggiungi(
+            new SchermoCSS(
+                $regoleCss,
+                self::LIMITE_TABLET, // limite massimo
+                self::LIMITE_SMARTPHONE // limite minimo
+            )
+        );
+    }
+    
+    public function cssTablet(array $regoleCss){
+        $this->aggiungi(
+            new SchermoCSS(
+                $regoleCss,
+                self::LIMITE_PORTATILE, // limite massimo
+                self::LIMITE_TABLET // limite minimo
+            )
+        );
+    }
+    
+    public function cssTabletVerticale(array $regoleCss){
+        $this->aggiungi(
+            new SchermoCSS(
+                $regoleCss,
+                self::LIMITE_PORTATILE, // limite massimo
+                self::LIMITE_TABLET, // limite minimo
+                SchermoCSS::VERTICALE
+            )
+        );
+    }
+    
+    public function cssTabletOrizzontale(array $regoleCss){
+        $this->aggiungi(
+            new SchermoCSS(
+                $regoleCss,
+                self::LIMITE_PORTATILE, // limite massimo
+                self::LIMITE_TABLET, // limite minimo
+                SchermoCSS::ORIZZONTALE
+            )
+        );
+    }
+    
+    public function cssMiniDesktop(array $regoleCss){
+        $this->aggiungi(
+            new SchermoCSS(
+                $regoleCss,
+                SchermoCSS::INDEFINITO, // limite massimo
+                self::LIMITE_PORTATILE// limite minimo
+            )
+        );
+    }
+    
+    public function cssDesktop(array $regoleCss){
+        $this->aggiungi(
+            new SchermoCSS(
+                $regoleCss,
+                SchermoCSS::INDEFINITO, // limite massimo
+                self::LIMITE_DESKTOP// limite minimo
+            )
+        );
+    }
+        
+       
+
+      
     
     public function __toString() {
         $intestazione = "<!DOCTYPE html>";

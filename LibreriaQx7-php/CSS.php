@@ -6,8 +6,13 @@
  * @author Dott. Domenico della PERUTA
  */
 class RegolaCSS {
+    const INDEFINITO = -1; 
+    const VERTICALE   = "portrait";
+    const ORIZZONTALE = "landscape";
+    
     protected $selettore;
     protected $dichiarazioni;
+    
     
     /**
      * 
@@ -140,6 +145,7 @@ abstract class PropritàCSS{
  */
 class SchermoCSS extends RegolaCSS{
 
+    public static $mobile = true;
     /**
      * Costruttore.
      * 
@@ -147,27 +153,43 @@ class SchermoCSS extends RegolaCSS{
      * @param int $max  massima risoluzione dello schermo
      * @param int $min  minima risoluzione dello schermo
      */
-    public function __construct(array $regole, int $max, int $min=0) {
+    public function __construct(array $regole, int $max, int $min = self::INDEFINITO, $orientamento = self::INDEFINITO) {
+        $mobile = self::$mobile;
+        $add = "";
         
+        if($orientamento === self::VERTICALE){
+            $mobile = true;
+            $add = " and  (orientation : portrait)";
+        }elseif ($orientamento === self::ORIZZONTALE) {
+            $add = " and  (orientation : landscape)";
+            $mobile = true;
+        }
         $this->dichiarazioni = $regole;
+        $query = ($mobile === true) ? "-device" : "";
         
         if($min <=0 && $max >0){
-            $this->selettore = '@media only screen and (max-width:'.$max.'px)';
+            $this->selettore = '@media only screen and (max'.$query.'-width:'.$max.'px)'.$add;
         }elseif ($min > 0 && $max >0){
-            $this->selettore = '@media only screen  and (min-width:'.$min.'px) and (max-width:'.$max.'px)';
+            $this->selettore = '@media only screen  and (min'.$query.'-width:'.$min.'px) and (max'.$query.'-width:'.$max.'px)'.$add;
         }elseif ($min > 0 && $max <=0){
-            $this->selettore = '@media only screen  and (min-width:'.$min.'px)';
+            $this->selettore = '@media only screen  and (min'.$query.'-width:'.$min.'px)'.$add;
         }else{
             $this->selettore = '';
         }
         
     }
     
+    
     public function aggiungi($regolaCSS) {
         if($regolaCSS instanceof RegolaCSS){
             $this->dichiarazioni[] = $regolaCSS;
         }
     }
+    
+    
+    
+    
+    
     
     
 }

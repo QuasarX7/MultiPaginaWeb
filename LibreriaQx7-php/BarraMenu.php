@@ -59,15 +59,23 @@ class BarraMenu extends Tag{
     public function regoleCSS(){
         $css = array();
         
-        /*
-         nav {
-         background-color: #333;
-         border: 1px solid #333;
-         display: block;
-         margin: 0;
-         overflow: hidden;
-         }
-         */
+        
+        $css[] = self::maxSchermo();
+        $css[] = self::miniSchermo();
+        return $css;
+        
+    }
+    
+    private function maxSchermo(){
+        $regole = array();
+        $logo = new RegolaCSS(
+            '.logo',
+            [
+                new DichiarazioneCSS(' display', 'none')
+            ]
+            );
+        $regole[] = $logo;
+        
         $nav = new RegolaCSS(
             'nav',
             [
@@ -82,11 +90,7 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('box-shadow', '0px 5px 5px 5px rgba(0,0,0,0.3)')
             ]
             );
-        /*
-         if($this->posizione == Posizione::FISSA){
-         $nav->aggiungi(new DichiarazioneCSS('position',Posizione::FISSA));
-         }*/
-        $css[] = $nav;
+        $regole[] = $nav;
         
         $nav_fisso = new RegolaCSS(
             'nav#fisso',
@@ -94,14 +98,8 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('position',Posizione::FISSA)
             ]
             );
-        $css[] = $nav_fisso;
+        $regole[] = $nav_fisso;
         
-        /*nav ul{
-         margin: 0;
-         padding: 0;
-         list-style: none;
-         }
-         */
         $nav_ul = new RegolaCSS(
             'nav ul',
             [
@@ -110,24 +108,13 @@ class BarraMenu extends Tag{
                 new DichiarazioneCSS('list-style','none')
             ]
             );
-        $css[] = $nav_ul;
+        $regole[] = $nav_ul;
         
         // colora celle menu (primo livello)
-        $css[] = $this->stileCellaMenu('nav > ul > li > a', $this->coloreTesto);
+        $regole[] = $this->stileCellaMenu('nav > ul > li > a', $this->coloreTesto);
         
         //colora celle menu (secondo livello)
-        $css[] = $this->stileCellaMenu('nav li > ul li a', $this->coloreTestoVoce);
-        
-       
-        
-        $css[] = self::maxSchermo();
-        $css[] = self::miniSchermo();
-        return $css;
-        
-    }
-    
-    private function maxSchermo(){
-        $regole = array();
+        $regole[] = $this->stileCellaMenu('nav li > ul li a', $this->coloreTestoVoce);
         
         // colore voce selezionata
         $nav_li_hover = new RegolaCSS(
@@ -137,15 +124,7 @@ class BarraMenu extends Tag{
             ]
             );
         $regole[] = $nav_li_hover;
-        /*
         
-        nav ul li {
-        margin: 0;
-        display: inline-block;
-        list-style-type: none;
-        transition: all 0.2s;
-        }
-        */
         $nav_ul_li = new RegolaCSS(
             'nav ul li',
             [
@@ -158,15 +137,6 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_ul_li;
         
-        
-        /*
-         nav li > ul{
-         display : none;
-         margin-top:1px;
-         background-color: #bbb;
-         
-         }
-         */
         $nav_li_ul = new RegolaCSS(
             'nav li > ul',
             [
@@ -177,12 +147,6 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_li_ul;
         
-        
-        /*
-         nav li > ul li{
-         display: block;
-         }
-         */
         $nav_li_ul_li = new RegolaCSS(
             'nav li > ul li',
             [
@@ -191,15 +155,6 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_li_ul_li;
         
-        
-        
-        
-        /*
-         nav li:hover > ul{
-         position:absolute; //* N.B.: variate
-         display : block;
-         }
-         */
         $nav_fissa_li_hover_ul= new RegolaCSS(
             'nav#fisso li:hover > ul',
             [
@@ -216,13 +171,7 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_mobile_li_hover_ul;
         
-        
-        /*
-         nav li > ul > li ul  {
-         display: none;
-         background-color: #888;
-         }
-         */ // colora voci menu 3 livello
+        // colora voci menu 3 livello
         $nav_li_ul_li_ul= new RegolaCSS(
             'nav li > ul > li ul',
             [
@@ -233,11 +182,6 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_li_ul_li_ul;
         
-        /*
-         nav li > ul > li ul a{
-         color: #888;
-         }
-         */ // colora voci menu 3 livello
         $nav_li_ul_li_ul_a= new RegolaCSS(
             'nav li > ul > li ul a',
             [
@@ -246,14 +190,6 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_li_ul_li_ul_a;
         
-        /*
-         nav li > ul > li:hover > ul  {
-         position:absolute;
-         display : block;
-         margin-left:100%;
-         margin-top:-3em;
-         }
-         */
         $nav_li_ul_li_hover_ul= new RegolaCSS(
             'nav li > ul > li:hover > ul',
             [
@@ -273,13 +209,6 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_fisso_li_ul_li_hover_ul;
         
-        
-        
-        /*
-         nav ul > li.sub{
-         background: url(LibreriaQx7-php/freccia_verticale.png) right center no-repeat;
-         }
-         */
         $nav_ul_li_sub= new RegolaCSS(
             'nav ul > li.sub',
             [
@@ -287,11 +216,7 @@ class BarraMenu extends Tag{
             ]
             );
         $regole[] = $nav_ul_li_sub;
-        /*
-         nav ul > li.sub li.sub{
-         background: url(LibreriaQx7-php/freccia_orizzontale.png) right center no-repeat;
-         }
-         */
+        
         $nav_ul_li_sub_li_sub= new RegolaCSS(
             'nav ul > li.sub li.sub',
             [
@@ -300,8 +225,7 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_ul_li_sub_li_sub;
         
-        
-        return new SchermoCSS($regole, 0, 800);
+        return new SchermoCSS($regole, SchermoCSS::INDEFINITO, MultiPagina::LIMITE_PORTATILE+1); // più grande di un tablet
     }
     
     private function miniSchermo(){
@@ -315,37 +239,24 @@ class BarraMenu extends Tag{
             ]
             );
         $regole[] = $logo;
-        /*
-           .bar1, .bar2, .bar3 {
-              width: 35px;
-              height: 5px;
-              background-color: #333;
-              margin: 6px 0;
-              transition: 0.4s;
-            }
-         */
+        
         $barre_logo = new RegolaCSS(
             '.barra1, .barra2, .barra3',
             [
-                new DichiarazioneCSS('width', '40px'),
-                new DichiarazioneCSS('height', '7px'),
+                new DichiarazioneCSS('width', '4.0vmax'),
+                new DichiarazioneCSS('height', '0.7vmax'),
                 new DichiarazioneCSS('background-color', $this->coloreSfondo),
-                new DichiarazioneCSS('margin', '7px 6px 0 6px'),
+                new DichiarazioneCSS('margin', '0.7vmax 0.6vmax 0 0.6vmax'),
                 new DichiarazioneCSS('transition', '0.4s')
             ]
             );
         $regole[] = $barre_logo;
-        /*
-            .attiva .barra1 {
-              -webkit-transform: rotate(-45deg) translate(-10px, 10px);
-              transform: rotate(-45deg) translate(-10px, 10px);
-            }
-         */
+        
         $barre_1 = new RegolaCSS(
             '.attiva .barra1',
             [
-                new DichiarazioneCSS('-webkit-transform', 'rotate(-45deg) translate(-10px, 10px)'),
-                new DichiarazioneCSS('transform', 'rotate(-45deg) translate(-10px, 10px)')
+                new DichiarazioneCSS('-webkit-transform', 'rotate(-45deg) translate(-1vmax, 1vmax)'),
+                new DichiarazioneCSS('transform', 'rotate(-45deg) translate(-1vmax, 1vmax)')
             ]
             );
         $regole[] = $barre_1;
@@ -359,29 +270,55 @@ class BarraMenu extends Tag{
             ]
             );
         $regole[] = $barre_2;
-        /*
-         .attiva .barra3 {
-         -webkit-transform: rotate(45deg) translate(-10px, -10px);
-         transform: rotate(45deg) translate(-10px, -10px);
-         }
-         */
+        
         $barre_3 = new RegolaCSS(
             '.attiva .barra3',
             [
-                new DichiarazioneCSS('-webkit-transform', 'rotate(45deg) translate(-10px, -10px)'),
-                new DichiarazioneCSS('transform', 'rotate(45deg) translate(-10px, -10px)')
+                new DichiarazioneCSS('-webkit-transform', 'rotate(45deg) translate(-1vmax, -1vmax)'),
+                new DichiarazioneCSS('transform', 'rotate(45deg) translate(-1vmax, -1vmax)')
             ]
             );
         $regole[] = $barre_3;
        
-        
-        
-        $nav_ul= new RegolaCSS(
-            'nav > ul',
+        $nav= new RegolaCSS(
+            'nav',
             [
                 new DichiarazioneCSS('background-color',$this->coloreSfondo),
-                new DichiarazioneCSS('display','none')
+                new DichiarazioneCSS('width','100%'),
+                new DichiarazioneCSS('max-height', '100%'),
+                new DichiarazioneCSS('overflow', 'auto'),
+                new DichiarazioneCSS('display','block'),
+                new DichiarazioneCSS('font-size','2.0vmax'),
+                new DichiarazioneCSS('transition', "top 0.5s")//eventuale effetto...
                 
+                
+            ]
+            );
+        $nav_fisso = new RegolaCSS(
+            'nav#fisso',
+            [
+                new DichiarazioneCSS('position',Posizione::FISSA)
+            ]
+            );
+        $regole[] = $nav_fisso;
+        $nav_mobile = new RegolaCSS(
+            'nav#mobile',
+            [
+                new DichiarazioneCSS('position',Posizione::STATICA)
+            ]
+            );
+        $regole[] = $nav_mobile;
+        
+        $regole[] = $nav;
+        
+        $nav_ul= new RegolaCSS(
+            'nav ul',
+            [
+                new DichiarazioneCSS('margin','0'),
+                new DichiarazioneCSS('padding','0'),
+                new DichiarazioneCSS('background-color',$this->coloreSfondo),
+                new DichiarazioneCSS('display','none'),
+                new DichiarazioneCSS('list-style-type','none')
             ]
             );
         $regole[] = $nav_ul;
@@ -396,60 +333,37 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_li_hover;
         
-        $nav_ul_li = new RegolaCSS(
-            'nav ul li',
+        // voci 
+   
+        $li_a = new RegolaCSS(
+            'li a',
             [
-                new DichiarazioneCSS('margin','0'),
                 new DichiarazioneCSS('display','block'),
-                new DichiarazioneCSS('list-style-type','none'),
-                new DichiarazioneCSS('box-shadow', '3px 5px 2px rgba(0,0,0,0.3)')
+                new DichiarazioneCSS('padding','10px'),
+                new DichiarazioneCSS('color',$this->coloreTesto),
+                new DichiarazioneCSS('text-decoration','none'),
+                new DichiarazioneCSS('border-bottom', '1px solid #555')
             ]
             );
-        $regole[] = $nav_ul_li;
-        
+        $regole[] = $li_a;
         
         $nav_li_ul = new RegolaCSS(
             'nav li > ul',
             [
-                new DichiarazioneCSS('display','none'),
-                new DichiarazioneCSS('background-color',$this->coloreSfondoVoce),
-                new DichiarazioneCSS('margin-top','1px')
+                new DichiarazioneCSS('background-color',$this->coloreSfondoVoce)
             ]
             );
         $regole[] = $nav_li_ul;
         
-        
-        /*
-         nav li > ul > li ul  {
-         display: none;
-         background-color: #888;
-         }*/
-          // colora voci menu 3 livello
         $nav_li_ul_li_ul= new RegolaCSS(
             'nav li > ul > li ul',
             [
                 new DichiarazioneCSS('background-color',$this->coloreSfondoVoce2liv)
-                
             ]
             );
         $regole[] = $nav_li_ul_li_ul;
         
-        /*
-         nav li > ul > li ul a{
-         color: #888;
-         }*/
-          // colora voci menu 3 livello
-        $nav_li_ul_li_ul_a= new RegolaCSS(
-            'nav li > ul > li ul a',
-            [
-                new DichiarazioneCSS('color',$this->coloreTestoVoce2liv)
-            ]
-            );
-        $regole[] = $nav_li_ul_li_ul_a;
-        
-        /*
-         Visualizza feccia verticale
-         */
+        //Visualizza feccia verticale
         $nav_ul_li_sub= new RegolaCSS(
             'nav ul li.sub',
             [
@@ -460,17 +374,8 @@ class BarraMenu extends Tag{
             ]
             );
         $regole[] = $nav_ul_li_sub;
-        /*
-        $blocca_evento_click= new RegolaCSS(
-            'li.sub > a',
-            [
-                new DichiarazioneCSS("pointer-events","none"),
-                new DichiarazioneCSS("cursor","default")
-            ]
-            );
-        $regole[] = $blocca_evento_click;
-        */
-        return new SchermoCSS($regole, 800);
+        
+        return new SchermoCSS($regole, MultiPagina::LIMITE_PORTATILE);
     }
     
     
@@ -527,7 +432,7 @@ class BarraMenu extends Tag{
     
     private function disegnaLogoMiniMenu(){
         if(!($this instanceof Menu)){
-            $logoMiniMenu = new Pannello('50px', '50px');
+            $logoMiniMenu = new Pannello('5.0vmax', '5.0vmax');
             $logoMiniMenu->aggiungi(new Attributo('class', 'logo'));
             
             //$logoMiniMenu->aggiungi(new Attributo('onclick', 'attivaMenu(this)'));
@@ -563,11 +468,6 @@ class BarraMenu extends Tag{
                         'if($(".attiva").height() > 0){'.
                             
                             '$(".logo").toggleClass("attiva");'.
-                            'if($(".sub ul").css("display") !== "block"){'.
-                                '$(".sub ul").css("display","block")'.
-                            '}else{'.
-                                '$(".sub ul").css("display","none")'.
-                            '}'.
                        '}'.
                     '}'.
                 '}else{'.
@@ -580,15 +480,23 @@ class BarraMenu extends Tag{
             
             /*Apri e chiudi il menu con il clic sul logo del menu (a destra della barra)*/
             '$(".logo").on("click", '.
-            'function(){'.
-            '$(this).toggleClass("attiva");'.
-                   'if($(".sub ul").css("display") !== "block"){'.
+                'function(){'.
+                    '$(this).toggleClass("attiva");'.
+                    'if($(".sub ul").css("display") !== "block"){'.
                         '$(".sub ul").css("display","block");'.
                     '}else{'.
                         '$(".sub ul").css("display","none")'.
-                        
                     '}'.
-            '});'
+                    // blocca scoll body
+                    'if($("body").css("overflow") !== "hidden"){'.
+                        '$("body").css("overflow","hidden");'.
+                    '}else{'.
+                        '$("body").css("overflow","visible");'.
+                    '}'.
+                '}'.
+            ');'
+            
+            
          
             ));
     }
