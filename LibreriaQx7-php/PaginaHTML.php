@@ -181,6 +181,14 @@ class PaginaHTML extends Oggetto{
         $intestazione = "<!DOCTYPE html>";
         
         $body = new Tag("body", $this->attributi, $this->contenuto);
+        $dispositiviMobili = new Tag(
+            "meta",
+            [
+                new Attributo('name','viewport'),
+                new Attributo('content','width=device-width'),
+                new Attributo('maximum-scale','1.0')
+            ]
+        );
         
         $codifica = new Tag("meta",[new Attributo('encoding','utf-8')]);
         $ricercaWeb = new Tag(
@@ -204,7 +212,7 @@ class PaginaHTML extends Oggetto{
         }
         
         $stile = new Tag('style',new Attributo('type','text/css'),$regoleCSS);
-        $head = new Tag("head", $correzioneIE . $codifica . $ricercaWeb . self::importaLibreriaJQuery() . $this->javascript . $titolo . $stile  );
+        $head = new Tag("head", $correzioneIE . $codifica . $ricercaWeb .$dispositiviMobili. self::importaLibreriaJQuery() . $this->javascript . $titolo . $stile  );
         $html = new Tag("html",  $head  . $this->jquery . $body . '');
         return $intestazione . $html->vedi();
     }

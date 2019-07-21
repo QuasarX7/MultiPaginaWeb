@@ -485,6 +485,8 @@ class MultiPagina extends PaginaHTML {
         $titolo = new RegolaCSS(
             '.testo h1,.testo h2,.testo h3',
             [
+                new DichiarazioneCSS('font-weight','normal'),
+                new DichiarazioneCSS('text-align','center'),
                 new DichiarazioneCSS('color', '#FFF'),
                 new DichiarazioneCSS('background','#111'),
                 new DichiarazioneCSS('font-family', "'intestazione', script")
