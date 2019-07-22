@@ -324,6 +324,16 @@ class BarraMenu extends Tag{
             );
         $regole[] = $nav_ul;
         
+       
+        $nav_li_sub = new RegolaCSS(
+            'nav li.sub > a',
+            [
+                new DichiarazioneCSS('cursor','not-allowed'),
+                new DichiarazioneCSS('pointer-events','none'),
+                new DichiarazioneCSS('opacity','0.5')
+            ]
+            );
+        $regole[] = $nav_li_sub;
         
         // colore voce selezionata
         $nav_li_hover = new RegolaCSS(
