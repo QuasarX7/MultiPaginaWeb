@@ -21,6 +21,7 @@ class PaginaHTML extends Oggetto{
     
     const JQUERY = 'LibreriaQx7-php/jquery-3.3.1.slim.min.js';//NON FUNZIONALITA AJAX
     protected $titolo;
+    protected $logo = "";
     protected $ricerca = '';
     protected $css = array();
     protected $file =''; ///< importa file esterni
@@ -45,6 +46,17 @@ class PaginaHTML extends Oggetto{
             self::parareChiaviDiRicerca($titolo);
         }
         
+    }
+    
+    /**
+     * Aggiungi file icona alla pagina web.
+     * 
+     * @param string $file
+     */
+    public function logoPNG($file){
+        if(is_string($file)){
+            $this->logo = $file;
+        }
     }
     
     /**
@@ -190,6 +202,15 @@ class PaginaHTML extends Oggetto{
                 new Attributo('maximum-scale','2')
             ]
         );
+        //<link rel="icon" href="/favicon.png" type="image/png" />
+        $logo = new Tag(
+            "link",
+            [
+                new Attributo("rel", "icon"),
+                new Attributo("href", $this->logo),
+                new Attributo("type", "image/png")
+            ]
+        );
         
         $codifica = new Tag("meta",[new Attributo('encoding','utf-8')]);
         $ricercaWeb = new Tag(
@@ -213,7 +234,7 @@ class PaginaHTML extends Oggetto{
         }
         
         $stile = new Tag('style',new Attributo('type','text/css'),$regoleCSS);
-        $head = new Tag("head", $correzioneIE . $codifica . $ricercaWeb .$dispositiviMobili. self::importaLibreriaJQuery() . $this->javascript . $titolo . $stile  );
+        $head = new Tag("head", $logo. $correzioneIE . $codifica . $ricercaWeb .$dispositiviMobili. self::importaLibreriaJQuery() . $this->javascript . $titolo . $stile  );
         $html = new Tag("html",  $head  . $this->jquery . $body . '');
         return $intestazione . $html->vedi();
     }

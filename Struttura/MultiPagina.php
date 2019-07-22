@@ -31,6 +31,7 @@ class MultiPagina extends PaginaHTML {
     
     const NOME_FONT_INTESATAZIONE = 'intestazione';
     
+    
 
    
     protected $fontIntestazione = 'Struttura/FrederickatheGreat-Regular.ttf';
