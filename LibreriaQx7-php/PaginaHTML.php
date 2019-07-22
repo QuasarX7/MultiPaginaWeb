@@ -186,7 +186,8 @@ class PaginaHTML extends Oggetto{
             [
                 new Attributo('name','viewport'),
                 new Attributo('content','width=device-width'),
-                new Attributo('maximum-scale','1.0')
+                new Attributo('initial-scale','2'),
+                new Attributo('maximum-scale','2')
             ]
         );
         

@@ -150,7 +150,8 @@ class BarraMenu extends Tag{
         $nav_li_ul_li = new RegolaCSS(
             'nav li > ul li',
             [
-                new DichiarazioneCSS('display','block')
+                new DichiarazioneCSS('display','block'),
+                new DichiarazioneCSS('width','max-content')
             ]
             );
         $regole[] = $nav_li_ul_li;
@@ -336,7 +337,7 @@ class BarraMenu extends Tag{
         // voci 
    
         $li_a = new RegolaCSS(
-            'li a',
+            'nav li a',
             [
                 new DichiarazioneCSS('display','block'),
                 new DichiarazioneCSS('padding','10px'),

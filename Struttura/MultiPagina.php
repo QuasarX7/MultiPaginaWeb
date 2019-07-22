@@ -38,8 +38,8 @@ class MultiPagina extends PaginaHTML {
     protected $barraMenu = null;
     protected $vociMenu = array();
     
-    protected $indice;
-    protected $argomento;
+    protected $indice = 0;
+    protected $argomento = self::HOME;
 
     protected $argomenti = array(); 
     protected $note = array();
@@ -147,6 +147,7 @@ class MultiPagina extends PaginaHTML {
     
     /**
      * Collegamento ipertestuale ad un altra pagina di un argomento.
+     * In caso di $argomento nullo esso punta alla pagina 'home' (se esiste),
      * 
      * @param   string|Argomento  $argomento
      * @param   int     $pagina
@@ -156,7 +157,7 @@ class MultiPagina extends PaginaHTML {
         if(!is_null($argomento)){
             return '?pagina='.$pagina.'&argomento='.$argomento;
         }
-        return '';
+        return '?pagina=0&argomento='.self::HOME;
     }
     
     /**
@@ -183,7 +184,14 @@ class MultiPagina extends PaginaHTML {
         }
     }
     
+    /**
+     * Carica font dei caratteri e specifica il comportamento dell'intestazione
+     * del sito (CSS).
+     */
     private function creaIntestazioneSito(){
+        if(!is_null($this->fontIntestazione)){
+            parent::importaFont('intestazione', $this->fontIntestazione);
+        }
         $this->intestazioneSito = new IntestazionePagina(self::ALTEZZA_INTESTAZIONE_SITO,'black','white');
         $this->intestazioneSito->aggiungi($this->titolo);
         $this->intestazioneSito->aggiungi(
@@ -222,6 +230,16 @@ class MultiPagina extends PaginaHTML {
      */
     public function aggiungiArgomento(Argomento $argomento){
         $this->argomenti[$argomento->nome()] = $argomento;
+    }
+    
+    /**
+     * Permette di specificare l'indirizzo dove trovare il file contenente
+     * il codice "body" da inseire nella pagina iniziale.
+     * 
+     * @param Pagina $file
+     */
+    public function aggiungiHome(Pagina $file){
+        $this->argomenti[self::HOME] = $file;
     }
     
     /**
@@ -379,9 +397,6 @@ class MultiPagina extends PaginaHTML {
      */
     private function cssBody(){
         parent::importaFont('Inter', self::FONT_TESTO_STANDARD);
-        if(!is_null($this->fontIntestazione)){
-            parent::importaFont('intestazione', $this->fontIntestazione);
-        }
         parent::importaFont('Prosto One', self::FONT_TITOLO_PAGINA_STANDARD);
         parent::importaFont('Anton', self::FONT_MENU_STANDARD);
         parent::importaFont('Niconne', self::FONT_TESTO_SPECIALE);
@@ -421,6 +436,7 @@ class MultiPagina extends PaginaHTML {
             ]
             );
         $this->aggiungi($classe);
+        
         $codice = new RegolaCSS(
             'code',
             [
@@ -701,48 +717,58 @@ class MultiPagina extends PaginaHTML {
             self::creaIntestazioneSito();
             self::creaMenu();
             $pagina = new AreaPagina();
-            $pagina->margine('10px', '0', '0', '0');
             
             if(isset($this->argomenti[$this->argomento])){
-                // Creazione (opzionale) della vista indice di pagine nella colonna di sinistra
-              if(!is_null($this->indiceLateraleSx)){ 
-                    self::creaListaPagine();
-                    $pagina->aggiungi($this->indiceLateraleSx);
-                }
-               $argomento = $this->argomenti[$this->argomento];
+                if($this->argomento == self::HOME){
+                    $pagina->margine('0', '0', '0', '0');
+                    $home = $this->argomenti[$this->argomento];
+                    if($home instanceof Pagina)
+                        $pagina->aggiungi($home->testo());
+                    
+                }else{
+                    $pagina->margine('10px', '0', '0', '0');
+                    // Creazione (opzionale) della vista indice di pagine nella colonna di sinistra
+                    if(!is_null($this->indiceLateraleSx)){ 
+                        self::creaListaPagine();
+                        $pagina->aggiungi($this->indiceLateraleSx);
+                    }
+                   $argomento = $this->argomenti[$this->argomento];
+                    
+                    self::inizializzaTitoloArgomentoMultipagina();
+                    self::inizializzaIndiceDiPagina();
+                    self::inizializzaTitoloPagina($argomento);
+                    self::inizializzaPaginaDiTesto();
+                    self::creaNoteMargineDx();
                 
-                self::inizializzaTitoloArgomentoMultipagina();
-                self::inizializzaIndiceDiPagina();
-                self::inizializzaTitoloPagina($argomento);
-                self::inizializzaPaginaDiTesto();
-                self::creaNoteMargineDx();
-
-                
-                $this->paginaTesto->aggiungi($this->titoloArgomento);
-                $this->paginaTesto->aggiungi($this->indiceDiPagina);
-                $this->paginaTesto->aggiungi($this->titoloPagina);
-                // crea pagina aggiugendo il testo per argomento e indice
-                $testo = '';
-                if($argomento instanceof Argomento){
-                    $testo = $argomento->pagina($this->indice);
-                    $this->paginaTesto->aggiungi($testo);
-                }
-                //visualizza i pulsanti di navigazione pagina alla fine del testo
-                //se il testo è di notevole dimensione.
-                if(strlen($testo) > 100){
+                    
+                    $this->paginaTesto->aggiungi($this->titoloArgomento);
                     $this->paginaTesto->aggiungi($this->indiceDiPagina);
+                    $this->paginaTesto->aggiungi($this->titoloPagina);
+                    // crea pagina aggiugendo il testo per argomento e indice
+                    $testo = '';
+                    if($argomento instanceof Argomento){
+                        $testo = $argomento->pagina($this->indice);
+                        $this->paginaTesto->aggiungi($testo);
+                    }
+                    //visualizza i pulsanti di navigazione pagina alla fine del testo
+                    //se il testo è di notevole dimensione.
+                    if(strlen($testo) > 100){
+                        $this->paginaTesto->aggiungi($this->indiceDiPagina);
+                    }
+                    //script inserito in '$this->paginaTesto'
+                    self::animaMenu();
+                    $sezionePrincipale = new ParagrafoPagina(null, 'auto');
+                    $sezionePrincipale->aggiungi($this->paginaTesto);
+                    $sezionePrincipale->aggiungi($this->noteLateraleDx);
+                    $pagina->aggiungi($sezionePrincipale);
+                   
+                
                 }
-                //script inserito in '$this->paginaTesto'
-                self::animaMenu();
-                $sezionePrincipale = new ParagrafoPagina(null, 'auto');
-                $sezionePrincipale->aggiungi($this->paginaTesto);
-                $sezionePrincipale->aggiungi($this->noteLateraleDx);
-                $pagina->aggiungi($sezionePrincipale);
-               self::aggiungi($pagina);
+                self::aggiungi($pagina);
+                self::cssBody();
+                self::cssElencoPagine();
+                self::cssFormattazionePagina();
             }
-            self::cssBody();
-            self::cssElencoPagine();
-            self::cssFormattazionePagina();
         }else{
             self::aggiungi(
                 '<h1>Il browser non è compatibile con il codice HTML5 della pagina</h1><br><br><h2>'.$controllo.'</h2>'

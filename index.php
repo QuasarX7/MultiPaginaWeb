@@ -26,8 +26,7 @@ $nota = new Pannello('100%', 'auto','#fafad2');
 $nota->aggiungi("Chiunque si accinga ad eleggere se stesso a giudice del vero e della conoscenza, naufraga sotto le risate degli dei.<br><br><i>Albert Einstein</i>");
 $pagina->aggiungiNoteMarginePagina($nota);
 
-$paginaHome = new Argomento(MultiPagina::HOME);
-$pagina->aggiungiArgomento($paginaHome);
+$pagina->aggiungiHome(new Pagina(MultiPagina::HOME,'PagineWeb/home.html'));
 
 $argomentoIA = new Argomento('Intelligenza Artificiale');
 $argomentoIA->aggiungiPagina('Introduzione','PagineWeb/IA/IA.html');
@@ -57,14 +56,10 @@ $pagina->aggiungiArgomento($argomentoPenTest);
 
 
 
-
-$tr = 'ventesimo';
-
-
 /* MENU PRINCIPALE */
 
 // Primo livello
-$pagina->aggiungiMenu(MENU_HOME, $paginaHome);
+$pagina->aggiungiMenu(MENU_HOME, null);
 $pagina->aggiungiMenu(MENU_APPUNTI);
 $pagina->aggiungiMenu(MENU_SORRISO);
 
