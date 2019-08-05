@@ -465,14 +465,14 @@ class MultiPagina extends PaginaHTML {
             ]
             );
         $this->aggiungi($pre_b);
-        /*$grossetto = new RegolaCSS(
+        $grossetto = new RegolaCSS(
             '.testo b',
             [
                 new DichiarazioneCSS('font-size','18px'),
-                new DichiarazioneCSS('font-family', intestazione.", script")
+                new DichiarazioneCSS('font-family', "'Prosto One', sans-serif")
             ]
             );
-        $this->aggiungi($grossetto);*/
+        $this->aggiungi($grossetto);
         $link_interno = new RegolaCSS(
             '.testo a.linkInterno:link,.testo a.linkInterno:visited',
             [
@@ -510,6 +510,32 @@ class MultiPagina extends PaginaHTML {
             ]
             );
         $this->aggiungi($titolo);
+        
+        $tabella = new RegolaCSS(
+            '.testo table',
+            [
+                new DichiarazioneCSS('width','100%'),
+                new DichiarazioneCSS('font-size', "16px"),
+                new DichiarazioneCSS('font-family', "'Inter', sans-serif")
+            ]
+            );
+        $this->aggiungi($tabella);
+        
+        $riga = new RegolaCSS(
+            '.testo table tr:hover td',
+            [
+                new DichiarazioneCSS('background-color','#ffff99')
+            ]
+            );
+        $this->aggiungi($riga);
+        
+        $riga_b = new RegolaCSS(
+            '.testo table tr:hover td b',
+            [
+                new DichiarazioneCSS('color','red')
+            ]
+            );
+        $this->aggiungi($riga_b);
         
         $immagine = new RegolaCSS(
             '.testo img',

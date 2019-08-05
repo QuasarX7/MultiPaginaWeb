@@ -151,7 +151,7 @@ class BarraMenu extends Tag{
             'nav li > ul li',
             [
                 new DichiarazioneCSS('display','block'),
-                new DichiarazioneCSS('width','max-content')
+                //new DichiarazioneCSS('width','max-content')
             ]
             );
         $regole[] = $nav_li_ul_li;
@@ -159,7 +159,8 @@ class BarraMenu extends Tag{
         $nav_fissa_li_hover_ul= new RegolaCSS(
             'nav#fisso li:hover > ul',
             [
-                new DichiarazioneCSS('position',Posizione::FISSA),new DichiarazioneCSS('display','block')
+                new DichiarazioneCSS('position',Posizione::FISSA),
+                new DichiarazioneCSS('display','block')
             ]
             );
         $regole[] = $nav_fissa_li_hover_ul;
@@ -167,7 +168,8 @@ class BarraMenu extends Tag{
         $nav_mobile_li_hover_ul= new RegolaCSS(
             'nav#mobile li:hover > ul',
             [
-                new DichiarazioneCSS('position',Posizione::ASSOLUTA),new DichiarazioneCSS('display','block')
+                new DichiarazioneCSS('position',Posizione::ASSOLUTA),
+                new DichiarazioneCSS('display','block')
             ]
             );
         $regole[] = $nav_mobile_li_hover_ul;
