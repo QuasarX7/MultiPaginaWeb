@@ -318,9 +318,10 @@ class MultiPagina extends PaginaHTML {
                 new Tag(
                     'img',
                     [
-                        new Attributo('src', 'LibreriaQx7-php/freccia_sinistra.png'),
-                        new Attributo('height', '40px'),
-                        new Attributo('width', '40px')
+                        new Attributo('src', $this->indice > 0 ? 'LibreriaQx7-php/freccia_sinistra.png' : 'LibreriaQx7-php/stop.png'),
+                        new Attributo('align','center'),
+                        new Attributo('height', '45px'),
+                        new Attributo('width', '45px')
                     ]
                 )
             );
@@ -333,8 +334,10 @@ class MultiPagina extends PaginaHTML {
                 new Tag(
                     'img',
                     [
-                        new Attributo('src', 'LibreriaQx7-php/freccia_destra.png'),
-                        new Attributo('height', '40px'),new Attributo('width', '40px')
+                        new Attributo('src', $this->indice < $maxPagina -1 ? 'LibreriaQx7-php/freccia_destra.png' : 'LibreriaQx7-php/stop.png'),
+                        new Attributo('align','center'),
+                        new Attributo('height', '45px'),
+                        new Attributo('width', '45px')
                     ]
                 )
             );
@@ -547,6 +550,15 @@ class MultiPagina extends PaginaHTML {
             ]
             );
         $this->aggiungi($immagine);
+        
+        $immagine_mouse = new RegolaCSS(
+            '.testo img:hover',
+            [
+                new DichiarazioneCSS('transform','scale(0.9)'),
+                new DichiarazioneCSS('border','0px solid gray;')
+            ]
+            );
+        $this->aggiungi($immagine_mouse);
         $immagine_estesa = new RegolaCSS(
             '.testo img.estesa',
             [
@@ -555,6 +567,15 @@ class MultiPagina extends PaginaHTML {
             ]
             );
         $this->aggiungi($immagine_estesa);
+        
+        $immagine_estesa_mouse = new RegolaCSS(
+            '.testo img.estesa:hover',
+            [
+                new DichiarazioneCSS('transform','scale(1.1)'),
+                new DichiarazioneCSS('border','1px solid gray;')
+            ]
+            );
+        $this->aggiungi($immagine_estesa_mouse);
     }
     
     private function cssFormattazionePagina(){
