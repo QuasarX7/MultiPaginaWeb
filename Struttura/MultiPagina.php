@@ -542,12 +542,15 @@ class MultiPagina extends PaginaHTML {
             [
                 new DichiarazioneCSS('float','left'),
                 new DichiarazioneCSS('margin','15px 15px 15px 15px'),
+                new DichiarazioneCSS('max-width','60%'),
+                new DichiarazioneCSS('min-width','30%')
             ]
             );
         $this->aggiungi($immagine);
         $immagine_estesa = new RegolaCSS(
             '.testo img.estesa',
             [
+                new DichiarazioneCSS('max-width','100%'),
                 new DichiarazioneCSS('float','none')
             ]
             );
