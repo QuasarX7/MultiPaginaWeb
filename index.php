@@ -9,11 +9,15 @@ const MENU_HOME                  = "Home";
 const MENU_SORRISO               = "Sorriso";
 const MENU_APPUNTI               = "Appunti";
 const MENU_INFORMATICA           = "Informatica";
-const MENU_IA                    = "Intelligenza Artificiale";
-const MENU_SICUREZZA_INFORMATICA = "Sicurezza Informatica";
+const MENU_IA                    = "Intelligenza_Artificiale";
+const MENU_SICUREZZA_INFORMATICA = "Sicurezza_Informatica";
+const MENU_INGLESE               = "Inglese";
+const MENU_PROGRAMMAZIONE        = "Programmazione";
+const MENU_CPP                   = "C++";
 const MENU_ART_ASCII = "ASCII Art";
 
 $pagina = new MultiPagina('Domenico dellaPERUTA');
+$pagina->logoPNG('PagineWeb/logo.png');
 
 $pagina->creaBarraMenu("#333",COLORE_TESTO_MENU,COLORE_SELEZIONE_MENU);
 $pagina->inizializzaPrimoLivelloMenu('#555', COLORE_TESTO_MENU);
@@ -53,8 +57,13 @@ $argomentoPenTest->aggiungiPagina('Forza bruta','PagineWeb/penetration_test/forz
 $argomentoPenTest->aggiungiPagina('Spoofing','PagineWeb/penetration_test/spoofing.html');
 $pagina->aggiungiArgomento($argomentoPenTest);
 
+$argomentoInglese = new Argomento('Ingelse');
+$argomentoInglese->aggiungiPagina('Pronuncia', 'PagineWeb/Inglese/pronuncia_inglese_a_z.html');
+$pagina->aggiungiArgomento($argomentoInglese);
 
-
+$argomentoCpp = new Argomento('C');
+$argomentoCpp->aggiungiPagina('Cpp', 'PagineWeb/Inglese/pronuncia_inglese_a_z.html');
+$pagina->aggiungiArgomento($argomentoCpp);
 
 /* MENU PRINCIPALE */
 
@@ -68,7 +77,12 @@ $pagina->aggiungiMenu(MENU_INFORMATICA,null,MENU_APPUNTI);
 $pagina->aggiungiMenu(MENU_IA, $argomentoIA,MENU_INFORMATICA);
 $pagina->aggiungiMenu(MENU_SICUREZZA_INFORMATICA, $argomentoPenTest,MENU_INFORMATICA);
 
+$pagina->aggiungiMenu(MENU_CPP,$argomentoCpp,MENU_INFORMATICA);
+
 $pagina->aggiungiMenu(MENU_ART_ASCII, $argomentoArtASCII,MENU_SORRISO);
+
+$pagina->aggiungiMenu(MENU_INGLESE,$argomentoInglese,MENU_APPUNTI);
+
 
 
 

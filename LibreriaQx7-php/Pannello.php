@@ -109,6 +109,7 @@ class Pannello extends Tag{
         static $z = 0;
         $css = new Stile([
             new DichiarazioneCSS('overflow','visible'),
+            new DichiarazioneCSS('word-wrap', 'break-word'),
             new DichiarazioneCSS(PropritàCSS::SOVRAPPOSIZIONE, ($z++) .'')
         ]);
         if(is_string($altezza)){
