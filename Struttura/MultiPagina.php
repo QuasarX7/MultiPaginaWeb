@@ -741,13 +741,18 @@ class MultiPagina extends PaginaHTML {
                         new Tag(
                             'a',
                             [new Attributo('href', self::link($argomento->nome(), $indice))],
-                            $argomento->nomePagina($indice)
+                            self::indicePagMenu($indice).$argomento->nomePagina($indice)
                         )
                     )
                 );
             }
         }
         $this->indiceLateraleSx->aggiungi($listaPagine);
+    }
+    
+    private function indicePagMenu($indice) {
+        
+        return '<b style="color:white">pag. '.($indice+1).'</b>&nbsp ';
     }
     
     private function animaMenu(){
