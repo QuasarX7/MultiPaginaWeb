@@ -108,8 +108,8 @@ class Pannello extends Tag{
     public function __construct($lunghezza, $altezza, $coloreSfondo=null, $coloreTesto=null,$id=null) {
         static $z = 0;
         $css = new Stile([
-            new DichiarazioneCSS('overflow','visible'),
-            new DichiarazioneCSS('word-wrap', 'break-word'),
+            new DichiarazioneCSS('overflow','hidden'),
+            new DichiarazioneCSS('word-wrap', 'break-word'),//forza il ritorno a capo
             new DichiarazioneCSS(PropritàCSS::SOVRAPPOSIZIONE, ($z++) .'')
         ]);
         if(is_string($altezza)){

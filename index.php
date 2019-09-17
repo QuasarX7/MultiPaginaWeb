@@ -61,8 +61,12 @@ $argomentoInglese = new Argomento('Ingelse');
 $argomentoInglese->aggiungiPagina('Pronuncia', 'PagineWeb/Inglese/pronuncia_inglese_a_z.html');
 $pagina->aggiungiArgomento($argomentoInglese);
 
-$argomentoCpp = new Argomento('C');
-$argomentoCpp->aggiungiPagina('Cpp', 'PagineWeb/Inglese/pronuncia_inglese_a_z.html');
+$argomentoCpp = new Argomento('C++');
+$argomentoCpp->aggiungiPagina('Output standard', 'PagineWeb/C++/video01.html');
+$argomentoCpp->aggiungiPagina('Input standard', 'PagineWeb/C++/video02.html');
+$argomentoCpp->aggiungiPagina('Variabili e Costanti', 'PagineWeb/C++/video03.html');
+$argomentoCpp->aggiungiPagina('Condizioni', 'PagineWeb/C++/video04.html');
+$argomentoCpp->aggiungiPagina('Cicli', 'PagineWeb/C++/video05.html');
 $pagina->aggiungiArgomento($argomentoCpp);
 
 /* MENU PRINCIPALE */

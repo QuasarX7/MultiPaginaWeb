@@ -156,7 +156,7 @@ class MultiPagina extends PaginaHTML {
      */
     private function link($argomento,$pagina){
         if(!is_null($argomento)){
-            return '?pagina='.$pagina.'&argomento='.$argomento;
+            return '?pagina='.$pagina.'&argomento='.rawurlencode($argomento);
         }
         return '?pagina=0&argomento='.self::HOME;
     }
@@ -413,7 +413,8 @@ class MultiPagina extends PaginaHTML {
                 new DichiarazioneCSS('padding','0'),
                 // N.B.:si applica soprattuto alla 'barra menu'
                 new DichiarazioneCSS('font-size','16px'),
-                new DichiarazioneCSS('font-family', "'Anton', sans-serif")
+                new DichiarazioneCSS('font-family', "'Anton', sans-serif"),
+                new DichiarazioneCSS('word-wrap', 'break-word')//forza il ritorno a capo
             ]
             );
         $this->aggiungi($body);
@@ -456,8 +457,9 @@ class MultiPagina extends PaginaHTML {
             [
                 new DichiarazioneCSS('background','#000'),
                 new DichiarazioneCSS('color', '#fff'),
-                new DichiarazioneCSS('font-size','12px'),
-                new DichiarazioneCSS('font-family', "'Space Mono', sans-serif")
+                new DichiarazioneCSS('font-size','14px'),
+                new DichiarazioneCSS('font-family', "'Space Mono', sans-serif"),
+                new DichiarazioneCSS('overflow','auto')
             ]
             );
         $this->aggiungi($pre);
@@ -471,7 +473,7 @@ class MultiPagina extends PaginaHTML {
         $grossetto = new RegolaCSS(
             '.testo b',
             [
-                new DichiarazioneCSS('font-size','18px'),
+                new DichiarazioneCSS('font-size','14px'),
                 new DichiarazioneCSS('font-family', "'Prosto One', sans-serif")
             ]
             );
