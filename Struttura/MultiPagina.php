@@ -262,7 +262,6 @@ class MultiPagina extends PaginaHTML {
     public function creaPannelloLaterale($coloreSfondo, $coloreTesto, $coloreSeleziona){
         $this->indiceLateraleSx = new NotePagina(self::LUNGHEZZA_PANNELLO_SX,'auto', $coloreSfondo, $coloreTesto);
         $this->coloreSelezionaIndicePagina = $coloreSeleziona;
-        //$this->indiceLateraleSx->comportamento(Comportamento::BLOCCO_LINEA);
         $this->indiceLateraleSx->allineamentoVerticale(Lato::ALTO);
         
     }
@@ -646,8 +645,10 @@ class MultiPagina extends PaginaHTML {
              $elenco = new RegolaCSS(
                 '#'.self::ID_ELENCO,
                 [
-                    new DichiarazioneCSS('width', 'auto'),
-                    new DichiarazioneCSS('height', 'auto'),
+                    new DichiarazioneCSS('width', '200px'),
+                    new DichiarazioneCSS('overflow-y','auto'),
+                    new DichiarazioneCSS('max-height', '80%'),
+                    new DichiarazioneCSS('min-height', '0'),
                     new DichiarazioneCSS('box-shadow', '2px 2px 2px 3px rgba(0,0,0,0.25)'),
                 ]
                 );
