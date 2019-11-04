@@ -56,6 +56,8 @@ class MultiPagina extends PaginaHTML {
     protected $noteLateraleDx = null;
     
     protected $coloreSelezionaIndicePagina;
+    protected $coloreIndicePagina;
+    protected $coloreMenu;
    
     
     
@@ -89,6 +91,7 @@ class MultiPagina extends PaginaHTML {
      */
     public function creaBarraMenu(string $coloreSfondo, string $coloreTesto, string $coloreSeleziona){
         $this->barraMenu = new BarraMenu($coloreSfondo, $coloreTesto, $coloreSeleziona,Posizione::RELATIVA);
+        $this->coloreMenu = $coloreSfondo;
     }
     
     /**
@@ -260,8 +263,9 @@ class MultiPagina extends PaginaHTML {
      * @param string $coloreSeleziona
      */
     public function creaPannelloLaterale($coloreSfondo, $coloreTesto, $coloreSeleziona){
-        $this->indiceLateraleSx = new NotePagina(self::LUNGHEZZA_PANNELLO_SX,'auto', $coloreSfondo, $coloreTesto);
+        $this->indiceLateraleSx = new NotePagina(self::LUNGHEZZA_PANNELLO_SX,'auto', $this->coloreMenu != null ? $this->coloreMenu : $coloreSfondo, $coloreTesto);
         $this->coloreSelezionaIndicePagina = $coloreSeleziona;
+        $this->coloreIndicePagina = $coloreSfondo;
         $this->indiceLateraleSx->allineamentoVerticale(Lato::ALTO);
         
     }
@@ -649,7 +653,8 @@ class MultiPagina extends PaginaHTML {
                     new DichiarazioneCSS('overflow-y','auto'),
                     new DichiarazioneCSS('max-height', '80%'),
                     new DichiarazioneCSS('min-height', '0'),
-                    new DichiarazioneCSS('box-shadow', '2px 2px 2px 3px rgba(0,0,0,0.25)'),
+                    new DichiarazioneCSS('box-shadow', '2px 2px 2px 3px rgba(0,0,0,0.25)')
+                    
                 ]
                 );
             $this->aggiungi($elenco);
@@ -668,7 +673,7 @@ class MultiPagina extends PaginaHTML {
             $voceVisibile = new RegolaCSS(
                 '#'.self::ID_ELENCO.' a:link, '.'#'.self::ID_ELENCO.' a:visited',
                 [
-                    new DichiarazioneCSS('background-color',$this->indiceLateraleSx->coloreSfondo()),
+                    new DichiarazioneCSS('background-color',$this->coloreIndicePagina),
                     new DichiarazioneCSS('color',$this->indiceLateraleSx->coloreTesto()),
                     new DichiarazioneCSS('padding','5px 10px'),
                     new DichiarazioneCSS('text-decoration', 'none'),
@@ -699,7 +704,7 @@ class MultiPagina extends PaginaHTML {
                 '#'.self::ID_ELENCO.' li',
                 [
                     new DichiarazioneCSS('margin-left','-40px'),
-                    new DichiarazioneCSS('margin-top','-5px'),
+                    new DichiarazioneCSS('margin-top','1px'),
                     new DichiarazioneCSS('width', 'auto'),
                 ]
             );
