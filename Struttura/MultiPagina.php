@@ -3,6 +3,7 @@ include_once 'LibreriaQx7-php/PaginaHTML.php';
 include_once 'LibreriaQx7-php/html5.php';
 include_once 'LibreriaQx7-php/BarraMenu.php';
 include_once 'LibreriaQx7-php/Menu.php';
+include_once 'LibreriaQx7-php/BaseDatiMySQL.php';
 include_once 'Argomento.php';
 
 class MultiPagina extends PaginaHTML {
@@ -59,8 +60,10 @@ class MultiPagina extends PaginaHTML {
     protected $coloreIndicePagina;
     protected $coloreMenu;
    
+    protected $baseDati = null;
     
     
+
     public function __construct($titolo){
         parent::__construct($titolo);
         
@@ -79,6 +82,35 @@ class MultiPagina extends PaginaHTML {
             }
         }
         
+    }
+    
+    /**
+     * Distruttore
+     */
+    function __destruct() {
+        if($this->baseDati instanceof BaseDatiMySQL) {
+             $this->baseDati->chiudi();
+        }
+    }
+    
+    
+    /**
+     * Connetti a una eventuale BD...
+     * 
+     * @param mixed $baseDati
+     */
+    public function connettiBaseDati(string $nome_db,string $utente,string $password){
+        $this->baseDati = new BaseDatiMySQL($nome_db,$utente,$password);
+    }
+    
+    /**
+     * Risultato interrogazione SQL del DB MySQL.
+     * @param string $SQL
+     * @return mixed
+     */
+    public function dati(string $SQL){
+        if($this->baseDati instanceof BaseDatiMySQL)
+            return $this->baseDati->SQL($SQL);
     }
     
     /**

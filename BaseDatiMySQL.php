@@ -1,6 +1,6 @@
 <?php
 
-class DataBaseMySQL{
+class BaseDatiMySQL{
     protected $connessione = null;
     
     
@@ -23,7 +23,7 @@ class DataBaseMySQL{
     }
     
     // distruttore
-    public function __destruct() {
+    function __destruct() {
         self::chiudi();
     }
 }
