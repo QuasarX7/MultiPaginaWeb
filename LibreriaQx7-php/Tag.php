@@ -94,8 +94,7 @@ class Tag extends Oggetto{
     }
     
     /**
-     * Controlla che la corretta lunghezza e formattazione (con caratteri italiani) della stringa
-     * con caratteri italinani.
+     * Controlla che la corretta lunghezza e formattazione (con caratteri italiani) della stringa.
      * 
      * @param string $stringa
      * @param int $lunghezza                numero limite di caratteri

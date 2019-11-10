@@ -4,6 +4,7 @@ include_once 'LibreriaQx7-php/html5.php';
 include_once 'LibreriaQx7-php/BarraMenu.php';
 include_once 'LibreriaQx7-php/Menu.php';
 include_once 'LibreriaQx7-php/BaseDatiMySQL.php';
+include_once 'LibreriaQx7-php/javascript.php';
 include_once 'Argomento.php';
 
 class MultiPagina extends PaginaHTML {
@@ -61,6 +62,7 @@ class MultiPagina extends PaginaHTML {
     protected $coloreMenu;
    
     protected $baseDati = null;
+    protected $dati = array();
     
     
 
@@ -81,6 +83,7 @@ class MultiPagina extends PaginaHTML {
                 $this->argomento = self::HOME;
             }
         }
+        
         
     }
     
@@ -104,13 +107,17 @@ class MultiPagina extends PaginaHTML {
     }
     
     /**
-     * Risultato interrogazione SQL del DB MySQL.
+     * Associa i dati di un'interrogazione SQL del DB MySQL alle pagine di un argomento.
      * @param string $SQL
+     * @param string $argomento
      * @return mixed
      */
-    public function dati(string $SQL){
-        if($this->baseDati instanceof BaseDatiMySQL)
-            return $this->baseDati->SQL($SQL);
+    public function associaDatiAllaPagina(string $SQL, string $argomento,int $pagina){
+        if($this->baseDati instanceof BaseDatiMySQL){
+            $risultato = $this->baseDati->SQL($SQL);
+            if($risultato)
+                $this->dati[$argomento][$pagina] = $risultato;
+        }
     }
     
     /**
@@ -860,6 +867,10 @@ class MultiPagina extends PaginaHTML {
                    
                 
                 }
+                if(isset($this->dati[$this->argomento][$this->indice])){
+                    $datiPagina= $this->dati[$this->argomento][$this->indice];
+                    self::aggiungiDatiPagina($datiPagina);
+                }
                 self::aggiungi($pagina);
                 self::cssBody();
                 self::cssElencoPagine();
@@ -872,6 +883,11 @@ class MultiPagina extends PaginaHTML {
         }
         
         return parent::__toString();
+    }
+    
+    private function aggiungiDatiPagina($dati) {
+        $script = new JavaScript("var x = 0;");
+        self::aggiungi($script);
     }
     
 }
