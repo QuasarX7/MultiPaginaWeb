@@ -1,6 +1,6 @@
 <?php
 include_once 'Tag.php';
-
+include_once 'Attributo.php';
 /**
  * Classe che contiene il codice JavaScript da inserire nella pagina HTML (in head).
  * 

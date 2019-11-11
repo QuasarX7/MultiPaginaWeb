@@ -7,7 +7,7 @@ include_once 'javascript.php';
 class BaseDatiMySQL{
     private $host;
     
-    public function __costruct(string $host){
+    public function __costruct(string $host='localhost'){
         $this->host = $host;
     }
     
@@ -46,7 +46,7 @@ class BaseDatiMySQL{
      * @param string $utente    autorizzato ad accedere allo schema
      * @param string $password  relativa all'utente
      * 
-     * @return string
+     * @return JavaScript
      */
     public function datiJavaScript(string $query,string $nome_db, string $utente="root",string $password="") {
         $risultato = self::SQL($query, $nome_db,$utente,$password);
@@ -67,9 +67,9 @@ class BaseDatiMySQL{
                 $primo = false;
             }
             $codice .= '];'; //fine
+            return new JavaScript($codice);
         }
-        $script = new JavaScript($codice);
-        $script->crea();
+        
     }
     
     

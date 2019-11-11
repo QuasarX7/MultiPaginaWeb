@@ -61,9 +61,7 @@ class MultiPagina extends PaginaHTML {
     protected $coloreIndicePagina;
     protected $coloreMenu;
    
-    protected $baseDati = null;
     protected $dati = array();
-    
     
 
     public function __construct($titolo){
@@ -97,14 +95,7 @@ class MultiPagina extends PaginaHTML {
     }
     
     
-    /**
-     * Connetti a una eventuale BD...
-     * 
-     * @param mixed $baseDati
-     */
-    public function connettiBaseDati(string $nome_db,string $utente,string $password){
-        $this->baseDati = new BaseDatiMySQL($nome_db,$utente,$password);
-    }
+
     
     /**
      * Associa i dati di un'interrogazione SQL del DB MySQL alle pagine di un argomento.
@@ -112,12 +103,12 @@ class MultiPagina extends PaginaHTML {
      * @param string $argomento
      * @return mixed
      */
-    public function associaDatiAllaPagina(string $SQL, string $argomento,int $pagina){
-        if($this->baseDati instanceof BaseDatiMySQL){
-            $risultato = $this->baseDati->SQL($SQL);
-            if($risultato)
-                $this->dati[$argomento][$pagina] = $risultato;
-        }
+    public function associaDatiPagina(string $SQL, string $schemaMySQL, string $utente, string $password,  Argomento& $argomento,int $pagina){
+        $baseDati = new BaseDatiMySQL();
+            $codiceDati = $baseDati->datiJavaScript($SQL,$schemaMySQL,$utente,$password);
+            if(isset($codiceDati))
+                $this->dati[$argomento->nome().$pagina.''] = $codiceDati;
+        
     }
     
     /**
@@ -867,9 +858,9 @@ class MultiPagina extends PaginaHTML {
                    
                 
                 }
-                if(isset($this->dati[$this->argomento][$this->indice])){
-                    $datiPagina= $this->dati[$this->argomento][$this->indice];
-                    self::aggiungiDatiPagina($datiPagina);
+                $script= $this->dati[$this->argomento.$this->indice.''];
+                if(isset($script)){
+                    self::aggiungi($script);
                 }
                 self::aggiungi($pagina);
                 self::cssBody();
@@ -885,10 +876,6 @@ class MultiPagina extends PaginaHTML {
         return parent::__toString();
     }
     
-    private function aggiungiDatiPagina($dati) {
-        $script = new JavaScript("var x = 0;");
-        self::aggiungi($script);
-    }
     
 }
 
