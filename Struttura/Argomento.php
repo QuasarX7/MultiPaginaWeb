@@ -34,9 +34,19 @@ class Argomento{
      * @param string $file    url del file contenente il testo della pagina
      * 
      */
-    public function aggiungiPagina($nome,$file) {
+    public function aggiungiPagina(string $nome,string $file) {
         $this->pagine[] = new Pagina($nome, $file);
     }
+    
+    /**
+     * Aggiungi del codice HTML.
+     * @param string $nome
+     * @param string $codice
+     */
+    public function aggiungiPaginaCodice(string $nome,string $codice) {
+        $this->pagine[] = $codice;
+    }
+    
     
     /**
      * Restituisce il testo della pagina se esiste.
@@ -48,6 +58,8 @@ class Argomento{
         $pagina = $this->pagine[$indice];
         if($pagina instanceof Pagina){
             return $pagina->testo();
+        }else if(is_string($pagina)){
+            return $pagina;
         }
         return '';
     }

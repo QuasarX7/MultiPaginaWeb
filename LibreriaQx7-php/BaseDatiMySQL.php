@@ -6,7 +6,13 @@ include_once 'javascript.php';
 
 class BaseDatiMySQL{
     private $host;
+    public const NOME_VARIABILE = 'tabella';
     
+    /**
+     * Costruttore.
+     * 
+     * @param string $host
+     */
     public function __costruct(string $host='localhost'){
         $this->host = $host;
     }
@@ -23,7 +29,9 @@ class BaseDatiMySQL{
      */
     public function SQL(string $query,string $nome_db, string $utente="root",string $password=""){
         $connessione = mysqli_connect($this->host, $utente, $password,$nome_db);
+        mysqli_set_charset($connessione,'utf8');
         $risultato = mysqli_query($connessione,$query);
+        
         mysqli_close($connessione);
         return $risultato;
     }
@@ -46,12 +54,12 @@ class BaseDatiMySQL{
      * @param string $utente    autorizzato ad accedere allo schema
      * @param string $password  relativa all'utente
      * 
-     * @return JavaScript
+     * @return JavaScript | null
      */
     public function datiJavaScript(string $query,string $nome_db, string $utente="root",string $password="") {
         $risultato = self::SQL($query, $nome_db,$utente,$password);
         if ($risultato->num_rows > 0) {
-            $codice  = 'var tabella = ['; // inizio
+            $codice  = 'var '.self::NOME_VARIABILE.' = ['; // inizio
             $primo = true;
             while($riga = mysqli_fetch_row($risultato)) {
                 if($primo != true){
