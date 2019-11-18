@@ -76,8 +76,49 @@ class BaseDatiMySQL{
             }
             $codice .= '];'; //fine
             return new JavaScript($codice);
+        
         }
         
+    
+    }
+    
+    /**
+     * Restituisce restituisce il nome e il tipo dei campi relativi alla tabella del database MySQL richiesto.
+     * @param string $tabella   nome relativo alla tabella
+     * @param string $nome_db   nome dello schema mysql
+     * @param string $utente
+     * @param string $password
+     * @return null | array bidimensionale
+     */
+    public function infoTabella(string $tabella,string $nome_db, string $utente="root",string $password=""){
+        $query = "select column_name , data_type from information_schema.columns where table_schema = '$nome_db' and table_name = '$tabella';";
+        return self::tabella($query, $nome_db,$utente,$password);
+    }
+    
+    /**
+     * Tabella query.
+     * 
+     * @param string $query
+     * @param string $nome_db
+     * @param string $utente
+     * @param string $password
+     * @return null | array bidimensionale
+     */
+    public function tabella(string $query,string $nome_db, string $utente="root",string $password="") {
+        $risultato = self::SQL($query, $nome_db,$utente,$password);
+        if ($risultato->num_rows > 0) {
+            $tabella = array();
+            $j=1;
+            while($riga = mysqli_fetch_row($risultato)) {
+                $r =  array();
+                for($i=0; $i < count($riga); $i++){
+                    $r[$i] = str_replace('"', '“', $riga[$i]); //... « “ » è un carattere UNICODE diverso da « " »
+                 
+                }
+                $tabella[$j++]=$r;
+            }
+            return $tabella;
+        }
     }
     
     

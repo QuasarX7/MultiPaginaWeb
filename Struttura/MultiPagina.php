@@ -61,8 +61,7 @@ class MultiPagina extends PaginaHTML {
     protected $coloreIndicePagina;
     protected $coloreMenu;
    
-    protected $dati = array();
-    
+     
 
     public function __construct($titolo){
         parent::__construct($titolo);
@@ -85,31 +84,9 @@ class MultiPagina extends PaginaHTML {
         
     }
     
-    /**
-     * Distruttore
-     */
-    function __destruct() {
-        if($this->baseDati instanceof BaseDatiMySQL) {
-             $this->baseDati->chiudi();
-        }
-    }
-    
-    
 
     
-    /**
-     * Associa i dati di un'interrogazione SQL del DB MySQL alle pagine di un argomento.
-     * @param string $SQL
-     * @param string $argomento
-     * @return mixed
-     */
-    public function associaDatiPagina(string $SQL, string $schemaMySQL, string $utente, string $password,  Argomento& $argomento,int $pagina){
-        $baseDati = new BaseDatiMySQL();
-            $codiceDati = $baseDati->datiJavaScript($SQL,$schemaMySQL,$utente,$password);
-            if(isset($codiceDati))
-                $this->dati[$argomento->nome().$pagina.''] = $codiceDati;
-        
-    }
+
     
     /**
      * Crea una barra menu orizzontale posizionata dopo l'intestazione di pagina.
@@ -858,10 +835,7 @@ class MultiPagina extends PaginaHTML {
                    
                 
                 }
-                $script= $this->dati[$this->argomento.$this->indice.''];
-                if(isset($script)){
-                    self::aggiungi($script);
-                }
+
                 self::aggiungi($pagina);
                 self::cssBody();
                 self::cssElencoPagine();
