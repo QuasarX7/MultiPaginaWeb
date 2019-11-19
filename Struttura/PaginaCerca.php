@@ -13,10 +13,9 @@ class PaginaCerca extends Tag{
     const FILE_FONT_ETICHETTA = 'Struttura/Anton-Regular.ttf';
     
     
-    private $tabella;
+    protected $tabella;
     private $colonna;
     
-    private $riga;
     
     const INPUT_AJAX = 'riga';
     
@@ -31,13 +30,13 @@ class PaginaCerca extends Tag{
      * @param array $info   contiene le informazioni sul tipo di campo
      */
     public function __construct(array $tabella,int $colonnaRicerca,array $info){
-         $this->colonna = $colonnaRicerca;
+        $this->colonna = $colonnaRicerca;
         $this->tabella = $tabella;
         parent::__construct('div',[new Attributo('id', self::ID_PAGINA)]);
         self::css();
         self::creaCampo();
-        self::script($info);
-        self::menu();
+        $this->script($info);
+        $this->menu();
         
     }
     
@@ -108,7 +107,7 @@ class PaginaCerca extends Tag{
      * @param array $tabella
      * @return string
      */
-    private function creaTabella(){
+    protected function creaTabella(){
         $codice  = 'var tabella = ['; // inizio
         $primo = true;
         foreach ($this->tabella as $riga) {
@@ -132,36 +131,37 @@ class PaginaCerca extends Tag{
         
     }
     
-    private function script($info){
-        
-        $script = new JavaScript(
-            $this->creaTabella($this->tabella).// var tabella = [ [.., .., ..], [.., .., ..], ... ];
-            '$(\'button.icona\').on(\'click\',function(e){'.
-                'var valoreCampo = $(\'#cerca\').val();'.
-                'var riga;'.
-                '$(".'.self::CLASSE_RIGA.'").remove();'.
-                'for(riga of tabella){'.
-                    'if(riga['.$this->colonna.'] == valoreCampo){'.
-                        '$(".contenitore").append(\''.
-                            self::creaCampiRicerca($info).
-                        '\');'.
-                        'break;'.
+    protected function script($info){
+        if(count($info) > 0){
+            $script = new JavaScript(
+                $this->creaTabella($this->tabella).// var tabella = [ [.., .., ..], [.., .., ..], ... ];
+                '$(\'button.icona\').on(\'click\',function(e){'.
+                    'var valoreCampo = $(\'#cerca\').val();'.
+                    'var riga;'.
+                    '$(".'.self::CLASSE_RIGA.'").remove();'.
+                    'for(riga of tabella){'.
+                        'if(riga['.$this->colonna.'] == valoreCampo){'.
+                            '$(".contenitore").append(\''.
+                                self::creaCampiRicerca($info).
+                            '\');'.
+                            'break;'.
+                        '}'.
+                        'riga = null;'.
                     '}'.
-                    'riga = null;'.
-                '}'.
-                'if(riga){'.
-                    'var valore;var i=0;'.
-                    'for(valore of riga){'.
-                        'if(i++ == '.$this->colonna .')continue;'.
-                        '$(".contenitore input").eq(i-1).val(valore);'.
-                    '}'.
-                '}else alert("Voce non presente...");'.
-            '});'
+                    'if(riga){'.
+                        'var valore;var i=0;'.
+                        'for(valore of riga){'.
+                            'if(i++ == '.$this->colonna .')continue;'.
+                            '$(".contenitore input").eq(i-1).val(valore);'.
+                        '}'.
+                    '}else alert("Voce non presente...");'.
+                '});'
             );
-        self::aggiungi($script);
+            self::aggiungi($script);
+        }
     }
     
-    private function css() {
+    protected function css() {
 
         $stile = new Tag('style',[new Attributo('type', 'text/css')]);
         $stile->aggiungi("@font-face {font-family: '".self::FONT_CAMPO."';src: url('".self::FILE_FONT_CAMPO."') format('truetype');}");
@@ -304,16 +304,21 @@ class PaginaCerca extends Tag{
     }
     
     
-    
-    private function menu() {
+    /**
+     * Se la '$this->tabella' è una array bidimensionale, restiutisce i valori della '$this->colonna' 
+     * associata; se è una lista, restituisce l'elenco delle sue chiavi.
+     */
+    protected function menu() {
         $lista = new Tag('datalist',[new Attributo('id', 'input_campo')]);
         foreach ($this->tabella as $riga) {
-            self::voceMenu($lista, $riga[$this->colonna]);
+            if(is_array($riga)){
+                self::voceMenu($lista, $riga[$this->colonna]);
+            }
         }
         self::aggiungi($lista);
     }
     
-    private function voceMenu(Tag $menu,string $valore) {
+    protected function voceMenu(Tag $menu,string $valore) {
         $voce = new Tag('option',[new Attributo('value', $valore)]);
         $menu->aggiungi($voce);
     }

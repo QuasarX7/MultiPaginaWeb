@@ -10,6 +10,7 @@ include_once 'Pagina.php';
 class Argomento{
     protected $nome;
     protected $pagine = array();
+    const HOME = 'home';
     
     /**
      * Costruttore
@@ -45,6 +46,27 @@ class Argomento{
      */
     public function aggiungiPaginaCodice(string $nome,string $codice) {
         $this->pagine[] = $codice;
+    }
+    
+    /**
+     * Lista degli indici di pagina.
+     * 
+     * @return string[]
+     */
+    public function listaIndici(){
+        $lista = array();
+        foreach ($this->pagine as $indice => $pagina) {
+            if($pagina instanceof Pagina)
+                $lista[$pagina->nome()] = Argomento::link($this->nome, $indice.'');
+        }
+        return $lista;
+    }
+    
+    public static function link($argomento,$pagina){
+        if(!is_null($argomento)){
+            return '?pagina='.$pagina.'&argomento='.rawurlencode($argomento);
+        }
+        return '?pagina=0&argomento='.self::HOME;
     }
     
     

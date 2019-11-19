@@ -3,7 +3,7 @@ include_once 'LibreriaQx7-php/PaginaHTML.php';
 include_once 'LibreriaQx7-php/html5.php';
 include_once 'LibreriaQx7-php/BarraMenu.php';
 include_once 'LibreriaQx7-php/Menu.php';
-include_once 'LibreriaQx7-php/BaseDatiMySQL.php';
+//include_once 'LibreriaQx7-php/BaseDatiMySQL.php';
 include_once 'LibreriaQx7-php/javascript.php';
 include_once 'Argomento.php';
 
@@ -13,6 +13,7 @@ class MultiPagina extends PaginaHTML {
     const CHIAVE_PAGINA = 'pagina';
     const CHIAVE_ARGOMENTO = 'argomento';
     const HOME = 'home';
+    const RICERCA = 'ricerca';
     
     const ALTEZZA_INTESTAZIONE_SITO  = 'auto';
     const ALTEZZA_MENU  = '50px';
@@ -42,7 +43,7 @@ class MultiPagina extends PaginaHTML {
     protected $vociMenu = array();
     
     protected $indice = 0;
-    protected $argomento = self::HOME;
+    protected $argomento = Argomento::HOME;
 
     protected $argomenti = array(); 
     protected $note = array();
@@ -77,7 +78,7 @@ class MultiPagina extends PaginaHTML {
         if(filter_has_var(INPUT_GET, self::CHIAVE_ARGOMENTO)){
             $this->argomento = filter_input(INPUT_GET, self::CHIAVE_ARGOMENTO, FILTER_SANITIZE_STRING);
             if ($this->argomento === false) {
-                $this->argomento = self::HOME;
+                $this->argomento = Argomento::HOME;
             }
         }
         
@@ -165,10 +166,7 @@ class MultiPagina extends PaginaHTML {
      * @return string
      */
     private function link($argomento,$pagina){
-        if(!is_null($argomento)){
-            return '?pagina='.$pagina.'&argomento='.rawurlencode($argomento);
-        }
-        return '?pagina=0&argomento='.self::HOME;
+        return Argomento::link($argomento, $pagina);
     }
     
     /**
@@ -226,6 +224,7 @@ class MultiPagina extends PaginaHTML {
             foreach ($this->vociMenu as $voce) {
                 $this->barraMenu->aggiungi($voce);
             }
+            $this->creaMenuInfo();
             parent::aggiungi($this->barraMenu->vedi());// disegna corpo
             foreach ($this->barraMenu->regoleCSS() as $regolaCSS) {
                 parent::aggiungi($regolaCSS);//aggiungi regola al tag style del head della pagina HTML
@@ -234,6 +233,25 @@ class MultiPagina extends PaginaHTML {
           
         }
     }
+////////////////////////    
+    private function creaMenuInfo(){
+        $this->barraMenu->aggiungi(new Menu('Cerca', '?pagina=0&argomento='.self::RICERCA));
+        
+        $argomento = new Argomento(self::RICERCA);
+        $paginaRicerca = new PaginaRicercaWeb($this->listaRicerca());
+        $argomento->aggiungiPaginaCodice(self::RICERCA, $paginaRicerca->vedi());
+        $this->aggiungiArgomento($argomento);
+    }
+    
+    private function listaRicerca(){
+        $lista = array();
+        foreach ($this->argomenti as $argomento) {
+            if($argomento instanceof Argomento)
+                $lista = array_merge($lista,$argomento->listaIndici());
+        }
+        return $lista;
+    }
+    
     /**
      * Aggiungi un argomento alla multi-pagina.
      * 
@@ -250,7 +268,7 @@ class MultiPagina extends PaginaHTML {
      * @param Pagina $file
      */
     public function aggiungiHome(Pagina $file){
-        $this->argomenti[self::HOME] = $file;
+        $this->argomenti[Argomento::HOME] = $file;
     }
     
     /**
@@ -281,7 +299,7 @@ class MultiPagina extends PaginaHTML {
     private function inizializzaTitoloArgomentoMultipagina(){
         // Crea titolo dell'argomento della multipagina
         if(isset($this->argomento))
-            if($this->argomento != self::HOME){
+            if($this->argomento != Argomento::HOME){
             $this->titoloArgomento = new Pannello('100%', 'auto', '#fff', '#000');
             
             $this->titoloArgomento->aggiungi($this->argomento.' ');
@@ -790,7 +808,7 @@ class MultiPagina extends PaginaHTML {
             $pagina = new AreaPagina();
             
             if(isset($this->argomenti[$this->argomento])){
-                if($this->argomento == self::HOME){
+                if($this->argomento == Argomento::HOME){
                     $pagina->margine('0', '0', '0', '0');
                     $home = $this->argomenti[$this->argomento];
                     if($home instanceof Pagina)
