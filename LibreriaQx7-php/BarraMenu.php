@@ -360,6 +360,22 @@ class BarraMenu extends Tag{
             );
         $regole[] = $li_a;
         
+        $li_a_sub = new RegolaCSS(
+            'nav li ul > li > a',
+            [
+                new DichiarazioneCSS('display','none')
+            ]
+            );
+        $regole[] = $li_a_sub;
+        
+        $li_hover_a_sub = new RegolaCSS(
+            'nav li:hover > ul > li > a',
+            [
+                new DichiarazioneCSS('display','block')
+            ]
+            );
+        $regole[] = $li_hover_a_sub;
+        
         $nav_li_ul = new RegolaCSS(
             'nav li > ul',
             [
