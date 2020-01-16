@@ -535,7 +535,11 @@ class BarraMenu extends Tag{
      */
     protected  function cambiaDimensioneMenu(){
         $this->aggiungi(new JQuery(
-            "$(window).resize(function(){location.reload();});"
+            '$(window).on("resize",function(){'.
+                '$(".logo").removeClass("attiva");'.
+                '$("body").removeAttr("style");'.
+                '$("nav ul").removeAttr("style");'.
+            '});'
             ));
     }
     
