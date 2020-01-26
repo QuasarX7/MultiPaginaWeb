@@ -3,10 +3,16 @@ include_once 'LibreriaQx7-php/PaginaHTML.php';
 include_once 'LibreriaQx7-php/html5.php';
 include_once 'LibreriaQx7-php/BarraMenu.php';
 include_once 'LibreriaQx7-php/Menu.php';
-//include_once 'LibreriaQx7-php/BaseDatiMySQL.php';
 include_once 'LibreriaQx7-php/javascript.php';
 include_once 'Argomento.php';
 
+/**
+ * Classe principale implementa la struttura di un semplice sito web multi-pagina
+ * Gestito tramite un file di configurazione di tipo JSON.
+ * 
+ * @author Dr. Domenico della Peruta
+ *
+ */
 class MultiPagina extends PaginaHTML {
     const ID_ELENCO = 'ElencoPagine'; // ID indici
     
@@ -34,9 +40,10 @@ class MultiPagina extends PaginaHTML {
     
     const NOME_FONT_INTESATAZIONE = 'intestazione';
     
+    const MENU_HOME = 'Home';
     
-
-   
+    
+    
     protected $fontIntestazione = 'Struttura/FrederickatheGreat-Regular.ttf';
     
     protected $barraMenu = null;
@@ -61,10 +68,16 @@ class MultiPagina extends PaginaHTML {
     protected $coloreSelezionaIndicePagina;
     protected $coloreIndicePagina;
     protected $coloreMenu;
+    protected $coloreIntestazione = 'black';
    
      
-
-    public function __construct($titolo){
+    
+    /**
+     * Costruttore.
+     * 
+     * @param string $titolo
+     */
+    protected function __construct($titolo){
         parent::__construct($titolo);
         
         if(filter_has_var(INPUT_GET, self::CHIAVE_PAGINA)){
@@ -85,9 +98,119 @@ class MultiPagina extends PaginaHTML {
         
     }
     
-
+    /**
+     * Metodo statico di costruzione del nostro sito web, usando un file di configurazione
+     * JSON.
+     *
+     * @param string $file
+     * @return MultiPagina
+     */
+    static public function costruisci(string $file){
+        $json = new Pagina('file JSON',$file);
+        $dati = json_decode($json->testo(),true);
+        
+        $sito = new MultiPagina(MultiPagina::cerca($dati,'titolo'));
+        
+        $sito->logoPNG(MultiPagina::cerca($dati,'logo'));
+        
+        $sito->aggiungi(new RegolaCSS(
+            '#home',
+            [
+                new DichiarazioneCSS('position', 'fixed'),
+                new DichiarazioneCSS('top', '0'),
+                new DichiarazioneCSS('left', '0'),
+                new DichiarazioneCSS('z-index', '-10000'),
+                new DichiarazioneCSS('min-width', '100%'),
+                new DichiarazioneCSS('min-height', '100%'),
+                new DichiarazioneCSS('height', 'auto'),
+                new DichiarazioneCSS('width', 'auto')
+                
+            ]
+            ));
+        
+        $coloreTesto=MultiPagina::cerca($dati, 'colore-testo','#B0E0E6');
+        $coloreSeleziona=MultiPagina::cerca($dati, 'colore-seleziona','#483D8B');
+        $coloreIntestazione=MultiPagina::cerca($dati, 'colore-intestazione','blue');
+        $coloreMenu=MultiPagina::cerca($dati, 'colore-menu','#333');
+        $coloreSottoMenuPrimoLivello=MultiPagina::cerca($dati, 'colore-sottomenu-primo',$coloreMenu);
+        $coloreSottoMenuSecondoLivello=MultiPagina::cerca($dati, 'colore-sottomenu-secondo',$coloreSottoMenuPrimoLivello);
+        
+        $sito->coloreIntestazione($coloreIntestazione);
+        $sito->creaBarraMenu($coloreMenu,$coloreTesto,$coloreSeleziona);
+        $sito->inizializzaPrimoLivelloMenu($coloreSottoMenuPrimoLivello, $coloreTesto);
+        $sito->inizializzaSecondoLivelloMenu($coloreSottoMenuSecondoLivello, $coloreTesto);
+        
+        $sito->creaPannelloLaterale($coloreIntestazione, $coloreTesto, $coloreSeleziona);
+        
+        $sito->aggiungiMenu(self::MENU_HOME);
+        foreach ($dati as $etichetta => $menu) {
+            if($etichetta == 'menu' && is_array($menu)){
+                MultiPagina::creaVoceMenu($menu, $sito);
+            }
+        }
+        
+        foreach ($dati as $etichetta => $note) {
+            if($etichetta == 'note' && is_array($note)){
+                foreach ($note as $nota) {
+                    $campo = new Pannello('auto', 'auto',$nota['colore']);
+                    $campo->aggiungi($nota['testo']);
+                    $sito->aggiungiNoteMarginePagina($campo);
+                }
+            }
+        }
+        
+        $paginaHome=MultiPagina::cerca($dati, self::HOME,'');
+        
+        $sito->aggiungiHome(new Pagina(self::HOME,$paginaHome));
+        
+        return $sito;
+    }
+    
+    static private function cerca(array $dati,string $cerca,string $predefinito=''){
+        foreach ($dati as $etichetta => $valore) {
+            if($etichetta == $cerca){
+                return $valore .'';
+            }
+        }
+        return $predefinito;
+    }
+    
+    static private function creaVoceMenu(array $menu,MultiPagina $sito,string $genitore=null){
+        if(count($menu) > 0){
+            foreach ($menu as $lista) {
+                $menuGenitore = null;
+                foreach ($lista as $etichetta => $voce) {
+                    if($etichetta == 'etichetta'){
+                        $argomento = MultiPagina::creaArgomento($lista);
+                        if($argomento != null)
+                            $sito->aggiungiArgomento($argomento);
+                            $sito->aggiungiMenu($voce,$argomento,$genitore);
+                            $menuGenitore = $voce;
+                    } else if($etichetta == 'contenuto')
+                        MultiPagina::creaVoceMenu($voce, $sito,$menuGenitore);
+                        
+                }
+            }
+            
+        }
+    }
+    
+    static private function creaArgomento(array $menu){
+        $lista = $menu['argomento'];
+        if($lista != null){
+            $argomento = new Argomento($lista['titolo']);
+            foreach ($lista['pagine'] as $voce) {
+                $argomento->aggiungiPagina($voce['sotto-titolo'], $voce['file']);
+            }
+            return $argomento;
+        }
+        return null;
+    }
     
 
+    protected function coloreIntestazione(string $colore) {
+        $this->coloreIntestazione = $colore;
+    }
     
     /**
      * Crea una barra menu orizzontale posizionata dopo l'intestazione di pagina.
@@ -97,7 +220,7 @@ class MultiPagina extends PaginaHTML {
      * @param string $coloreSeleziona
      * @param string $posizone          se Posizione::FISSA non varia con lo scorrimento della pagina.
      */
-    public function creaBarraMenu(string $coloreSfondo, string $coloreTesto, string $coloreSeleziona){
+    protected  function creaBarraMenu(string $coloreSfondo, string $coloreTesto, string $coloreSeleziona){
         $this->barraMenu = new BarraMenu($coloreSfondo, $coloreTesto, $coloreSeleziona,Posizione::RELATIVA);
         $this->coloreMenu = $coloreSfondo;
     }
@@ -108,7 +231,7 @@ class MultiPagina extends PaginaHTML {
      * @param string $coloreSfondo
      * @param string $coloreTesto
      */
-    public function inizializzaPrimoLivelloMenu(string $coloreSfondo, string $coloreTesto){
+    protected function inizializzaPrimoLivelloMenu(string $coloreSfondo, string $coloreTesto){
         if(!is_null($this->barraMenu)){
             $this->barraMenu->menuPrimoLivello($coloreSfondo, $coloreTesto);
         }
@@ -119,7 +242,7 @@ class MultiPagina extends PaginaHTML {
      * @param string $coloreSfondo
      * @param string $coloreTesto
      */
-    public function inizializzaSecondoLivelloMenu(string $coloreSfondo, string $coloreTesto){
+    protected function inizializzaSecondoLivelloMenu(string $coloreSfondo, string $coloreTesto){
         if(!is_null($this->barraMenu)){
             $this->barraMenu->menuSecondoLivello($coloreSfondo, $coloreTesto);
         }
@@ -137,7 +260,7 @@ class MultiPagina extends PaginaHTML {
      * @param Argomento     $argomento
      * @param string        $menu       etichetta della voce menu (padre) a cui è aggangiata
      */    
-    public function aggiungiMenu(string $etichetta,Argomento $argomento=null,string $menu=null){
+    protected function aggiungiMenu(string $etichetta,Argomento $argomento=null,string $menu=null){
          if(!is_null($this->barraMenu)){
             $nuovoMenu = new Menu(
                 $etichetta,
@@ -201,7 +324,7 @@ class MultiPagina extends PaginaHTML {
         if(!is_null($this->fontIntestazione)){
             parent::importaFont('intestazione', $this->fontIntestazione);
         }
-        $this->intestazioneSito = new IntestazionePagina(self::ALTEZZA_INTESTAZIONE_SITO,'black','white');
+        $this->intestazioneSito = new IntestazionePagina(self::ALTEZZA_INTESTAZIONE_SITO,$this->coloreIntestazione,'white');
         $this->intestazioneSito->aggiungi($this->titolo);
         $this->intestazioneSito->aggiungi(
             new Stile(
@@ -257,7 +380,7 @@ class MultiPagina extends PaginaHTML {
      * 
      * @param Argomento $argomento
      */
-    public function aggiungiArgomento(Argomento $argomento){
+    protected function aggiungiArgomento(Argomento $argomento){
         $this->argomenti[$argomento->nome()] = $argomento;
     }
     
@@ -267,7 +390,7 @@ class MultiPagina extends PaginaHTML {
      * 
      * @param Pagina $file
      */
-    public function aggiungiHome(Pagina $file){
+    protected function aggiungiHome(Pagina $file){
         $this->argomenti[Argomento::HOME] = $file;
     }
     
@@ -276,7 +399,7 @@ class MultiPagina extends PaginaHTML {
      * 
      * @param Pannello $note
      */    
-    public function aggiungiNoteMarginePagina(Pannello $note){
+    protected function aggiungiNoteMarginePagina(Pannello $note){
         $this->note[] = $note;
     }
 
@@ -287,7 +410,7 @@ class MultiPagina extends PaginaHTML {
      * @param string $coloreTesto
      * @param string $coloreSeleziona
      */
-    public function creaPannelloLaterale($coloreSfondo, $coloreTesto, $coloreSeleziona){
+    protected function creaPannelloLaterale($coloreSfondo, $coloreTesto, $coloreSeleziona){
         $this->indiceLateraleSx = new NotePagina(self::LUNGHEZZA_PANNELLO_SX,'auto', $this->coloreMenu != null ? $this->coloreMenu : $coloreSfondo, $coloreTesto);
         $this->coloreSelezionaIndicePagina = $coloreSeleziona;
         $this->coloreIndicePagina = $coloreSfondo;
@@ -418,7 +541,7 @@ class MultiPagina extends PaginaHTML {
      * Carica il file del font per l'intestazione degli argomenti.
      * @param string $font
      */
-    public function formatoCarattereDiIntestazione($font) {
+    protected function formatoCarattereDiIntestazione($font) {
         if(is_string($font)){
             $this->fontIntestazione = $font;
         }

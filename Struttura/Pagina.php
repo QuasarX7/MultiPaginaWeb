@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * La classe Pagina permette di leggere il contenuto di un file di testo.
+ * 
+ * @author Dott. Domenico della Peruta
+ *
+ */
 class Pagina {
     
     protected $nome;
