@@ -1,0 +1,435 @@
+{
+	"titolo" : "Domenico dellaPERUTA",
+	"logo"	: "PagineWeb/logo.png",
+	"colore-testo" : "#078",
+	"colore-seleziona" : "#29023B",
+	"colore-intestazione" : "black",
+	"colore-menu" : "#333",
+	"colore-sottomenu-primo" : "#444",
+	"colore-sottomenu-secondo" : "#555",
+	"home" : "PagineWeb3/home.html",
+	"note" : [
+		{
+			"colore" : "#aaffd2",
+			"testo": "[1]<br>Chiunque si accinga ad eleggere se stesso a giudice del vero e della conoscenza, naufraga sotto le risate degli dei.<br><br><i>Albert Einstein</i>"
+		}
+	],
+	"menu3" : [
+ 		{
+			"etichetta" : "Appunti",
+			"contenuto" : [
+				{
+					"etichetta" : "Informatica",
+					"contenuto" : [
+						{
+							"etichetta" : "Intelligenza_Artificiale",
+							"argomento" : {
+								"titolo" : "Intelligenza Artificiale",
+								"pagine" : [
+									{
+										"sotto-titolo" : "Introduzione",
+										"file" : "PagineWeb/IA/IA.html"
+									},
+									{
+										"sotto-titolo" : "Algoritmi Genetici",
+										"file" : "PagineWeb/IA/algoritmi_genetici/algoritmi_genetici.html"
+									},
+									{
+										"sotto-titolo" : "Reti Neurali",
+										"file" : "PagineWeb/IA/reti_neurali/reti_neurali.html"
+									},
+									{
+										"sotto-titolo" : "Percettrone",
+										"file" : "PagineWeb/IA/reti_neurali/percettrone/Percettrone.html"
+									},
+									{
+										"sotto-titolo" : "MLP",
+										"file" : "PagineWeb/IA/reti_neurali/MLP/MLP.html"
+									},
+									{
+										"sotto-titolo" : "SOM",
+										"file" : "PagineWeb/IA/reti_neurali/SOM/SOM.html"
+									},
+									{
+										"sotto-titolo" : "RBF",
+										"file" : "PagineWeb/IA/reti_neurali/RBF/RBF.html"
+									},
+									{
+										"sotto-titolo" : "Hopfield",
+										"file" : "PagineWeb/IA/reti_neurali/hopfield/Hopfield.html"
+									}
+								]
+							}
+						},
+						{
+							"etichetta" : "Sicurezza_Informatica",
+							"argomento" : {
+								"titolo" : "Sicurezza Informatica",
+								"pagine" : [
+									{
+										"sotto-titolo" : "Penetration Test",
+										"file" : "PagineWeb/penetration_test/penetration_test.html"
+									},
+									{
+										"sotto-titolo" : "Footprinting",
+										"file" : "PagineWeb/penetration_test/footprinting.html"
+									},
+									{
+										"sotto-titolo" : "Scansione delle porte",
+										"file" : "PagineWeb/penetration_test/scansione_delle_porte.html"
+									},
+									{
+										"sotto-titolo" : "Enumerazione",
+										"file" : "PagineWeb/penetration_test/enumerazione.html"
+									},
+									{
+										"sotto-titolo" : "Exploit",
+										"file" : "PagineWeb/penetration_test/exploit.html"
+									},
+									{
+										"sotto-titolo" : "Forza bruta",
+										"file" : "PagineWeb/penetration_test/forza_bruta.html"
+									},
+									{
+										"sotto-titolo" : "Spoofing",
+										"file" : "PagineWeb/penetration_test/spoofing.html"
+									}
+								]
+							}
+						},
+						{
+							"etichetta" : "C++",
+							"argomento" : {
+								"titolo" : "C++",
+								"pagine" : [
+									{
+										"sotto-titolo" : "Output standard",
+										"file" : "PagineWeb/C++/video01.html"
+									},
+									{
+										"sotto-titolo" : "Input standard",
+										"file" : "PagineWeb/C++/video02.html"
+									},
+									{
+										"sotto-titolo" : "Variabili e Costanti",
+										"file" : "PagineWeb/C++/video03.html"
+									},
+									{
+										"sotto-titolo" : "Condizioni",
+										"file" : "PagineWeb/C++/video04.html"
+									},
+									{
+										"sotto-titolo" : "Cicli",
+										"file" : "PagineWeb/C++/video05.html"
+									},
+									{
+										"sotto-titolo" : "Vettori",
+										"file" : "PagineWeb/C++/video06.html"
+									},
+									{
+										"sotto-titolo" : "Caratteri",
+										"file" : "PagineWeb/C++/video07.html"
+									},
+									{
+										"sotto-titolo" : "Puntatori",
+										"file" : "PagineWeb/C++/video08.html"
+									},
+									{
+										"sotto-titolo" : "Riferimenti",
+										"file" : "PagineWeb/C++/video09.html"
+									},
+									{
+										"sotto-titolo" : "Stringhe",
+										"file" : "PagineWeb/C++/video10.html"
+									},
+									{
+										"sotto-titolo" : "Matrici",
+										"file" : "PagineWeb/C++/video11.html"
+									},
+									{
+										"sotto-titolo" : "Classe string",
+										"file" : "PagineWeb/C++/video12.html"
+									},
+									{
+										"sotto-titolo" : "Strutture e Unioni",
+										"file" : "PagineWeb/C++/video13.html"
+									},
+									{
+										"sotto-titolo" : "typedef e sizeof",
+										"file" : "PagineWeb/C++/video14.html"
+									},
+									{
+										"sotto-titolo" : "Memoria dinamica",
+										"file" : "PagineWeb/C++/video15.html"
+									},
+									{
+										"sotto-titolo" : "Funzioni",
+										"file" : "PagineWeb/C++/video16.html"
+									},
+									{
+										"sotto-titolo" : "Parametri di una funzione",
+										"file" : "PagineWeb/C++/video17.html"
+									},
+									{
+										"sotto-titolo" : "Puntatori a funzioni",
+										"file" : "PagineWeb/C++/video18.html"
+									},
+									{
+										"sotto-titolo" : "Introduzione alle classi",
+										"file" : "PagineWeb/C++/video19.html"
+									},
+									{
+										"sotto-titolo" : "Costruttore di una classe",
+										"file" : "PagineWeb/C++/video20.html"
+									},
+									{
+										"sotto-titolo" : "Costruttore di copia di una classe",
+										"file" : "PagineWeb/C++/video21.html"
+									},
+									{
+										"sotto-titolo" : "Distruttore di una classe",
+										"file" : "PagineWeb/C++/video22.html"
+									},
+									{
+										"sotto-titolo" : "Funzioni in linea",
+										"file" : "PagineWeb/C++/video23.html"
+									},
+									{
+										"sotto-titolo" : "Funzione ordinaria e parametri input/output",
+										"file" : "PagineWeb/C++/video24.html"
+									},
+									{
+										"sotto-titolo" : "funzioni amiche",
+										"file" : "PagineWeb/C++/video25.html"
+									},
+									{
+										"sotto-titolo" : "Classi derivate",
+										"file" : "PagineWeb/C++/video26.html"
+									},
+									{
+										"sotto-titolo" : "Funzione virtuali",
+										"file" : "PagineWeb/C++/video27.html"
+									},
+									{
+										"sotto-titolo" : "Polimorfismo",
+										"file" : "PagineWeb/C++/video28.html"
+									},
+									{
+										"sotto-titolo" : "Distruttore virtuale",
+										"file" : "PagineWeb/C++/video29.html"
+									},
+									{
+										"sotto-titolo" : "Classe astratta e interfacce",
+										"file" : "PagineWeb/C++/video30.html"
+									},
+									{
+										"sotto-titolo" : "Derivazione multipla",
+										"file" : "PagineWeb/C++/video31.html"
+									},
+									{
+										"sotto-titolo" : "Derivazione virtuale",
+										"file" : "PagineWeb/C++/video32.html"
+									},
+									{
+										"sotto-titolo" : "Variabili e funzioni statiche",
+										"file" : "PagineWeb/C++/video33.html"
+									},
+									{
+										"sotto-titolo" : "Classi modello",
+										"file" : "PagineWeb/C++/video34.html"
+									},
+									{
+										"sotto-titolo" : "Funzioni operatori",
+										"file" : "PagineWeb/C++/video35.html"
+									},
+									{
+										"sotto-titolo" : "Eccezioni",
+										"file" : "PagineWeb/C++/video36.html"
+									},
+									{
+										"sotto-titolo" : "Riferimento a r-value",
+										"file" : "PagineWeb/C++/video37.html"
+									},
+									{
+										"sotto-titolo" : "Costruttore di spostamento",
+										"file" : "PagineWeb/C++/video38.html"
+									},
+									{
+										"sotto-titolo" : "classe std::vector",
+										"file" : "PagineWeb/C++/video39.html"
+									},
+									{
+										"sotto-titolo" : "auto e decltype",
+										"file" : "PagineWeb/C++/video40.html"
+									},
+									{
+										"sotto-titolo" : "funzioni anonime",
+										"file" : "PagineWeb/C++/video41.html"
+									},
+									{
+										"sotto-titolo" : "inizializzazione in C++11",
+										"file" : "PagineWeb/C++/video42.html"
+									},
+									{
+										"sotto-titolo" : "Costruttore delega",
+										"file" : "PagineWeb/C++/video43.html"
+									},
+									{
+										"sotto-titolo" : "Aggiungere o eliminare metodi default",
+										"file" : "PagineWeb/C++/video44.html"
+									},
+									{
+										"sotto-titolo" : "Namespace",
+										"file" : "PagineWeb/C++/video45.html"
+									},
+									{
+										"sotto-titolo" : "Enumerazione",
+										"file" : "PagineWeb/C++/video46.html"
+									},
+									{
+										"sotto-titolo" : "Puntatori intelligenti",
+										"file" : "PagineWeb/C++/video47.html"
+									},
+									{
+										"sotto-titolo" : "Multithreading e sincronizzazione",
+										"file" : "PagineWeb/C++/video48.html"
+									}
+								]
+							}
+						}
+					]
+				},
+				{
+					"etichetta" : "Inglese",
+					"argomento" : {
+						"titolo" : "Inglese",
+						"pagine" : [
+							{
+								"sotto-titolo" : "Pronuncia",
+								"file" : "PagineWeb/Inglese/pronuncia_inglese_a_z.html"
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"etichetta" : "Sorriso",
+			"contenuto" : [
+				{
+					"etichetta" : "ASCII Art",
+					"argomento" : {
+						"titolo" : "Immagine Art ASCII",
+						"pagine" : [
+							{
+								"sotto-titolo" : "Lamù - la ragazza dello Spazio",
+								"file" : "PagineWeb/sorriso/lamu.txt"
+							},
+							{
+								"sotto-titolo" : "Jennifer Lopez",
+								"file" : "PagineWeb/sorriso/Jennifer Lopez.txt"
+							},
+							{
+								"sotto-titolo" : "Ken il Guerriero",
+								"file" : "PagineWeb/sorriso/ken.txt"
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"etichetta" : "Prontuario",
+			"contenuto" : [
+				{
+					"etichetta" : "HTML",
+					"argomento" : {
+						"titolo" : "HTML",
+						"pagine" : [
+							{
+								"sotto-titolo" : "Tag",
+								"file" : "PagineWeb/HTML/tag.html"
+							}
+						]
+					}
+				},
+				{
+					"etichetta" : "CSS",
+					"argomento" : {
+						"titolo" : "CSS",
+						"pagine" : [
+							{
+								"sotto-titolo" : "Proprietà",
+								"file" : "PagineWeb/CSS/proprietaCSS.html"
+							},
+							{
+								"sotto-titolo" : "Pseudo-classi e pseudo-elementi",
+								"file" : "PagineWeb/CSS/pseudoclassi.html"
+							}
+						]
+					}
+				},
+				{
+					"etichetta" : "JavaScript",
+					"argomento" : {
+						"titolo" : "JavaScript",
+						"pagine" : [
+							{
+								"sotto-titolo" : "Document Object Model",
+								"file" : "PagineWeb/JavaScript/DOM.html"
+							},
+							{
+								"sotto-titolo" : "Eventi",
+								"file" : "PagineWeb/JavaScript/eventi.html"
+							},
+							{
+								"sotto-titolo" : "String",
+								"file" : "PagineWeb/JavaScript/stringa.html"
+							},
+							{
+								"sotto-titolo" : "Number",
+								"file" : "PagineWeb/JavaScript/numero.html"
+							},
+							{
+								"sotto-titolo" : "Tempo",
+								"file" : "PagineWeb/JavaScript/tempo.html"
+							},
+							{
+								"sotto-titolo" : "AJAX",
+								"file" : "PagineWeb/JavaScript/ajax.html"
+							}
+						]
+					}
+				},
+				{
+					"etichetta" : "jQuery",
+					"argomento" : {
+						"titolo" : "jQuery",
+						"pagine" : [
+							{
+								"sotto-titolo" : "Metodi",
+								"file" : "PagineWeb/JavaScript/jQuery/metodi.html"
+							},
+							{
+								"sotto-titolo" : "AJAX",
+								"file" : "PagineWeb/jQuery/ajax.html"
+							}
+						]
+					}
+				},
+				{
+					"etichetta" : "JEE",
+					"argomento" : {
+						"titolo" : "",
+						"pagine" : [
+							{
+								"sotto-titolo" : "",
+								"file" : "PagineWeb/"
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}
