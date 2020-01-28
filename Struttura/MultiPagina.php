@@ -336,7 +336,7 @@ class MultiPagina extends PaginaHTML {
             parent::importaFont('intestazione', $this->fontIntestazione);
         }
         $this->intestazioneSito = new IntestazionePagina(self::ALTEZZA_INTESTAZIONE_SITO,$this->coloreIntestazione,'white');
-        $this->intestazioneSito->aggiungi($this->titolo);
+        $this->intestazioneSito->aggiungi($this->creaAccessoUtente() . $this->titolo);
         $this->intestazioneSito->aggiungi(
             new Stile(
                 [
@@ -349,6 +349,22 @@ class MultiPagina extends PaginaHTML {
         parent::aggiungi($this->intestazioneSito->vedi());
         
     }
+    private function creaAccessoUtente(){
+        $link = new Tag('a',
+            [
+                new Attributo('href', '?pagina=0&argomento='.self::RICERCA),
+                
+            ]);
+        $immagine = new Tag(
+            'img',
+            [
+                new Attributo('src', 'Struttura/accesso_utente.png'),
+                new Attributo('style', 'display:inline;margin: 0 10px')
+            ]);
+        $link->aggiungi($immagine->vedi());
+        return $link->vedi();
+    }
+    
   
     /**
      * Se è stato definito un menu viene aggiunto alla codice html.
@@ -367,7 +383,7 @@ class MultiPagina extends PaginaHTML {
           
         }
     }
-////////////////////////    
+
     private function creaMenuInfo(){
         $this->barraMenu->aggiungi(new Menu('Cerca', '?pagina=0&argomento='.self::RICERCA));
         
