@@ -3,7 +3,8 @@
 include_once 'Struttura/PaginaCerca.php';
 
 /**
- * Classe che implementa una pagina di ricerca pagine web.
+ * Classe che implementa una pagina di ricerca dei documenti HTML presenti nel sito per 
+ * argomento.
  * 
  * @author Dott. Domenico della Peruta
  *
