@@ -7,14 +7,14 @@
 	"colore-menu" : "#333",
 	"colore-sottomenu-primo" : "#444",
 	"colore-sottomenu-secondo" : "#555",
-	"home" : "PagineWeb3/home.html",
+	"home" : "PagineWeb/home.html",
 	"note" : [
 		{
 			"colore" : "#aaffd2",
 			"testo": "[1]<br>Chiunque si accinga ad eleggere se stesso a giudice del vero e della conoscenza, naufraga sotto le risate degli dei.<br><br><i>Albert Einstein</i>"
 		}
 	],
-	"menu3" : [
+	"menu" : [
  		{
 			"etichetta" : "Appunti",
 			"contenuto" : [
@@ -412,7 +412,7 @@
 							},
 							{
 								"sotto-titolo" : "AJAX",
-								"file" : "PagineWeb/jQuery/ajax.html"
+								"file" : "PagineWeb/JavaScript/jQuery/ajax.html"
 							}
 						]
 					}

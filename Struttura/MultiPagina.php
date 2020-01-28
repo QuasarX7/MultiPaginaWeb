@@ -105,9 +105,20 @@ class MultiPagina extends PaginaHTML {
      * @param string $file
      * @return MultiPagina
      */
-    static public function costruisci(string $file){
+    static public function costruisciDaFileJSON(string $file){
         $json = new Pagina('file JSON',$file);
         $dati = json_decode($json->testo(),true);
+       return  MultiPagina::costruisciDaJSON($dati);
+    }
+    
+    /**
+     * Metodo statico di costruzione del nostro sito web, usando dati di tipo
+     * JSON.
+     * 
+     * @param array $dati
+     * @return MultiPagina
+     */
+    static public function costruisciDaJSON(array $dati){
         
         $sito = new MultiPagina(MultiPagina::cerca($dati,'titolo'));
         
