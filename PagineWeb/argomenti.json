@@ -371,51 +371,58 @@
 				},
 				{
 					"etichetta" : "JavaScript",
-					"argomento" : {
-						"titolo" : "JavaScript",
-						"pagine" : [
-							{
-								"sotto-titolo" : "Document Object Model",
-								"file" : "PagineWeb/JavaScript/DOM.html"
-							},
-							{
-								"sotto-titolo" : "Eventi",
-								"file" : "PagineWeb/JavaScript/eventi.html"
-							},
-							{
-								"sotto-titolo" : "String",
-								"file" : "PagineWeb/JavaScript/stringa.html"
-							},
-							{
-								"sotto-titolo" : "Number",
-								"file" : "PagineWeb/JavaScript/numero.html"
-							},
-							{
-								"sotto-titolo" : "Tempo",
-								"file" : "PagineWeb/JavaScript/tempo.html"
-							},
-							{
-								"sotto-titolo" : "AJAX",
-								"file" : "PagineWeb/JavaScript/ajax.html"
+					"contenuto" :[
+						{
+							"etichetta" : "Fondamenti",
+							"argomento" : {
+								"titolo" : "JavaScript",
+								"pagine" : [
+									{
+										"sotto-titolo" : "Document Object Model",
+										"file" : "PagineWeb/JavaScript/DOM.html"
+									},
+									{
+										"sotto-titolo" : "Eventi",
+										"file" : "PagineWeb/JavaScript/eventi.html"
+									},
+									{
+										"sotto-titolo" : "String",
+										"file" : "PagineWeb/JavaScript/stringa.html"
+									},
+									{
+										"sotto-titolo" : "Number",
+										"file" : "PagineWeb/JavaScript/numero.html"
+									},
+									{
+										"sotto-titolo" : "Tempo",
+										"file" : "PagineWeb/JavaScript/tempo.html"
+									},
+									{
+										"sotto-titolo" : "AJAX",
+										"file" : "PagineWeb/JavaScript/ajax.html"
+									}
+								]
+							
 							}
-						]
-					}
-				},
-				{
-					"etichetta" : "jQuery",
-					"argomento" : {
-						"titolo" : "jQuery",
-						"pagine" : [
-							{
-								"sotto-titolo" : "Metodi",
-								"file" : "PagineWeb/JavaScript/jQuery/metodi.html"
-							},
-							{
-								"sotto-titolo" : "AJAX",
-								"file" : "PagineWeb/JavaScript/jQuery/ajax.html"
+						},
+						{
+							"etichetta" : "jQuery",
+							"argomento" : {
+								"titolo" : "jQuery",
+								"pagine" : [
+									{
+										"sotto-titolo" : "Metodi",
+										"file" : "PagineWeb/JavaScript/jQuery/metodi.html"
+									},
+									{
+										"sotto-titolo" : "AJAX",
+										"file" : "PagineWeb/JavaScript/jQuery/ajax.html"
+									}
+								]
 							}
-						]
-					}
+						}
+						
+					]
 				},
 				{
 					"etichetta" : "JEE",

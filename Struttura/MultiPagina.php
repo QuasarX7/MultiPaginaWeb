@@ -319,7 +319,7 @@ class MultiPagina extends PaginaHTML {
                         if(!is_null($menuPadre)){
                             $menuPadre->aggiungi($nuovoMenu);
                         }else{
-                            self::aggiungiSottomenu($menu->voci(), $nuovoMenu, $etichetta);
+                            self::aggiungiSottomenu($menu->vociMenu(), $nuovoMenu, $etichetta);
                         }
                     }
                 }
