@@ -1,12 +1,12 @@
 {
 	"titolo" : "Domenico dellaPERUTA",
 	"logo"	: "PagineWeb/logo.png",
-	"colore-testo" : "#078",
-	"colore-seleziona" : "#29023B",
+	"colore-testo" : "#ff0",
+	"colore-seleziona" : "blue",
 	"colore-intestazione" : "black",
-	"colore-menu" : "#333",
-	"colore-sottomenu-primo" : "#444",
-	"colore-sottomenu-secondo" : "#555",
+	"colore-menu" : "#333333",
+	"colore-sottomenu-primo" : "red",
+	"colore-sottomenu-secondo" : "green",
 	"home" : "PagineWeb/home.html",
 	"note" : [
 		{
@@ -426,15 +426,20 @@
 				},
 				{
 					"etichetta" : "JEE",
-					"argomento" : {
-						"titolo" : "",
-						"pagine" : [
-							{
-								"sotto-titolo" : "",
-								"file" : "PagineWeb/"
-							}
-						]
-					}
+					"contenuto" : [
+						{
+							"etichetta" : "Servlet",
+							"argomento" :{}
+						},
+						{
+							"etichetta" : "JSP",
+							"argomento" :{}
+						},
+						{
+							"etichetta" : "Spring",
+							"argomento" :{}
+						}
+					]
 				}
 			]
 		}

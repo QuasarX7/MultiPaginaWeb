@@ -5,6 +5,7 @@ include_once 'LibreriaQx7-php/BarraMenu.php';
 include_once 'LibreriaQx7-php/Menu.php';
 include_once 'LibreriaQx7-php/javascript.php';
 include_once 'Argomento.php';
+include_once 'PaginaLogin.php';
 
 /**
  * Classe principale implementa la struttura di un semplice sito web multi-pagina
@@ -18,8 +19,13 @@ class MultiPagina extends PaginaHTML {
     
     const CHIAVE_PAGINA = 'pagina';
     const CHIAVE_ARGOMENTO = 'argomento';
+    
+    const CHIAVE_NOME_ROOT = PaginaLogin::CHIAVE_UTENTE;
+    const CHIAVE_PASSWORD_ROOT = PaginaLogin::CHIAVE_PASSWORD;
+    
     const HOME = 'home';
     const RICERCA = 'ricerca';
+    const LOGIN = 'Utente Amministratore';
     
     const ALTEZZA_INTESTAZIONE_SITO  = 'auto';
     const ALTEZZA_MENU  = '50px';
@@ -41,6 +47,7 @@ class MultiPagina extends PaginaHTML {
     const NOME_FONT_INTESATAZIONE = 'intestazione';
     
     const MENU_HOME = 'Home';
+    
     
     
     
@@ -70,7 +77,7 @@ class MultiPagina extends PaginaHTML {
     protected $coloreMenu;
     protected $coloreIntestazione = 'black';
    
-     
+    protected $accessoRoot = false;
     
     /**
      * Costruttore.
@@ -95,6 +102,16 @@ class MultiPagina extends PaginaHTML {
             }
         }
         
+        if(filter_has_var(INPUT_POST, self::CHIAVE_NOME_ROOT) && filter_has_var(INPUT_POST, self::CHIAVE_PASSWORD_ROOT)){
+            $utente = filter_input(INPUT_POST, self::CHIAVE_NOME_ROOT, FILTER_SANITIZE_STRING);
+            $password = filter_input(INPUT_POST, self::CHIAVE_PASSWORD_ROOT, FILTER_SANITIZE_STRING);
+            if ($password !== false && $utente !== false) {
+                $this->accessoRoot = true;
+            }else{
+                $this->argomento = Argomento::HOME;
+            }
+        }
+        
         
     }
     
@@ -106,9 +123,7 @@ class MultiPagina extends PaginaHTML {
      * @return MultiPagina
      */
     static public function costruisciDaFileJSON(string $file){
-        $json = new Pagina('file JSON',$file);
-        $dati = json_decode($json->testo(),true);
-       return  MultiPagina::costruisciDaJSON($dati);
+        return  MultiPagina::costruisciDaJSON(MultiPagina::datiJSON($file));
     }
     
     /**
@@ -177,6 +192,14 @@ class MultiPagina extends PaginaHTML {
         return $sito;
     }
     
+    
+    
+    static private function datiJSON(string $file){
+        $json = new Pagina('file JSON',$file);
+        $dati = json_decode($json->testo(),true);
+        return $dati;
+    }
+    
     static private function cerca(array $dati,string $cerca,string $predefinito=''){
         foreach ($dati as $etichetta => $valore) {
             if($etichetta == $cerca){
@@ -207,18 +230,37 @@ class MultiPagina extends PaginaHTML {
     }
     
     static private function creaArgomento(array $menu){
-        $lista = $menu['argomento'];
-        if($lista != null){
-            $argomento = new Argomento($lista['titolo']);
-            foreach ($lista['pagine'] as $voce) {
-                $argomento->aggiungiPagina($voce['sotto-titolo'], $voce['file']);
+        if(isset($menu['argomento'])){
+            $lista = $menu['argomento'];
+            if($lista != null){
+                $argomento = new Argomento($lista['titolo']);
+                foreach ($lista['pagine'] as $voce) {
+                    $argomento->aggiungiPagina($voce['sotto-titolo'], $voce['file']);
+                }
+                return $argomento;
             }
-            return $argomento;
         }
         return null;
     }
     
 
+    /**
+     * Aggiungi nuova pagina ad un argomento specificato nel menu.
+     *
+     * @param string $fileJSON
+     * @param array $menu               es.: ['voce_menu','voce_sottomenu',...,'voce_argomento']
+     * @param string $titoloPagina
+     * @param string $filePagina        path dove dovrà risiederà il file contenente (testo o html) della pagina
+     * @param string $htmlPagina        testo...
+     */
+    static public function aggiungiPaginaAlFileJSON(string $fileJSON,array $menu,string $titoloPagina,string $filePagina,string $htmlPagina){
+        $dati = MultiPagina::datiJSON($fileJSON);
+        
+        $json = json_encode($dati,JSON_PRETTY_PRINT);
+        file_put_contents($fileJSON, $json);
+    }
+    
+    
     protected function coloreIntestazione(string $colore) {
         $this->coloreIntestazione = $colore;
     }
@@ -229,7 +271,6 @@ class MultiPagina extends PaginaHTML {
      * @param string $coloreSfondo
      * @param string $coloreTesto
      * @param string $coloreSeleziona
-     * @param string $posizone          se Posizione::FISSA non varia con lo scorrimento della pagina.
      */
     protected  function creaBarraMenu(string $coloreSfondo, string $coloreTesto, string $coloreSeleziona){
         $this->barraMenu = new BarraMenu($coloreSfondo, $coloreTesto, $coloreSeleziona,Posizione::RELATIVA);
@@ -335,7 +376,7 @@ class MultiPagina extends PaginaHTML {
         if(!is_null($this->fontIntestazione)){
             parent::importaFont('intestazione', $this->fontIntestazione);
         }
-        $this->intestazioneSito = new IntestazionePagina(self::ALTEZZA_INTESTAZIONE_SITO,$this->coloreIntestazione,'white');
+        $this->intestazioneSito = new IntestazionePagina(self::ALTEZZA_INTESTAZIONE_SITO,$this->coloreIntestazione,($this->accessoRoot === true) ? 'red' : 'white');
         $this->intestazioneSito->aggiungi($this->creaAccessoUtente() . $this->titolo);
         $this->intestazioneSito->aggiungi(
             new Stile(
@@ -348,11 +389,12 @@ class MultiPagina extends PaginaHTML {
             );
         parent::aggiungi($this->intestazioneSito->vedi());
         
+        
     }
     private function creaAccessoUtente(){
         $link = new Tag('a',
             [
-                new Attributo('href', '?pagina=0&argomento='.self::RICERCA),
+                new Attributo('href', '?pagina=0&argomento='.self::LOGIN),
                 
             ]);
         $immagine = new Tag(
@@ -374,17 +416,19 @@ class MultiPagina extends PaginaHTML {
             foreach ($this->vociMenu as $voce) {
                 $this->barraMenu->aggiungi($voce);
             }
-            $this->creaMenuInfo();
+            $this->creaMenuRicercaInfo();
             parent::aggiungi($this->barraMenu->vedi());// disegna corpo
-            foreach ($this->barraMenu->regoleCSS() as $regolaCSS) {
-                parent::aggiungi($regolaCSS);//aggiungi regola al tag style del head della pagina HTML
-            }
-            
-          
         }
     }
+    
+    private function creaLogin(){
+        $argomento = new Argomento(self::LOGIN);
+        $paginaLogin = new PaginaLogin();
+        $argomento->aggiungiPaginaCodice(self::LOGIN, $paginaLogin->vedi());
+        $this->aggiungiArgomento($argomento);
+    }
 
-    private function creaMenuInfo(){
+    private function creaMenuRicercaInfo(){
         $this->barraMenu->aggiungi(new Menu('Cerca', '?pagina=0&argomento='.self::RICERCA));
         
         $argomento = new Argomento(self::RICERCA);
@@ -936,12 +980,7 @@ class MultiPagina extends PaginaHTML {
         return '<b style="color:white">pag. '.($indice+1).'</b>&nbsp ';
     }
     
-    private function animaMenu(){
-        if(!is_null($this->barraMenu)){
-            $this->paginaTesto->aggiungi($this->barraMenu->azioneStickyMenu(self::ID_ELENCO));
-            
-        }
-    }
+    
     
     /**
      * {@inheritDoc}
@@ -955,6 +994,7 @@ class MultiPagina extends PaginaHTML {
 
             self::creaIntestazioneSito();
             self::creaMenu();
+            self::creaLogin();
             $pagina = new AreaPagina();
             
             if(isset($this->argomenti[$this->argomento])){
@@ -986,8 +1026,12 @@ class MultiPagina extends PaginaHTML {
                     // crea pagina aggiugendo il testo per argomento e indice
                     $testo = '';
                     if($argomento instanceof Argomento){
-                        $testo = $argomento->pagina($this->indice);
-                        $this->paginaTesto->aggiungi($testo);
+                        if($this->accessoRoot !== true){
+                            $testo = $argomento->pagina($this->indice);
+                            $this->paginaTesto->aggiungi($testo);
+                        }else{
+                            $this->paginaTesto->aggiungi('<b>Ciao Mondo</b>');
+                        }
                     }
                     //visualizza i pulsanti di navigazione pagina alla fine del testo
                     //se il testo è di notevole dimensione.
@@ -995,7 +1039,6 @@ class MultiPagina extends PaginaHTML {
                         $this->paginaTesto->aggiungi($this->indiceDiPagina);
                     }
                     //script inserito in '$this->paginaTesto'
-                    self::animaMenu();
                     $sezionePrincipale = new ParagrafoPagina(null, 'auto');
                     $sezionePrincipale->aggiungi($this->paginaTesto);
                     $sezionePrincipale->aggiungi($this->noteLateraleDx);

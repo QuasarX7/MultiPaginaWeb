@@ -5,6 +5,13 @@ include_once 'LibreriaQx7-php/Attributo.php';
 include_once 'LibreriaQx7-php/CSS.php';
 include_once 'LibreriaQx7-php/javascript.php';
 
+/**
+ * Classe che implementa un pannello 'div' per la ricerca di un valore contenuto in una
+ * variabile tabella.
+ * 
+ * @author Dott. Domenico della Peruta
+ *
+ */
 class PaginaCerca extends Tag{
     
     const FONT_CAMPO     = 'campo';

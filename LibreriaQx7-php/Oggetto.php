@@ -23,7 +23,14 @@ abstract class Oggetto {
             if(!array_key_exists('style',$this->attributi)){
                 $this->attributi[$valore->nome()] = $valore;
             }else{
-                $this->attributi[$valore->nome()]->concatenaStringaCSS($valore->valore());
+                $stile = $this->attributi[$valore->nome()];
+                if($stile  instanceof Stile){
+                    $stile->concatenaStringaCSS($valore->valore());
+                }elseif ($stile  instanceof Attributo){
+                    if(is_string($valore->valore())){
+                        $stile->aggiungiValore($stile->valore().';'.$valore->valore());
+                    }
+                }
             }
             
         }elseif ($valore instanceof Attributo) {

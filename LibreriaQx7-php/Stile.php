@@ -45,6 +45,8 @@ class Stile extends Attributo{
                 parent::__construct('style', $css . '');
             }
             
+        }elseif (func_num_args() == 0) {
+            parent::__construct('style', '');
         }
     }
     

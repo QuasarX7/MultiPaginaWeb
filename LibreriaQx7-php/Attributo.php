@@ -26,17 +26,21 @@ class Attributo{
     public function valore() {
         return $this->valore;
     }
+    
+    public function aggiungiValore($valore) {
+        $this->valore=$valore;
+    }
 
     public function __toString() {
         $tag = '';
         if(strlen($this->nome) > 0){
             $tag = $this->nome;
-        }
-        if (!is_null($tag)) {
-            if (!is_null($this->valore)) {
-                $tag .=  "=\"" . $this->valore . "\"";
-            }else{
-                $tag .=  "=\"\"";
+            if (!is_null($tag)) {
+                if (!is_null($this->valore)) {
+                    $tag .=  "=\"" . $this->valore . "\"";
+                }else{
+                    $tag .=  "=\"\"";
+                }
             }
         }
         return $tag;

@@ -20,6 +20,9 @@ class PaginaHTML extends Oggetto{
     const LIMITE_SMARTPHONE = 320;//480;
     
     const JQUERY = 'LibreriaQx7-php/jquery-3.3.1.slim.min.js';//NON FUNZIONALITA AJAX
+    const BOOTSTRAP_CSS = 'LibreriaQx7-php/bootstrap-4.4.1/css/bootstrap.min.css';
+    const BOOTSTRAP_JS = 'LibreriaQx7-php/bootstrap-4.4.1/js/bootstrap.min.js';
+    
     protected $titolo;
     protected $logo = "";
     protected $ricerca = '';
@@ -113,6 +116,20 @@ class PaginaHTML extends Oggetto{
     private function importaLibreriaJQuery(){
         return new Tag('script',[new Attributo('src',self::JQUERY)],' ').'';
     }
+    
+    private function importaLibreriaBootstrapJavaScript(){
+        return new Tag('script',[new Attributo('src',self::BOOTSTRAP_JS)],' ').'';
+    }
+    
+    private function importaLibreriaBootstrapCSS(){
+        return new Tag(
+            "link",
+            [
+                new Attributo("rel", "stylesheet"),
+                new Attributo("href", self::BOOTSTRAP_CSS)
+            ]
+            ).'';
+    }
 
     public function cssCellulareVerticale(array $regoleCss){
         $this->aggiungi(
@@ -192,7 +209,7 @@ class PaginaHTML extends Oggetto{
     public function __toString() {
         $intestazione = "<!DOCTYPE html>";
         
-        $body = new Tag("body", $this->attributi, $this->contenuto);
+        $body = new Tag("body", $this->attributi, $this->contenuto . self::importaLibreriaBootstrapJavaScript() );
         $dispositiviMobili = new Tag(
             "meta",
             [
@@ -234,7 +251,7 @@ class PaginaHTML extends Oggetto{
         }
         
         $stile = new Tag('style',new Attributo('type','text/css'),$regoleCSS);
-        $head = new Tag("head", $logo. $correzioneIE . $codifica . $ricercaWeb .$dispositiviMobili. self::importaLibreriaJQuery() . $this->javascript . $titolo . $stile  );
+        $head = new Tag("head", $logo. self::importaLibreriaBootstrapCSS(). $correzioneIE . $codifica . $ricercaWeb .$dispositiviMobili. self::importaLibreriaJQuery() . $this->javascript . $titolo . $stile  );
         $html = new Tag("html",  $head  . $this->jquery . $body . '');
         return $intestazione . $html->vedi();
     }
