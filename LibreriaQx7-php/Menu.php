@@ -182,7 +182,6 @@ class Menu extends BarraMenu{
         
     }
     
-
     
     /**
      * {@inheritDoc}

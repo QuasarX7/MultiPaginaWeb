@@ -157,6 +157,36 @@ class BarraMenu extends Tag{
             $this->aggiungi($lista);
     }
     
+    
+    private function stileSeleziona() {
+        $css = new Tag('style');
+        $selezione = new  RegolaCSS('nav a:hover, .dropdown-item:hover', [
+            new DichiarazioneCSS('background-color', self::$coloreSeleziona)
+        ]);
+        $css->aggiungi($selezione.'');
+        
+        $selezione = new  RegolaCSS('.navbar, .dropdown-menu', [
+            new DichiarazioneCSS('padding', '0'),
+            new DichiarazioneCSS('border-radius', '0'),
+            new DichiarazioneCSS('box-shadow','4px 4px 5px #111')
+        ]);
+        $css->aggiungi($selezione.'');
+        
+        $menuRadice = new  RegolaCSS('.dropdown-item', [
+            new DichiarazioneCSS('padding-top', '0'),
+            new DichiarazioneCSS('padding-bottom', '0'),
+            new DichiarazioneCSS('padding-left', '20px')
+        ]);
+        $css->aggiungi($menuRadice.'');
+        
+        $menuRadice = new  RegolaCSS('nav a', [
+            new DichiarazioneCSS('line-height','40px')
+        ]);
+        $css->aggiungi($menuRadice.'');
+
+        $this->aggiungi($css);
+    }
+    
 
     /**
      * {@inheritDoc}
@@ -165,6 +195,7 @@ class BarraMenu extends Tag{
     public function __toString(){
         if($this->numeroVoci() > 0){
             if($this->nome == 'nav'){ 
+                $this->stileSeleziona();
                 // se è un menu principale
                 $this->aggiungi(new Attributo('class','navbar navbar-expand-md sticky-top'));
                 $this->aggiungi(new Stile('background-color',self::$coloreSfondo));
