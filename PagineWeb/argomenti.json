@@ -1,12 +1,12 @@
 {
 	"titolo" : "Domenico dellaPERUTA",
 	"logo"	: "PagineWeb/logo.png",
-	"colore-testo" : "#ff0",
-	"colore-seleziona" : "blue",
+	"colore-testo" : "#D6EAF8",
+	"colore-seleziona" : "#2E86C1",
 	"colore-intestazione" : "black",
-	"colore-menu" : "#333333",
-	"colore-sottomenu-primo" : "red",
-	"colore-sottomenu-secondo" : "green",
+	"colore-menu" : "#17202A",
+	"colore-sottomenu-primo" : "#2C3E50",
+	"colore-sottomenu-secondo" : "#566573",
 	"home" : "PagineWeb/home.html",
 	"note" : [
 		{

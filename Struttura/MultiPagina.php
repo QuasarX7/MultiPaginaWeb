@@ -157,7 +157,7 @@ class MultiPagina extends PaginaHTML {
         $coloreTesto=MultiPagina::cerca($dati, 'colore-testo','#B0E0E6');
         $coloreSeleziona=MultiPagina::cerca($dati, 'colore-seleziona','#483D8B');
         $coloreIntestazione=MultiPagina::cerca($dati, 'colore-intestazione','blue');
-        $coloreMenu=MultiPagina::cerca($dati, 'colore-menu','#333');
+        $coloreMenu=MultiPagina::cerca($dati, 'colore-menu','#111');
         $coloreSottoMenuPrimoLivello=MultiPagina::cerca($dati, 'colore-sottomenu-primo',$coloreMenu);
         $coloreSottoMenuSecondoLivello=MultiPagina::cerca($dati, 'colore-sottomenu-secondo',$coloreSottoMenuPrimoLivello);
         

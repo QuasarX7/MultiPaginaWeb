@@ -229,7 +229,8 @@ class PaginaHTML extends Oggetto{
             ]
         );
         
-        $codifica = new Tag("meta",[new Attributo('encoding','utf-8')]);
+        //<meta charset="utf-8">
+        $codifica = new Tag("meta",[new Attributo('charset','utf-8')]);
         $ricercaWeb = new Tag(
             "meta",
             [
