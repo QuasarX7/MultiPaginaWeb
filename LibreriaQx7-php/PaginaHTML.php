@@ -22,6 +22,8 @@ class PaginaHTML extends Oggetto{
     const JQUERY = 'LibreriaQx7-php/jquery-3.3.1.slim.min.js';//NON FUNZIONALITA AJAX
     const BOOTSTRAP_CSS = 'LibreriaQx7-php/bootstrap-4.4.1/css/bootstrap.min.css';
     const BOOTSTRAP_JS = 'LibreriaQx7-php/bootstrap-4.4.1/js/bootstrap.min.js';
+    const PRISMA_JS = 'LibreriaQx7-php/prism.js';
+    const PRISMA_CSS = 'LibreriaQx7-php/prism.css';
     
     protected $titolo;
     protected $logo = "";
@@ -111,6 +113,20 @@ class PaginaHTML extends Oggetto{
         if(is_string($file) && is_string($nome)){
             $this->file .= "@font-face {font-family: '".$nome."';src: url('".$file."') format('truetype');}";
         }
+    }
+    
+    private function importaLibreriaPrismaCSS(){
+        return new Tag(
+            "link",
+            [
+                new Attributo("rel", "stylesheet"),
+                new Attributo("href", self::PRISMA_CSS)
+            ]
+            ).'';
+    }
+    
+    private function importaLibreriaPrismaJS(){
+        return new Tag('script',[new Attributo('src',self::PRISMA_JS)],' ').'';
     }
     
     private function importaLibreriaJQuery(){
@@ -209,7 +225,7 @@ class PaginaHTML extends Oggetto{
     public function __toString() {
         $intestazione = "<!DOCTYPE html>";
         
-        $body = new Tag("body", $this->attributi, $this->contenuto . self::importaLibreriaBootstrapJavaScript() );
+        $body = new Tag("body", $this->attributi, $this->contenuto . self::importaLibreriaBootstrapJavaScript() .self::importaLibreriaPrismaJS() );
         $dispositiviMobili = new Tag(
             "meta",
             [
@@ -252,7 +268,7 @@ class PaginaHTML extends Oggetto{
         }
         
         $stile = new Tag('style',new Attributo('type','text/css'),$regoleCSS);
-        $head = new Tag("head", $logo. self::importaLibreriaBootstrapCSS(). $correzioneIE . $codifica . $ricercaWeb .$dispositiviMobili. self::importaLibreriaJQuery() . $this->javascript . $titolo . $stile  );
+        $head = new Tag("head", $logo. self::importaLibreriaPrismaCSS(). self::importaLibreriaBootstrapCSS(). $correzioneIE . $codifica . $ricercaWeb .$dispositiviMobili. self::importaLibreriaJQuery() . $this->javascript . $titolo . $stile  );
         $html = new Tag("html",  $head  . $this->jquery . $body . '');
         return $intestazione . $html->vedi();
     }
