@@ -5,6 +5,10 @@ include_once 'Menu.php';
 
 class BarraMenu extends Tag{
     
+    const PULSANTE_RICERCA = 'submit_ricerca';
+    const CAMPO_RICERCA = 'ricerca_argomento';
+    const INPUT_RICERCA = 'input_campo_ricerca';
+    
     protected $livello;
     protected $menu = array();
     protected static $coloreSfondo; 
@@ -17,12 +21,17 @@ class BarraMenu extends Tag{
     protected static $coloreTestoVoce2liv;
     
     protected static $coloreSeleziona;
+    
+    private static $ricercaURL;
 
 
     /**
      * Costruisce un tag 'nav'.
      */
     public function __construct($coloreSfondo,$coloreTesto,$coloreSeleziona){
+        if(!isset(self::$ricercaURL)){
+            self::$ricercaURL = array();
+        }
         $this->livello = 0;
         $this->nome = 'nav';
         $this->contenuto = ' ';
@@ -43,6 +52,11 @@ class BarraMenu extends Tag{
             self::$coloreTestoVoce2liv = self::$coloreTestoVoce;
         }
     }
+    
+    static public function aggiungiListaRicercaURL(array $lista){
+        self::$ricercaURL = $lista;
+    }
+    
     
     /**
      * Numero di voci presenti.
@@ -112,6 +126,74 @@ class BarraMenu extends Tag{
     }
     
  
+    private function creaCampoRicerca(Tag $div){
+        if(count(self::$ricercaURL) > 0){
+            /*
+             <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              </form>
+             */
+            $form = new Tag('form',[new Attributo('class', 'form-inline'),new Attributo('id', self::PULSANTE_RICERCA)]);
+            $input= new Tag('input',[
+                new Attributo('id', self::CAMPO_RICERCA),
+                new Attributo('class', 'form-control mr-sm-2'),
+                new Attributo('type', 'search'),
+                new Attributo('placeholder', 'Argomento'),
+                new Attributo('aria-label', 'Search'),
+                new Attributo('list', self::INPUT_RICERCA)
+            ]);
+            $form->aggiungi($input);
+            $inputPagina = new Tag('input',[
+                new Attributo('id', 'paginaR'),
+                new Attributo('name', 'pagina'),
+                new Attributo('type', 'hidden'),
+                new Attributo('value', '')
+            ]);
+            $form->aggiungi($inputPagina);
+            $inputArgomento = new Tag('input',[
+                new Attributo('id', 'argomentoR'),
+                new Attributo('name', 'argomento'),
+                new Attributo('type', 'hidden'),
+                new Attributo('value', '')
+            ]);
+            $form->aggiungi($inputArgomento);
+            $pulsante = new Tag(
+                'button',[
+                    new Attributo('class', 'btn btn-outline-success my-2 my-sm-0'),
+                    new Attributo('type', 'submit')
+                ],
+                'Cerca'
+            );
+            $form->aggiungi($pulsante);
+            $this->vociMenuCampoRicerca($form);
+            $form->aggiungi(new JQuery(
+                "$('#".self::PULSANTE_RICERCA."').submit(function(){
+                        var value = $('#".self::CAMPO_RICERCA."').val();
+                        var queryString = $('#".self::INPUT_RICERCA." [value=\"' + value + '\"]').data('value');
+                        var params = {}, queries, temp, i, l;
+                        queries = queryString.split(\"&\");
+                        for ( i = 0, l = queries.length; i < l; i++ ) {
+                            temp = queries[i].split('=');
+                            params[temp[0]] = temp[1];
+                        }
+                        $('#argomentoR').val(decodeURI(params['argomento']));
+                        $('#paginaR').val(params['?pagina']);
+                });"    
+            ));
+            $div->aggiungi($form);
+        }
+    }
+    
+    private function vociMenuCampoRicerca(Tag $form){
+            $menuCampoRicerca = new Tag('datalist',[new Attributo('id', self::INPUT_RICERCA)]);
+            foreach (self::$ricercaURL as $argomento => $url) {
+                $voce = new Tag('option',[new Attributo('data-value', $url),new Attributo('value', $argomento)]);
+                $menuCampoRicerca->aggiungi($voce);
+            }
+            $form->aggiungi($menuCampoRicerca);
+       
+    }
    
     private function creaLogoBarra(string $logo){
          /*
@@ -148,13 +230,15 @@ class BarraMenu extends Tag{
                 new Attributo('class','collapse navbar-collapse'),
                 new Attributo('id','navbarSupportedContent')
             ]);
-            $this->aggiungi($area);
             
             $lista = new Tag('ul',new Attributo('class',"navbar-nav mr-auto"));
             foreach ($this->menu as  $voce) {
                 $lista->aggiungi($voce);
             }
-            $this->aggiungi($lista);
+            $area->aggiungi($lista);
+            
+            $this->creaCampoRicerca($area);
+            $this->aggiungi($area);
     }
     
     

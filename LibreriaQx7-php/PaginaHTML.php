@@ -231,8 +231,8 @@ class PaginaHTML extends Oggetto{
             [
                 new Attributo('name','viewport'),
                 new Attributo('content','width=device-width'),
-                new Attributo('initial-scale','2'),
-                new Attributo('maximum-scale','2')
+                new Attributo('initial-scale','1'),
+                new Attributo('maximum-scale','1')
             ]
         );
         //<link rel="icon" href="/favicon.png" type="image/png" />

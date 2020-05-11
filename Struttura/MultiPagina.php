@@ -17,6 +17,8 @@ include_once 'PaginaLogin.php';
 class MultiPagina extends PaginaHTML {
     const ID_ELENCO = 'ElencoPagine'; // ID indici
     
+    const CHIAVE_CAMPO_RICERCA = BarraMenu::CAMPO_RICERCA;
+    
     const CHIAVE_PAGINA = 'pagina';
     const CHIAVE_ARGOMENTO = 'argomento';
     
@@ -37,7 +39,7 @@ class MultiPagina extends PaginaHTML {
     const LUNGHEZZA_PANNELLO_DX  = '29%';
     
     const FONT_TESTO_STANDARD      = 'Struttura/Inter-Regular.ttf';
-    const FONT_TESTO_SPECIALE      = 'Struttura/Niconne-Regular.ttf';
+    const FONT_TESTO_SPECIALE      = 'Struttura/Aaargh.ttf';//'Struttura/Niconne-Regular.ttf';
     const FONT_TESTO_SPACEMONO     = 'Struttura/SpaceMono-Regular.ttf';
     const FONT_TITOLO_PAGINA_SPECIALE = 'FrederickatheGreat-Regular.ttf';
     
@@ -111,6 +113,7 @@ class MultiPagina extends PaginaHTML {
                 $this->argomento = Argomento::HOME;
             }
         }
+    
         
         
     }
@@ -421,22 +424,19 @@ class MultiPagina extends PaginaHTML {
         }
     }
     
-    private function creaLogin(){
-        $argomento = new Argomento(self::LOGIN);
-        $paginaLogin = new PaginaLogin();
-        $argomento->aggiungiPaginaCodice(self::LOGIN, $paginaLogin->vedi());
-        $this->aggiungiArgomento($argomento);
-    }
+    
 
+    /**
+     * Crea un menu a tendina nella campo di ricerca della barra menu principale.
+     */
     private function creaMenuRicercaInfo(){
-        $this->barraMenu->aggiungi(new Menu('Cerca', '?pagina=0&argomento='.self::RICERCA));
-        
-        $argomento = new Argomento(self::RICERCA);
-        $paginaRicerca = new PaginaRicercaWeb($this->listaRicerca());
-        $argomento->aggiungiPaginaCodice(self::RICERCA, $paginaRicerca->vedi());
-        $this->aggiungiArgomento($argomento);
+        BarraMenu::aggiungiListaRicercaURL($this->listaRicerca());
     }
     
+    /**
+     *  Lista di tutti gli URL delle pagine dei singoli argomenti presenti nel sito.
+     * @return array
+     */
     private function listaRicerca(){
         $lista = array();
         foreach ($this->argomenti as $argomento) {
@@ -444,6 +444,13 @@ class MultiPagina extends PaginaHTML {
                 $lista = array_merge($lista,$argomento->listaIndici());
         }
         return $lista;
+    }
+    
+    private function creaLogin(){
+        $argomento = new Argomento(self::LOGIN);
+        $paginaLogin = new PaginaLogin();
+        $argomento->aggiungiPaginaCodice(self::LOGIN, $paginaLogin->vedi());
+        $this->aggiungiArgomento($argomento);
     }
     
     /**
@@ -625,7 +632,7 @@ class MultiPagina extends PaginaHTML {
         parent::importaFont('Inter', self::FONT_TESTO_STANDARD);
         parent::importaFont('Prosto One', self::FONT_TITOLO_PAGINA_STANDARD);
         parent::importaFont('Anton', self::FONT_MENU_STANDARD);
-        parent::importaFont('Niconne', self::FONT_TESTO_SPECIALE);
+        parent::importaFont(/*'Niconne'*/'Aaargh', self::FONT_TESTO_SPECIALE);
         parent::importaFont('Space Mono', self::FONT_TESTO_SPACEMONO);
         
         $body = new RegolaCSS(
@@ -658,8 +665,11 @@ class MultiPagina extends PaginaHTML {
                 new DichiarazioneCSS('margin','2px'),
                 new DichiarazioneCSS('padding','2px'),
                 new DichiarazioneCSS('text-align','justify'),
-                new DichiarazioneCSS('font-size','26px'),
-                new DichiarazioneCSS('font-family', "'Niconne', sans-serif")
+                //new DichiarazioneCSS('font-size','26px'),
+                //new DichiarazioneCSS('font-family', "'Niconne', sans-serif")
+                
+                new DichiarazioneCSS('font-size','15px'),
+                new DichiarazioneCSS('font-family', "'Aaargh', sans-serif")
             ]
             );
         $this->aggiungi($classe);
