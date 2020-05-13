@@ -177,7 +177,8 @@ class BarraMenu extends Tag{
                             temp = queries[i].split('=');
                             params[temp[0]] = temp[1];
                         }
-                        $('#argomentoR').val(decodeURI(params['argomento']));
+                        var arg = decodeURI(params['argomento']);
+                        $('#argomentoR').val(arg.trim());
                         $('#paginaR').val(params['?pagina']);
                 });"    
             ));

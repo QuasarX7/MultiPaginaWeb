@@ -103,6 +103,7 @@ class MultiPagina extends PaginaHTML {
                 $this->argomento = Argomento::HOME;
             }
         }
+        $this->argomento = urldecode($this->argomento);
         
         if(filter_has_var(INPUT_POST, self::CHIAVE_NOME_ROOT) && filter_has_var(INPUT_POST, self::CHIAVE_PASSWORD_ROOT)){
             $utente = filter_input(INPUT_POST, self::CHIAVE_NOME_ROOT, FILTER_SANITIZE_STRING);
@@ -113,9 +114,20 @@ class MultiPagina extends PaginaHTML {
                 $this->argomento = Argomento::HOME;
             }
         }
+    }
     
-        
-        
+    /**
+     * Verifica l'esistenza dell'argomento.
+     * @param string $cerca
+     * @return boolean
+     */
+    private function verificaArgomento(string $cerca){
+        foreach ($this->argomenti as $argomento) {
+            if($argomento instanceof Argomento)
+                if($argomento->nome() === $cerca)
+                    return true;
+        }
+        return false;
     }
     
     /**
