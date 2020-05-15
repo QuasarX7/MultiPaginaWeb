@@ -103,7 +103,13 @@ class MultiPagina extends PaginaHTML {
                 $this->argomento = Argomento::HOME;
             }
         }
-        $this->argomento = urldecode($this->argomento);
+        if(filter_has_var(INPUT_GET, self::CHIAVE_CAMPO_RICERCA)){
+            $valore = filter_input(INPUT_GET, self::CHIAVE_CAMPO_RICERCA, FILTER_SANITIZE_STRING);
+            if ($valore !== false) {
+                $this->argomento = urldecode($this->argomento);
+            }
+        }
+        
         
         if(filter_has_var(INPUT_POST, self::CHIAVE_NOME_ROOT) && filter_has_var(INPUT_POST, self::CHIAVE_PASSWORD_ROOT)){
             $utente = filter_input(INPUT_POST, self::CHIAVE_NOME_ROOT, FILTER_SANITIZE_STRING);
@@ -1069,11 +1075,11 @@ class MultiPagina extends PaginaHTML {
                 
                 }
 
-                self::aggiungi($pagina);
-                self::cssBody();
-                self::cssElencoPagine();
-                self::cssFormattazionePagina();
             }
+            self::aggiungi($pagina);
+            self::cssBody();
+            self::cssElencoPagine();
+            self::cssFormattazionePagina();
         }else{
             self::aggiungi(
                 '<h1>Il browser non è compatibile con il codice HTML5 della pagina</h1><br><br><h2>'.$controllo.'</h2>'

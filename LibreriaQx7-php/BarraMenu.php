@@ -137,6 +137,7 @@ class BarraMenu extends Tag{
             $form = new Tag('form',[new Attributo('class', 'form-inline'),new Attributo('id', self::PULSANTE_RICERCA)]);
             $input= new Tag('input',[
                 new Attributo('id', self::CAMPO_RICERCA),
+                new Attributo('name', self::CAMPO_RICERCA),
                 new Attributo('class', 'form-control mr-sm-2'),
                 new Attributo('type', 'search'),
                 new Attributo('placeholder', 'Argomento'),
@@ -177,7 +178,7 @@ class BarraMenu extends Tag{
                             temp = queries[i].split('=');
                             params[temp[0]] = temp[1];
                         }
-                        var arg = decodeURI(params['argomento']);
+                        var arg = params['argomento'];
                         $('#argomentoR').val(arg.trim());
                         $('#paginaR').val(params['?pagina']);
                 });"    
