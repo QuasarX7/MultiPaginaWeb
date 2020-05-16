@@ -22,7 +22,7 @@
 					"etichetta" : "Informatica",
 					"contenuto" : [
 						{
-							"etichetta" : "Intelligenza_Artificiale",
+							"etichetta" : "Intelligenza Artificiale",
 							"argomento" : {
 								"titolo" : "Intelligenza Artificiale",
 								"pagine" : [
@@ -62,7 +62,7 @@
 							}
 						},
 						{
-							"etichetta" : "Sicurezza_Informatica",
+							"etichetta" : "Sicurezza Informatica",
 							"argomento" : {
 								"titolo" : "Sicurezza Informatica",
 								"pagine" : [
@@ -315,9 +315,11 @@
 		},
 		{
 			"etichetta" : "Sorriso",
+			"visibile" : false,
 			"contenuto" : [
 				{
 					"etichetta" : "ASCII Art",
+					"visibile" : true,
 					"argomento" : {
 						"titolo" : "Immagine Art ASCII",
 						"pagine" : [
@@ -340,6 +342,7 @@
 		},
 		{
 			"etichetta" : "Prontuario",
+			"visibile" : true,
 			"contenuto" : [
 				{
 					"etichetta" : "HTML",
@@ -426,6 +429,7 @@
 				},
 				{
 					"etichetta" : "JEE",
+					"visibile" : false,
 					"contenuto" : [
 						{
 							"etichetta" : "Servlet",

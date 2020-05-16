@@ -234,6 +234,7 @@ class MultiPagina extends PaginaHTML {
         if(count($menu) > 0){
             foreach ($menu as $lista) {
                 $menuGenitore = null;
+                if(isset($lista['visibile']) && $lista['visibile'] === false) continue;
                 foreach ($lista as $etichetta => $voce) {
                     if($etichetta == 'etichetta'){
                         $argomento = MultiPagina::creaArgomento($lista);
