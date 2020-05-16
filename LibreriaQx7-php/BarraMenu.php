@@ -128,12 +128,6 @@ class BarraMenu extends Tag{
  
     private function creaCampoRicerca(Tag $div){
         if(count(self::$ricercaURL) > 0){
-            /*
-             <form class="form-inline">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-              </form>
-             */
             $form = new Tag('form',[new Attributo('class', 'form-inline'),new Attributo('id', self::PULSANTE_RICERCA)]);
             $input= new Tag('input',[
                 new Attributo('id', self::CAMPO_RICERCA),
@@ -216,7 +210,8 @@ class BarraMenu extends Tag{
         ]);
         $pulsante->aggiungi(new Stile([
             new DichiarazioneCSS('background-color',self::$coloreTesto),
-            new DichiarazioneCSS('color',self::$coloreSfondo)
+            new DichiarazioneCSS('color',self::$coloreSfondo),
+            new DichiarazioneCSS('margin','5px')
         ]));
         $pulsante->aggiungi(new Tag("span",[new Attributo("class", "navbar-toggler-icon")]),'');
         $pulsante->aggiungi("🌫");
@@ -251,12 +246,12 @@ class BarraMenu extends Tag{
         ]);
         $css->aggiungi($selezione.'');
         
-        $selezione = new  RegolaCSS('.navbar, .dropdown-menu', [
+        $menu = new  RegolaCSS('.navbar, .dropdown-menu', [
             new DichiarazioneCSS('padding', '0'),
             new DichiarazioneCSS('border-radius', '0'),
             new DichiarazioneCSS('box-shadow','4px 4px 5px #111')
         ]);
-        $css->aggiungi($selezione.'');
+        $css->aggiungi($menu.'');
         
         $menuRadice = new  RegolaCSS('.dropdown-item', [
             new DichiarazioneCSS('padding-top', '0'),
@@ -266,9 +261,21 @@ class BarraMenu extends Tag{
         $css->aggiungi($menuRadice.'');
         
         $menuRadice = new  RegolaCSS('nav a', [
-            new DichiarazioneCSS('line-height','40px')
+            new DichiarazioneCSS('line-height','40px'),
+            new DichiarazioneCSS('padding-left', '20px')
         ]);
         $css->aggiungi($menuRadice.'');
+        
+        $voci = new  RegolaCSS('.navbar-nav .nav-link', [
+            new DichiarazioneCSS('padding-left', '20px'),
+            new DichiarazioneCSS('padding-right', '20px')
+        ]);
+        $css->aggiungi($voci.'');
+        /*
+         .navbar-nav .nav-link {
+    padding-right: 0;
+    padding-left: 0;
+    /* border-color: red; */
 
         $this->aggiungi($css);
     }

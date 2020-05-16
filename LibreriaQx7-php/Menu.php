@@ -174,7 +174,7 @@ class Menu extends BarraMenu{
                         new DichiarazioneCSS('padding-bottom', '0'),
                         new DichiarazioneCSS('padding-left', '20px')
                     ]));
-                    $frecciaDX = new Tag('span',[new Attributo('style', 'float:right;')],'⯈');
+                    $frecciaDX = new Tag('span',[new Attributo('style', 'float:right;')],'►');
                     $this->aggiungi($this->etichetta . $frecciaDX);
                 }
             }
