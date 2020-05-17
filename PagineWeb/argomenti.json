@@ -352,6 +352,10 @@
 							{
 								"sotto-titolo" : "Tag",
 								"file" : "PagineWeb/HTML/tag.html"
+							},
+							{
+								"sotto-titolo" : "table",
+								"file" : "PagineWeb/HTML/tabella.html"
 							}
 						]
 					}

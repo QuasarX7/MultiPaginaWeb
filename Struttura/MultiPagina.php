@@ -674,9 +674,109 @@ class MultiPagina extends PaginaHTML {
             ]
             );
         $this->aggiungi($aside);
-        self::classeTesto();//casse speciale dei tag di tipo div
+        
+        //classi speciale di formattazione del testo
+        $this->classeTesto();
+        $this->classeTecnico();
     }
     
+    private function classeTecnico(){
+        
+        $classe = new RegolaCSS(
+            '.tecnico',
+            [
+                new DichiarazioneCSS('margin','4px'),
+                new DichiarazioneCSS('padding','4px'),
+                new DichiarazioneCSS('text-align','justify'),
+                
+                new DichiarazioneCSS('font-size','15px'),
+                new DichiarazioneCSS('font-family', "'Aaargh', sans-serif")
+            ]
+            );
+        $this->aggiungi($classe);
+        
+        $kbd = new RegolaCSS(
+            '.tecnico kbd',
+            [
+                new DichiarazioneCSS('font-size','16px'),
+                new DichiarazioneCSS('font-family', "'Aaargh', sans-serif"),
+                new DichiarazioneCSS('font-weight', 'bold'),
+                new DichiarazioneCSS('color','#000'),
+                new DichiarazioneCSS('background','#FFF')
+            ]
+            );
+        $this->aggiungi($kbd);
+        
+        $titolo = new RegolaCSS(
+            '.tecnico h1,.tecnico h2,.tecnico h3',
+            [
+                new DichiarazioneCSS('margin-top','30px'),
+                new DichiarazioneCSS('margin-bottom','20px'),
+                new DichiarazioneCSS('font-weight','normal'),
+                new DichiarazioneCSS('text-align','center'),
+                new DichiarazioneCSS('color','#000'),
+                new DichiarazioneCSS('background','#FFF'),
+                new DichiarazioneCSS('font-family', "'intestazione', script")
+            ]
+            );
+        $this->aggiungi($titolo);
+        
+        $link_focus = new RegolaCSS(
+            '.tecnico a:hover,.tecnico a:active,.tecnico a.linkInterno:hover,.tecnico a.linkInterno:active',
+            [
+                new DichiarazioneCSS('color', 'orange'),
+                new DichiarazioneCSS('text-decoration', 'underline')
+            ]
+            );
+        $this->aggiungi($link_focus);
+        
+        $tabella = new RegolaCSS(
+            '.tecnico td, .tecnico th',
+            [
+                new DichiarazioneCSS('margin','4px'),
+                new DichiarazioneCSS('padding','4px')
+            ]
+            );
+        $this->aggiungi($tabella);
+        
+        $schedario = new RegolaCSS(
+            '.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active',
+            [
+                new DichiarazioneCSS('color',$this->coloreSelezionaIndicePagina),
+                new DichiarazioneCSS('background-color',$this->coloreMenu),
+                new DichiarazioneCSS('font-size','16px'),
+                new DichiarazioneCSS('font-family', "'Anton', sans-serif")
+            ]
+            );
+        $this->aggiungi($schedario);
+        /*
+         * .nav-tabs .nav-link {
+    /* border: 1px solid transparent; *
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+
+         */
+        $schedario = new RegolaCSS(
+            '.tecnico .nav-tabs .nav-link',
+            [
+                new DichiarazioneCSS(' border', '1px solid grey')
+            ]
+            );
+        $this->aggiungi($schedario);
+        
+        $schedario_focus = new RegolaCSS(
+            '.tecnico .nav-tabs a:hover,.tecnico .nav-tabs a:active,.tecnico .nav-tabs a.linkInterno:hover,.tecnico .nav-tabsa.linkInterno:active',
+            [
+                new DichiarazioneCSS('color', 'white'),
+                new DichiarazioneCSS('text-decoration', 'none')
+            ]
+            );
+        $this->aggiungi($schedario_focus);
+    }
+    
+    /**
+     * Imposta lo stile "testo"
+     */
     private function classeTesto(){
         $classe = new RegolaCSS(
             '.testo',
