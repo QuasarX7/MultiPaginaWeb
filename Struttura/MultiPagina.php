@@ -721,6 +721,16 @@ class MultiPagina extends PaginaHTML {
             );
         $this->aggiungi($titolo);
         
+        $link = new RegolaCSS(
+            '.tecnico a.linkInterno',
+            [
+                new DichiarazioneCSS('color', '#3CB371'),
+                new DichiarazioneCSS('text-decoration', 'none'),
+                new DichiarazioneCSS('font-weight', 'bold')
+            ]
+            );
+        $this->aggiungi($link);
+        
         $link_focus = new RegolaCSS(
             '.tecnico a:hover,.tecnico a:active,.tecnico a.linkInterno:hover,.tecnico a.linkInterno:active',
             [
