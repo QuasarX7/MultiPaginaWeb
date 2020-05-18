@@ -356,6 +356,10 @@
 							{
 								"sotto-titolo" : "table",
 								"file" : "PagineWeb/HTML/tabella.html"
+							},
+							{
+								"sotto-titolo" : "form",
+								"file" : "PagineWeb/HTML/form.html"
 							}
 						]
 					}
