@@ -6,6 +6,7 @@ class Browser {
     protected $versione = '?';
     
     protected $dispositivoMobile = false;
+    protected $dispositivo = '?';
     
     /**
      * Costruttore che inizializza le variabili.
@@ -17,6 +18,7 @@ class Browser {
             $lista = array('MSIE','Trident','Firefox','Opera','OPR','Edge','Chrome','Safari');
             
             foreach($lista as $browser){
+                $match=array();
                 if (preg_match("#($browser)[/ ]?([0-9.]*)#", $this->dati, $match)){
                     $this->nome = $match[1] ===  'Trident' ? 'Explorer' : ($match[1] ===  'OPR' ? 'Opera' :  $match[1] );
                     $this->versione = $match[1] ===  'Trident'?  $match[2] + 4.0 : $match[2];
@@ -28,6 +30,7 @@ class Browser {
             foreach ($device as $value) {
                 if (strpos($this->dati, $value) !== false) {
                     $this->dispositivoMobile = true;
+                    $this->dispositivo = $value;
                     break;
                 }
             }
@@ -51,6 +54,10 @@ class Browser {
 
     public function telefono(){
         return $this->dispositivoMobile;
+    }
+    
+    public function dispositivo(){
+        return $this->dispositivo;
     }
     
     /**

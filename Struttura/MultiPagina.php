@@ -157,9 +157,7 @@ class MultiPagina extends PaginaHTML {
     static public function costruisciDaJSON(array $dati){
         
         $sito = new MultiPagina(MultiPagina::cerca($dati,'titolo'));
-        
         $sito->logoPNG(MultiPagina::cerca($dati,'logo'));
-        
         $sito->aggiungi(new RegolaCSS(
             '#home',
             [
@@ -200,7 +198,19 @@ class MultiPagina extends PaginaHTML {
             if($etichetta == 'note' && is_array($note)){
                 foreach ($note as $nota) {
                     $campo = new Pannello('auto', 'auto',$nota['colore']);
-                    $campo->aggiungi($nota['testo']);
+                    $campo->aggiungi(new Attributo('class', 'alert alert-dismissible fade show'));
+                    $campo->aggiungi(new Attributo('role', 'alert'));
+                    $campo->margine('20px', '5px', '2px', '2px');
+                    $pulsanteChiudi= new Tag('button',[
+                        new Attributo('type', 'button'),
+                        new Attributo('class', 'close'),
+                        new Attributo('data-dismiss', 'alert'),
+                        new Attributo('aria-label', 'Close')
+                    ]);
+                    $campo->aggiungi('<p>'.$nota['testo']);
+                    $campo->aggiungi($pulsanteChiudi);
+                    
+                    
                     $sito->aggiungiNoteMarginePagina($campo);
                 }
             }
@@ -508,10 +518,11 @@ class MultiPagina extends PaginaHTML {
      * @param string $coloreSeleziona
      */
     protected function creaPannelloLaterale($coloreSfondo, $coloreTesto, $coloreSeleziona){
-        $this->indiceLateraleSx = new NotePagina(self::LUNGHEZZA_PANNELLO_SX,'auto', $this->coloreMenu != null ? $this->coloreMenu : $coloreSfondo, $coloreTesto);
+        $this->indiceLateraleSx = new NotePagina(self::LUNGHEZZA_PANNELLO_SX,'100%', $this->coloreMenu != null ? $this->coloreMenu : $coloreSfondo, $coloreTesto);
         $this->coloreSelezionaIndicePagina = $coloreSeleziona;
         $this->coloreIndicePagina = $coloreSfondo;
         $this->indiceLateraleSx->allineamentoVerticale(Lato::ALTO);
+        $this->indiceLateraleSx->aggiungi(new Attributo('class', 'd-none d-md-block col-md-4 col-lg-2 col-xl-2')); //////////////////////////////////////////
         
     }
     
@@ -608,6 +619,7 @@ class MultiPagina extends PaginaHTML {
         $this->paginaTesto = new TestoPagina(null, 'auto', '#fff', 'black');
         
         $this->paginaTesto->allineamentoVerticale(Lato::ALTO);
+        $this->paginaTesto->aggiungi(new Attributo('class', 'col-12 col-sm-12 col-md-8 col-lg-7'));
         $this->paginaTesto->aggiungi(' ');
         $this->paginaTesto->aggiungi(
             new Stile(
@@ -623,7 +635,9 @@ class MultiPagina extends PaginaHTML {
      * Inizializza e crea il pannello laterale destro con i sugerimenti e le note aggiunte.
      */
     private function creaNoteMargineDx(){
-        $this->noteLateraleDx = new NotePagina(self::LUNGHEZZA_PANNELLO_DX, 'auto');
+        $this->noteLateraleDx = new NotePagina('auto', 'auto');
+        $this->noteLateraleDx->aggiungi(new Attributo('class', 'col-12 col-sm-12 col-md-12 col-lg-3')); 
+        
         $this->noteLateraleDx->comportamento(Comportamento::BLOCCO_LINEA);
         $this->noteLateraleDx->allineamentoVerticale(Lato::ALTO);
         foreach ($this->note as $pannello) {
@@ -941,62 +955,7 @@ class MultiPagina extends PaginaHTML {
         $this->aggiungi($immagine_estesa_mouse);
     }
     
-    private function cssFormattazionePagina(){
-        $primaColonna = new RegolaCSS(
-            'aside:first-child',
-            [
-                new DichiarazioneCSS('display', 'inline-block')
-            ]
-            );
-        //$this->aggiungi($primaColonna);
-        
-        $colonnaTesto = new RegolaCSS(
-            'article:first-child',
-            [
-                new DichiarazioneCSS('display', 'inline-block'),
-                new DichiarazioneCSS('width', self::LUNGHEZZA_AREA_ARGOMENTO)
-            ]
-            );
-        //$this->aggiungi($colonnaTesto);
-        
-        $areaPrincipale =  new RegolaCSS(
-            'section',
-            [
-                new DichiarazioneCSS('display', 'inline-block'),
-                new DichiarazioneCSS('width', self::LUNGHEZZA_AREA_PRINCIPALE)
-            ]
-            );
-        //$this->aggiungi($areaPrincipale);
-        
-        $scomparsaPrimaColonna = new RegolaCSS(//elimina la prima colonna
-            'aside:first-child',
-            [
-                new DichiarazioneCSS('display', 'none')
-            ]
-            );
-        $espandiColonnaTesto = new RegolaCSS(//elimina la prima colonna
-            'article:first-child',
-            [
-                new DichiarazioneCSS('display', 'block'),
-                new DichiarazioneCSS('width', '100%')
-            ]
-            );
-        $espandiAreaPrincipale = new RegolaCSS(
-            'section',
-            [
-                new DichiarazioneCSS('display', 'block'),
-                new DichiarazioneCSS('width', '100%')
-            ]
-            );
-        
-        $this->cssMiniDesktop([$primaColonna,$colonnaTesto,$areaPrincipale]);
-        $this->cssTablet([$colonnaTesto,$areaPrincipale,$scomparsaPrimaColonna]);
-        $this->cssTabletOrizzontale([$colonnaTesto,$areaPrincipale,$scomparsaPrimaColonna]);
-        $this->cssTabletVerticale([$areaPrincipale,$scomparsaPrimaColonna,$espandiAreaPrincipale]);
-        $this->cssCellulareOrizzontale([$areaPrincipale,$scomparsaPrimaColonna,$espandiAreaPrincipale]);
-        $this->cssCellulareVerticale([$scomparsaPrimaColonna,$espandiColonnaTesto,$espandiAreaPrincipale]);
-
-    }
+    
     
     private function cssElencoPagine(){
         if($this->indiceLateraleSx instanceof Pannello) {
@@ -1007,9 +966,10 @@ class MultiPagina extends PaginaHTML {
              $elenco = new RegolaCSS(
                 '#'.self::ID_ELENCO,
                 [
-                    new DichiarazioneCSS('width', '200px'),
+                    new DichiarazioneCSS('margin-top', '10px'),
+                    new DichiarazioneCSS('margin-left', '-10px'),
+                    new DichiarazioneCSS('width', '100%'),
                     new DichiarazioneCSS('overflow-y','auto'),
-                    new DichiarazioneCSS('max-height', '80%'),
                     new DichiarazioneCSS('min-height', '0'),
                     new DichiarazioneCSS('box-shadow', '2px 2px 2px 3px rgba(0,0,0,0.25)')
                     
@@ -1087,6 +1047,7 @@ class MultiPagina extends PaginaHTML {
     
     private function creaListaPagine(){
         $listaPagine = new Tag('ul',[new Attributo('id', self::ID_ELENCO)]);
+        //$listaPagine->aggiungi(new Attributo('class', 'fixed-bottom'));
         $listaPagine->aggiungi(
             new Stile(
                 [
@@ -1131,24 +1092,27 @@ class MultiPagina extends PaginaHTML {
         SchermoCSS::$mobile = $controllo->telefono();
         if($controllo->html5()){
 
-            self::creaIntestazioneSito();
-            self::creaMenu();
-            self::creaLogin();
+            $this->creaIntestazioneSito();
+            $this->creaMenu();
+            $this->creaLogin();
+            
             $pagina = new AreaPagina();
+            $contenitorePagina= new Tag('div',[new Attributo('class', 'container-fluid')]);
+            $areaPagina= new Tag('div',[new Attributo('class', 'row')]);
             
             if(isset($this->argomenti[$this->argomento])){
                 if($this->argomento == Argomento::HOME){
                     $pagina->margine('0', '0', '0', '0');
                     $home = $this->argomenti[$this->argomento];
                     if($home instanceof Pagina)
-                        $pagina->aggiungi($home->testo());
+                        $areaPagina->aggiungi($home->testo());
                     
                 }else{
                     $pagina->margine('10px', '0', '0', '0');
                     // Creazione (opzionale) della vista indice di pagine nella colonna di sinistra
                     if(!is_null($this->indiceLateraleSx)){ 
-                        self::creaListaPagine();
-                        $pagina->aggiungi($this->indiceLateraleSx);
+                        $this->creaListaPagine();
+                        $areaPagina->aggiungi($this->indiceLateraleSx);
                     }
                    $argomento = $this->argomenti[$this->argomento];
                     
@@ -1177,23 +1141,24 @@ class MultiPagina extends PaginaHTML {
                     if(strlen($testo) > 100){
                         $this->paginaTesto->aggiungi($this->indiceDiPagina);
                     }
-                    //script inserito in '$this->paginaTesto'
-                    $sezionePrincipale = new ParagrafoPagina(null, 'auto');
-                    $sezionePrincipale->aggiungi($this->paginaTesto);
-                    $sezionePrincipale->aggiungi($this->noteLateraleDx);
-                    $pagina->aggiungi($sezionePrincipale);
-                   
-                
+                    $areaPagina->aggiungi($this->paginaTesto);
+                    $areaPagina->aggiungi($this->noteLateraleDx);
                 }
 
             }
-            self::aggiungi($pagina);
-            self::cssBody();
-            self::cssElencoPagine();
-            self::cssFormattazionePagina();
+            $contenitorePagina->aggiungi($areaPagina);
+            $pagina->aggiungi($contenitorePagina);
+            $this->aggiungi($pagina);
+            $this->cssBody();
+            $this->cssElencoPagine();
         }else{
-            self::aggiungi(
-                '<h1>Il browser non è compatibile con il codice HTML5 della pagina</h1><br><br><h2>'.$controllo.'</h2>'
+            $this->aggiungi(
+                '<h1>Il browser non è compatibile con il codice HTML5 della pagina</h1><br><br>'.
+                '<h2>' .'dispositivo: '.$controllo->dispositivo().'</h2>'.
+                '<h2>' .'browser: '.$controllo->nome().'</h2>'.
+                '<h2>' .'versione: '.$controllo->versione().'</h2>'.
+                '<h2> </h2>'.
+                ':\'('
             );
         }
         
