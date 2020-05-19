@@ -79,15 +79,20 @@ class MultiPagina extends PaginaHTML {
     protected $coloreMenu;
     protected $coloreIntestazione = 'black';
    
-    protected $accessoRoot = false;
+    protected static $accessoRoot = false;
+    protected $password='';
+    protected $utente='';
+    
     
     /**
      * Costruttore.
      * 
      * @param string $titolo
      */
-    protected function __construct($titolo){
+    protected function __construct($titolo,$utente='',$password=''){
         parent::__construct($titolo);
+        $this->utente = $utente;
+        $this->password = $password;
         
         if(filter_has_var(INPUT_GET, self::CHIAVE_PAGINA)){
             $this->indice = filter_input(INPUT_GET, self::CHIAVE_PAGINA, FILTER_SANITIZE_NUMBER_INT);
@@ -114,12 +119,20 @@ class MultiPagina extends PaginaHTML {
         if(filter_has_var(INPUT_POST, self::CHIAVE_NOME_ROOT) && filter_has_var(INPUT_POST, self::CHIAVE_PASSWORD_ROOT)){
             $utente = filter_input(INPUT_POST, self::CHIAVE_NOME_ROOT, FILTER_SANITIZE_STRING);
             $password = filter_input(INPUT_POST, self::CHIAVE_PASSWORD_ROOT, FILTER_SANITIZE_STRING);
-            if ($password !== false && $utente !== false) {
-                $this->accessoRoot = true;
+            if ($password !== false && $utente !== false && $this->controllo($password,$utente)) {
+                self::$accessoRoot = true;
             }else{
                 $this->argomento = Argomento::HOME;
             }
         }
+    }
+    
+    private function controllo(string $password,string $utente){
+        if(strlen($this->password) > 0 && strlen($this->utente) > 0){
+            if(strcmp($this->password,$password) == 0 && strcmp($this->utente,$utente) == 0)
+                return true;
+        }
+        return false;
     }
     
     /**
@@ -156,7 +169,7 @@ class MultiPagina extends PaginaHTML {
      */
     static public function costruisciDaJSON(array $dati){
         
-        $sito = new MultiPagina(MultiPagina::cerca($dati,'titolo'));
+        $sito = new MultiPagina(MultiPagina::cerca($dati,'titolo'),MultiPagina::cerca($dati, 'utente'),MultiPagina::cerca($dati, 'password'));
         $sito->logoPNG(MultiPagina::cerca($dati,'logo'));
         $sito->aggiungi(new RegolaCSS(
             '#home',
@@ -171,8 +184,8 @@ class MultiPagina extends PaginaHTML {
                 new DichiarazioneCSS('width', 'auto')
                 
             ]
-            ));
-        
+            )
+        );
         $coloreTesto=MultiPagina::cerca($dati, 'colore-testo','#B0E0E6');
         $coloreSeleziona=MultiPagina::cerca($dati, 'colore-seleziona','#483D8B');
         $coloreIntestazione=MultiPagina::cerca($dati, 'colore-intestazione','blue');
@@ -244,14 +257,14 @@ class MultiPagina extends PaginaHTML {
         if(count($menu) > 0){
             foreach ($menu as $lista) {
                 $menuGenitore = null;
-                if(isset($lista['visibile']) && $lista['visibile'] === false) continue;
+                if(isset($lista['visibile']) && $lista['visibile'] === false && self::$accessoRoot === false ) continue;
                 foreach ($lista as $etichetta => $voce) {
                     if($etichetta == 'etichetta'){
                         $argomento = MultiPagina::creaArgomento($lista);
                         if($argomento != null)
                             $sito->aggiungiArgomento($argomento);
-                            $sito->aggiungiMenu($voce,$argomento,$genitore);
-                            $menuGenitore = $voce;
+                        $sito->aggiungiMenu($voce,$argomento,$genitore);
+                        $menuGenitore = $voce;
                     } else if($etichetta == 'contenuto')
                         MultiPagina::creaVoceMenu($voce, $sito,$menuGenitore);
                         
@@ -408,7 +421,7 @@ class MultiPagina extends PaginaHTML {
         if(!is_null($this->fontIntestazione)){
             parent::importaFont('intestazione', $this->fontIntestazione);
         }
-        $this->intestazioneSito = new IntestazionePagina(self::ALTEZZA_INTESTAZIONE_SITO,$this->coloreIntestazione,($this->accessoRoot === true) ? 'red' : 'white');
+        $this->intestazioneSito = new IntestazionePagina(self::ALTEZZA_INTESTAZIONE_SITO,$this->coloreIntestazione,(self::$accessoRoot === true) ? 'red' : 'white');
         $this->intestazioneSito->aggiungi($this->creaAccessoUtente() . $this->titolo);
         $this->intestazioneSito->aggiungi(
             new Stile(
@@ -1129,7 +1142,7 @@ class MultiPagina extends PaginaHTML {
                     // crea pagina aggiugendo il testo per argomento e indice
                     $testo = '';
                     if($argomento instanceof Argomento){
-                        if($this->accessoRoot !== true){
+                        if(self::$accessoRoot !== true){
                             $testo = $argomento->pagina($this->indice);
                             $this->paginaTesto->aggiungi($testo);
                         }else{
