@@ -433,8 +433,20 @@
 									}
 								]
 							}
+						},
+						{
+							"etichetta" : "Vue.js",
+							"visibile"	: true,
+							"argomento" : {
+								"titolo" : "Vue",
+								"pagine" : [
+									{
+										"sotto-titolo" : "Direttive",
+										"file" : "PagineWeb/JavaScript/Vue/vue.html"
+									}
+								]
+							}
 						}
-						
 					]
 				},
 				{
