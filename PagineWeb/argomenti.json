@@ -395,6 +395,10 @@
 										"file" : "PagineWeb/JavaScript/DOM.html"
 									},
 									{
+										"sotto-titolo" : "Array",
+										"file" : "PagineWeb/JavaScript/array.html"
+									},
+									{
 										"sotto-titolo" : "Eventi",
 										"file" : "PagineWeb/JavaScript/eventi.html"
 									},
