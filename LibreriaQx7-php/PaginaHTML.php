@@ -108,6 +108,37 @@ class PaginaHTML extends Oggetto{
             $this->file .= "@import url(".$file.");";
         }
     }
+
+    /**
+     * Metodo che assegna un valore predefinito di stile.
+     */
+    protected function inizializzaCSS(){
+            /* unione delle due colonne */
+            /*
+            @media (max-width: 500px) {
+                th,td { 
+                    float:none; 
+                    display:block; 
+                } 
+            }
+            */
+        $schermoCellulare = new SchermoCSS([
+            new RegolaCSS('th:nth-child(1),td',[
+                new DichiarazioneCSS('float','none'),
+                new DichiarazioneCSS('display','block'),
+                new DichiarazioneCSS('width','100% !important')
+            ]),
+            new RegolaCSS('th:nth-child(2),th:nth-child(3)',[
+                new DichiarazioneCSS('display','none')
+            ]),
+            new RegolaCSS('td:nth-child(3)',[
+                new DichiarazioneCSS('color','#4169E1')
+            ]),
+            //tbody tr td:nth-child(1) span{color: #DC143C;
+
+        ],500);
+        return $schermoCellulare . '';
+    }
     
     public function importaFont($nome,$file){
         if(is_string($file) && is_string($nome)){
@@ -263,6 +294,7 @@ class PaginaHTML extends Oggetto{
         );
         $titolo = new Tag("title", $this->titolo . ' ');
         $regoleCSS = ' ' . $this->file;
+        $regoleCSS .= $this->inizializzaCSS();
         foreach ($this->css as $regola) {
             $regoleCSS .= $regola . '';
         }
