@@ -5,7 +5,7 @@ include_once 'LibreriaQx7-php/BarraMenu.php';
 include_once 'LibreriaQx7-php/Menu.php';
 include_once 'LibreriaQx7-php/javascript.php';
 include_once 'Argomento.php';
-include_once 'PaginaLogin.php';
+//include_once 'PaginaLogin.php';
 
 /**
  * Classe principale implementa la struttura di un semplice sito web multi-pagina
@@ -22,12 +22,14 @@ class MultiPagina extends PaginaHTML {
     const CHIAVE_PAGINA = 'pagina';
     const CHIAVE_ARGOMENTO = 'argomento';
     
-    const CHIAVE_NOME_ROOT = PaginaLogin::CHIAVE_UTENTE;
-    const CHIAVE_PASSWORD_ROOT = PaginaLogin::CHIAVE_PASSWORD;
+    //TODO... [1]
+    //const CHIAVE_NOME_ROOT = PaginaLogin::CHIAVE_UTENTE;
+    //const CHIAVE_PASSWORD_ROOT = PaginaLogin::CHIAVE_PASSWORD;
     
     const HOME = 'home';
     const RICERCA = 'ricerca';
-    const LOGIN = 'Utente Amministratore';
+    //TODO... [1]
+    //const LOGIN = 'Utente Amministratore';
     
     const ALTEZZA_INTESTAZIONE_SITO  = 'auto';
     const ALTEZZA_MENU  = '50px';
@@ -115,7 +117,7 @@ class MultiPagina extends PaginaHTML {
             }
         }
         
-        
+        /*
         if(filter_has_var(INPUT_POST, self::CHIAVE_NOME_ROOT) && filter_has_var(INPUT_POST, self::CHIAVE_PASSWORD_ROOT)){
             $utente = filter_input(INPUT_POST, self::CHIAVE_NOME_ROOT, FILTER_SANITIZE_STRING);
             $password = filter_input(INPUT_POST, self::CHIAVE_PASSWORD_ROOT, FILTER_SANITIZE_STRING);
@@ -125,6 +127,7 @@ class MultiPagina extends PaginaHTML {
                 $this->argomento = Argomento::HOME;
             }
         }
+        */
     }
     
     private function controllo(string $password,string $utente){
@@ -422,7 +425,9 @@ class MultiPagina extends PaginaHTML {
             parent::importaFont('intestazione', $this->fontIntestazione);
         }
         $this->intestazioneSito = new IntestazionePagina(self::ALTEZZA_INTESTAZIONE_SITO,$this->coloreIntestazione,(self::$accessoRoot === true) ? 'red' : 'white');
+        
         $this->intestazioneSito->aggiungi($this->creaAccessoUtente() . $this->titolo);
+
         $this->intestazioneSito->aggiungi(
             new Stile(
                 [
@@ -439,7 +444,7 @@ class MultiPagina extends PaginaHTML {
     private function creaAccessoUtente(){
         $link = new Tag('a',
             [
-                new Attributo('href', '?pagina=0&argomento='.self::LOGIN),
+            new Attributo('href', /*TODO...[1] ... '?pagina=0&argomento='.self::LOGIN */ ''),
                 
             ]);
         $immagine = new Tag(
@@ -488,13 +493,16 @@ class MultiPagina extends PaginaHTML {
         return $lista;
     }
     
+    /*
+    TODO... [1]
     private function creaLogin(){
         $argomento = new Argomento(self::LOGIN);
         $paginaLogin = new PaginaLogin();
         $argomento->aggiungiPaginaCodice(self::LOGIN, $paginaLogin->vedi());
         $this->aggiungiArgomento($argomento);
     }
-    
+    */
+
     /**
      * Aggiungi un argomento alla multi-pagina.
      * 
@@ -1107,7 +1115,8 @@ class MultiPagina extends PaginaHTML {
 
             $this->creaIntestazioneSito();
             $this->creaMenu();
-            $this->creaLogin();
+            //TODO... [1]
+            //$this->creaLogin();
             
             $pagina = new AreaPagina();
             $contenitorePagina= new Tag('div',[new Attributo('class', 'container-fluid')]);
