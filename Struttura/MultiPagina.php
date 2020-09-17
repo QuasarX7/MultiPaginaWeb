@@ -433,7 +433,7 @@ class MultiPagina extends PaginaHTML {
                 [
                     new DichiarazioneCSS('font-family',"'".self::NOME_FONT_INTESATAZIONE."', cursive"),
                     new DichiarazioneCSS('font-size',"50px"),
-                    new DichiarazioneCSS('font-size',"4.5vw")//adatta alle dimensioni
+                    new DichiarazioneCSS('font-size',"3.0vmax")//adatta alle dimensioni
                 ]
                 )
             );
@@ -713,6 +713,37 @@ class MultiPagina extends PaginaHTML {
         //classi speciale di formattazione del testo
         $this->classeTesto();
         $this->classeTecnico();
+
+
+        $bootstrapPulsante = new RegolaCSS(
+            '.btn-outline-success',
+            [
+                new DichiarazioneCSS('color', $this->coloreSelezionaIndicePagina), 
+                new DichiarazioneCSS('border-color', $this->coloreSelezionaIndicePagina)
+            ]
+        );
+        $this->aggiungi($bootstrapPulsante);
+
+        $bootstrapPulsante  = new RegolaCSS(
+            '.btn-outline-success:hover,'.
+            '.btn-outline-success:not(:disabled):not(.disabled).active,'.
+            '.btn-outline-success:not(:disabled):not(.disabled):active,'.
+            ' .show > .btn-outline-success.dropdown-toggle',
+            [
+                new DichiarazioneCSS('background-color', $this->coloreSelezionaIndicePagina), 
+                new DichiarazioneCSS('border-color', $this->coloreSelezionaIndicePagina)
+            ]
+        );
+        $this->aggiungi($bootstrapPulsante);
+
+        $bootstrapPulsante = new RegolaCSS(
+            '.btn-outline-success:focus,'.'.btn-outline-success:not(:disabled):not(.disabled):active:focus,'.
+            '.show > .btn-outline-success.dropdown-toggle:focus',
+            [
+                new DichiarazioneCSS('box-shadow', '0 0 0 .2rem rgba(40, 115, 167, 0.5)')
+            ]
+        );
+        $this->aggiungi($bootstrapPulsante);
     }
     
     private function classeTecnico(){
